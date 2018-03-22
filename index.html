@@ -20,6 +20,7 @@
     }
     #editor .editorArea,#editor .preview{
         flex-grow:1;
+        width: 50%;
     }
     #editor .editorArea{
         display: flex;
@@ -34,52 +35,39 @@
         border:none;
         outline: none;
         height: calc(100% - 85px);
-        padding: 40px 40px 80px;
+        padding: 20px;
+        box-sizing: border-box;
 
     }
-     /*#editor div {
-        display: inline-block;
-        width: 49%;
-        height: 100%;
-        vertical-align: top;
-        box-sizing: border-box;
-        padding: 0 20px;
-    }*/
-    /*.editorArea{
-        height: 100%;
+    #editor .editorArea .title{
+        line-height: 50px;
+        font-size: 20px;
         border: none;
-        border-right: 1px solid #ccc;
-        resize: none;
         outline: none;
-        background-color: #f6f6f6;
-        font-size: 14px;
+        padding: 0 20px;
+        box-sizing: border-box;
 
+    }
+    .preview{
         padding: 20px;
     }
-    textarea {
-        height: 100%;
-        width: 100%;
+    .preview img{
+        max-width: 100%;
+        margin: 0 auto;
     }
-
-    code {
-        color: #f66;
-    }*/
 </style>
 <body>
 
 
 <div id="editor">
     <div class="editorArea">
-        <input type="text" placeholder="请输入题目">
+        <input class="title" type="text" placeholder="请输入题目">
         <div class="toolbar">
             <button class="save">
                 保存
             </button>
         </div>
-        <div>
-            <textarea  @input="update"></textarea>
-        </div>
-
+        <textarea  @input="update"></textarea>
     </div>
     <div v-html="compiledMarkdown" class="preview"></div>
 </div>
