@@ -1,10 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>王星个人网站</title>
+    <meta charset="utf-8"/>
+    <title>Marked in the browser</title>
+    <script src="https://unpkg.com/marked@0.3.6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 </head>
+<style>
+    html, body, #editor {
+        margin: 0;
+        height: 100%;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: #333;
+    }
+    #editor{
+        display: flex;
+        flex-direction: row;
+
+    }
+    #editor .editorArea,#editor .preview{
+        flex-grow:1;
+    }
+    #editor .editorArea{
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #ccc;
+    }
+    #editor .editorArea textarea{
+        width:100%;
+        background-color: #f6f6f6;
+        font-size: 14px;
+        font-family: 'Monaco', courier, monospace;
+        border:none;
+        outline: none;
+        height: calc(100% - 85px);
+        padding: 40px 40px 80px;
+
+    }
+     /*#editor div {
+        display: inline-block;
+        width: 49%;
+        height: 100%;
+        vertical-align: top;
+        box-sizing: border-box;
+        padding: 0 20px;
+    }*/
+    /*.editorArea{
+        height: 100%;
+        border: none;
+        border-right: 1px solid #ccc;
+        resize: none;
+        outline: none;
+        background-color: #f6f6f6;
+        font-size: 14px;
+
+        padding: 20px;
+    }
+    textarea {
+        height: 100%;
+        width: 100%;
+    }
+
+    code {
+        color: #f66;
+    }*/
+</style>
 <body>
-个人博客
+
+
+<div id="editor">
+    <div class="editorArea">
+        <input type="text" placeholder="请输入题目">
+        <div class="toolbar">
+            <button class="save">
+                保存
+            </button>
+        </div>
+        <div>
+            <textarea  @input="update"></textarea>
+        </div>
+
+    </div>
+    <div v-html="compiledMarkdown" class="preview"></div>
+</div>
 </body>
+<script>
+    new Vue({
+        el: '#editor',
+        data: {
+            dom: ''
+        },
+        computed: {
+            compiledMarkdown: function () {
+                return this.dom;
+            }
+        },
+        methods: {
+            update: function(e){
+                this.dom=marked(e.target.value);
+
+            }
+        }
+    })
+</script>
 </html>
