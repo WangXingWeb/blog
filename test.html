@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8" />
     <title></title>
+    <link href="comp/highlight/styles/kimbie.dark.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <script >hljs.initHighlightingOnLoad();</script>
 </head>
 <style>
-    *{box-sizing: border-box;}
-    .outer{
-        background-color: aqua;
-        height: 500px;
-        width: 500px;
-    }
-    textarea{
-        width:  100%;
-        padding: 50px;
-        background-color: #cccccc;
-    }
+
 </style>
 <body>
 
-<div class="outer">
-    <div>    <textarea ></textarea>
-    </div>
+<div>
+            <pre>
+                <code class="lang-javascript">
+        function init(){
+            $scope.req.getArticle();
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        }
+                </code>
+            </pre>
 </div>
+
+
 </body>
 </html>
