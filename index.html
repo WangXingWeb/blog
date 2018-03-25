@@ -41,6 +41,10 @@
         padding: 20px;
         box-sizing: border-box;
     }
+    #editor .editorArea .title-bar{
+        display: flex;
+        flex-direction: row;
+    }
     #editor .editorArea .title{
         line-height: 50px;
         font-size: 20px;
@@ -48,7 +52,9 @@
         outline: none;
         padding: 0 20px;
         box-sizing: border-box;
-
+    }
+    #editor .editorArea .save{
+        margin-left: auto;
     }
     .preview{
         padding: 0px 20px 20px;
@@ -88,11 +94,9 @@
 <body>
 <div id="editor">
     <div class="editorArea">
-        <input class="title" type="text" placeholder="请输入题目" @input="updateTitle">
-        <div class="toolbar">
-            <button class="save" @click="save">
-                保存
-            </button>
+        <div class="title-bar">
+            <input class="title" type="text" placeholder="请输入题目" @input="updateTitle">
+            <button class="save" @click="save">保存</button>
         </div>
         <textarea  @input="update"></textarea>
     </div>
