@@ -7,6 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <link href="comp/highlight/styles/ocean.css" rel="stylesheet">
     <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
     <script >hljs.initHighlightingOnLoad();</script>
 </head>
 <style>
@@ -122,7 +125,8 @@
         el: '#editor',
         data: {
             dom: '',
-            title:''
+            title:'',
+            isSubmit:false
         },
         computed: {
             compiledMarkdown: function () {
@@ -131,17 +135,37 @@
         },
         methods: {
             updateTitle:function(e){
-                this.title="<center><h1>"+e.target.value+"</h1></center>"
+                this.title="<center><h1>"+e.target.value+"</h1></center>";
+                this.isSubmit=false;
             },
             update: function(e){
                 this.dom=marked(e.target.value);
-
+                this.isSubmit=false;
             },
             save:function () {
-                console.log(this.title+this.dom);
+                if(!this.isSubmit){
+                    this.isSubmit=true;
+                    mainBmob.init();
+                    mainBmob.addData(
+                        {
+                            title:this.title,
+                            content:this.dom,
+                            createdAt:dateFormat(new Date(),'yyyy-MM-dd hh:mm:ss')
+                        },
+                        "Blog"
+                    ).then(function (data) {
+                        if(data.status){
+                            alert('保存成功'+data.objectId);
+                        }else{
+                            alert('保存失败'+data.objError);
+                        }
+                    });
+                }else{
+                    console.log('您已提交请勿重复提交');
+                }
             }
-
         }
     });
+
 </script>
 </html>

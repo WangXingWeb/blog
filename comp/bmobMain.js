@@ -3,9 +3,11 @@
 * date:2017/11/08
 * */
 var mainBmob={
+    /*注册bomb*/
     init:function(){
-        Bmob.initialize("47793ef8c6c5506ff8f2940fbbb68342", "0125a0a418ad7f4aa9c49f13ed12c78d");
+        Bmob.initialize("4efc0353163bed25dfd3d9f07ee6a94d", "b501324629bdfcd57347654b581eba47");
     },
+    /*添加数据*/
     addData:function(option,objName){
         var Obj = Bmob.Object.extend(objName);
         var obj = new Obj();
@@ -31,12 +33,13 @@ var mainBmob={
         var promise = new Promise(saveData);
         return promise;
     },
+    /*查询*/
     createQuery:function(objName){
-
         var Query = Bmob.Object.extend(objName);
         var objQuery = new Bmob.Query(Query);
         return objQuery;
     },
+    /*删除数据*/
     delData:function (objName,id) {
         var query=this.createQuery(objName);
         function destroryData(resolve, reject){
@@ -60,6 +63,7 @@ var mainBmob={
         var promise = new Promise(destroryData);
         return promise;
     },
+    /*改变值*/
     changeData:function(option,objName,id){
         var query=this.createQuery(objName);
         function change(resolve, reject){
@@ -88,6 +92,7 @@ var mainBmob={
         var promise = new Promise(change);
         return promise;
     },
+    /*上传文件*/
     loadFile:function(fileName,file){
         //文件名必须带后缀
         var objFile = new Bmob.File(fileName,file);
