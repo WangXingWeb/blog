@@ -10,7 +10,7 @@
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
-    <script >hljs.initHighlightingOnLoad();</script>
+    <!--<script >hljs.initHighlightingOnLoad();</script>-->
 </head>
 <style>
     html, body, #editor {
@@ -86,7 +86,6 @@
     pre{
         border: 1px solid #d9d9d9;
         background-color: #f2f2f2;
-        overflow-x: scroll;
         padding: 10px;
         color: #555;
     }
@@ -126,16 +125,21 @@
         data: {
             dom: '',
             title:'',
-            isSubmit:false
+            isSubmit:false,
+            blogId:'',
+            isCreated:false
+        },
+        created: function () {
+
         },
         computed: {
             compiledMarkdown: function () {
-                return this.title+this.dom;
+                return "<center><h1>"+this.title+"</h1></center>"+this.dom;
             }
         },
         methods: {
             updateTitle:function(e){
-                this.title="<center><h1>"+e.target.value+"</h1></center>";
+                this.title=e.target.value;
                 this.isSubmit=false;
             },
             update: function(e){
@@ -143,23 +147,34 @@
                 this.isSubmit=false;
             },
             save:function () {
+                var _this=this;
                 if(!this.isSubmit){
                     this.isSubmit=true;
-                    mainBmob.init();
-                    mainBmob.addData(
-                        {
-                            title:this.title,
-                            content:this.dom,
-                            createdAt:dateFormat(new Date(),'yyyy-MM-dd hh:mm:ss')
-                        },
-                        "Blog"
-                    ).then(function (data) {
-                        if(data.status){
-                            alert('保存成功'+data.objectId);
-                        }else{
-                            alert('保存失败'+data.objError);
-                        }
-                    });
+                    if(!this.isCreated){
+                        mainBmob.init();
+                        mainBmob.addData({}, "Blog").then(function (data) {
+                            if(data.status){
+                                _this.blogId=data.objectId;
+                                console.log(_this.blogId);
+                                _this.isCreated=true;
+                                return mainBmob.changeData({
+                                    title:_this.title,
+                                    content:_this.dom
+                                },"Blog",_this.blogId);
+                            }else{
+                                console.log('保存失败'+data.objError);
+                            }
+                        }).then(function (data) {
+                            console.log(data);
+                        });
+                    }else{
+                        mainBmob.changeData({
+                            title:_this.title,
+                            content:_this.dom
+                        },"Blog",_this.blogId).then(function (data) {
+                            console.log(data);
+                        })
+                    }
                 }else{
                     console.log('您已提交请勿重复提交');
                 }

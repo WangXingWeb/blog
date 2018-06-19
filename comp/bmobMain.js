@@ -68,7 +68,7 @@ var mainBmob={
         var query=this.createQuery(objName);
         function change(resolve, reject){
             query.get(id, {
-                success: function(object) {
+                success: function(object){
                     for(var key in option){
                         object.set(key,option[key]);
                     }
@@ -85,7 +85,6 @@ var mainBmob={
                 },
                 error: function(object, error) {
                     resolve(3);
-                    //alert("query object fail");
                 }
             });
         }
