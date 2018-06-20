@@ -3,107 +3,39 @@
 <head>
     <meta charset="utf-8"/>
     <title>博客</title>
-    <script src="https://unpkg.com/marked@0.3.6"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
     <link href="comp/highlight/styles/ocean.css" rel="stylesheet">
-    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <link href="static/editor/editor.css" rel="stylesheet">
+    <link href="static/editor/editor-view.css" rel="stylesheet">
+    <link href="static/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+    <script src="comp/marked.js"></script>
+    <script src="comp/vue.js"></script>
+    <script src="comp/highlight/highlight.pack.js"></script>
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <!--<script >hljs.initHighlightingOnLoad();</script>-->
 </head>
-<style>
-    html, body, #editor {
-        margin: 0;
-        height: 100%;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        color: #333;
-    }
-    #editor{
-        display: flex;
-        flex-direction: row;
-
-    }
-    #editor .editorArea,#editor .preview{
-        flex-grow:1;
-        width: 50%;
-    }
-    #editor .editorArea{
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid #ccc;
-    }
-    #editor .editorArea textarea{
-        width:100%;
-        background-color: #f6f6f6;
-        font-size: 14px;
-        font-family: 'Monaco', courier, monospace;
-        border:none;
-        outline: none;
-        height: calc(100% - 85px);
-        padding: 20px;
-        box-sizing: border-box;
-    }
-    #editor .editorArea .title-bar{
-        display: flex;
-        flex-direction: row;
-    }
-    #editor .editorArea .title{
-        line-height: 50px;
-        font-size: 20px;
-        border: none;
-        outline: none;
-        padding: 0 20px;
-        box-sizing: border-box;
-    }
-    #editor .editorArea .save{
-        margin-left: auto;
-    }
-    .preview{
-        padding: 0px 20px 20px;
-    }
-    .preview img{
-        max-width: 100%;
-        margin: 0 auto;
-    }
-
-    .preview blockquote{
-        border-left: 6px solid #b3b3b3;
-        padding: 10px;
-        box-sizing: border-box;
-    }
-    .preview blockquote p {
-        font-weight: 400;
-
-    }
-    table{
-        border-collapse: collapse;
-        width: 100%;
-    }
-    table th,td{
-        border: 1px solid #d9d9d9;
-    }
-    pre{
-        border: 1px solid #d9d9d9;
-        background-color: #f2f2f2;
-        padding: 10px;
-        color: #555;
-    }
-    code{
-        white-space: pre;
-    }
-</style>
 <body>
 <div id="editor">
     <div class="editorArea">
         <div class="title-bar">
             <input class="title" type="text" placeholder="请输入题目" @input="updateTitle">
-            <button class="save" @click="save">保存</button>
         </div>
-        <textarea  @input="update"></textarea>
+        <div class="tool-Bar">
+            <div class="tool-Bar-loadImg" @click="loadImg"><i class="icon iconfont icon-image"></i></div>
+            <button class="tool-Bar-save" @click="save">保存</button>
+        </div>
+        <div class="editor-content">
+            <textarea  @input="update"></textarea>
+        </div>
+
     </div>
     <div v-html="compiledMarkdown" class="preview"></div>
-
 </div>
 </body>
 <script>
@@ -129,9 +61,6 @@
             blogId:'',
             isCreated:false
         },
-        created: function () {
-
-        },
         computed: {
             compiledMarkdown: function () {
                 return "<center><h1>"+this.title+"</h1></center>"+this.dom;
@@ -146,37 +75,48 @@
                 this.dom=marked(e.target.value);
                 this.isSubmit=false;
             },
+            loadImg:function () {
+                console.log(1323);
+            },
             save:function () {
                 var _this=this;
-                if(!this.isSubmit){
-                    this.isSubmit=true;
-                    if(!this.isCreated){
-                        mainBmob.init();
-                        mainBmob.addData({}, "Blog").then(function (data) {
-                            if(data.status){
-                                _this.blogId=data.objectId;
-                                console.log(_this.blogId);
-                                _this.isCreated=true;
-                                return mainBmob.changeData({
-                                    title:_this.title,
-                                    content:_this.dom
-                                },"Blog",_this.blogId);
-                            }else{
-                                console.log('保存失败'+data.objError);
-                            }
-                        }).then(function (data) {
-                            console.log(data);
-                        });
+                //必须添加标题和内容
+                if(this.title&&this.dom){
+                    //防止重复提交
+                    if(!this.isSubmit){
+                        this.isSubmit=true;
+                        //新建
+                        if(!this.isCreated){
+                            mainBmob.init();
+                            mainBmob.addData({}, "Blog").then(function (data) {
+                                if(data.status){
+                                    _this.blogId=data.objectId;
+                                    console.log(_this.blogId);
+                                    _this.isCreated=true;
+                                    return mainBmob.changeData({
+                                        title:_this.title,
+                                        content:_this.dom
+                                    },"Blog",_this.blogId);
+                                }else{
+                                    console.log('保存失败'+data.objError);
+                                }
+                            }).then(function (data) {
+                                console.log(data);
+                            });
+                        //修改
+                        }else{
+                            mainBmob.changeData({
+                                title:_this.title,
+                                content:_this.dom
+                            },"Blog",_this.blogId).then(function (data) {
+                                console.log(data);
+                            })
+                        }
                     }else{
-                        mainBmob.changeData({
-                            title:_this.title,
-                            content:_this.dom
-                        },"Blog",_this.blogId).then(function (data) {
-                            console.log(data);
-                        })
+                        console.log('您已提交请勿重复提交');
                     }
                 }else{
-                    console.log('您已提交请勿重复提交');
+                    console.log('请添加题目和内容');
                 }
             }
         }

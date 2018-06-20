@@ -9,15 +9,12 @@
 </head>
 <style>
     .blog{
-        padding: 10px;
-        border: solid 1px rgba(0,0,0,0.1);;
-        border-left: none;
-        border-right:none;
+        margin: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px rgba(0,0,0,0.1);;
         overflow: hidden;
     }
-    .blog:first-child{
-        border-top: none;
-    }
+
     .img-contianer{
         width: 120px;
         height: 70px;
@@ -28,15 +25,23 @@
         width: 100%;
         height: 100%;
     }
-    .cotent{
+    .info{
         margin-left: 128px;
+    }
+    .title{
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 2;
+        color: rgba(0,0,0,0.6);
+    }
+    .cotent{
         color: rgba(0,0,0,0.6);
         overflow: hidden;
-        font-size: 14px;
-        line-height: 1.7;
+        font-size: 12px;
+        line-height: 1.6;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp:3;
+        -webkit-line-clamp:2;
         -webkit-box-orient: vertical;
     }
 </style>
@@ -44,16 +49,30 @@
 <body>
     <div id="blogList">
         <ul>
-            <li class="blog">
+            <li class="blog" v-for="blog in blogs" v-on:click="readBlog(blog.id)">
                 <div class="img-contianer">
-                    <img src="http://a1.jikexueyuan.com/home/201507/17/d462/55a86c87b0eb5.jpg" alt="">
+                    <img v-bind:src="blog.imgSrc" v-bind:alt="blog.title">
                 </div>
-                <div class="cotent">
-                    <div>dsfkjkdljsfkljldksaj;fkljdasklf;jkl j放大后开始疯狂活动时间反馈哈考六级客户的方式啊回家;fkljdasklf;jkl j放大后开始疯狂活动时间反馈哈考六级客户的方式啊回家看费拉达斯法赫卡里好放大就傻哭了</div>
+                <div class="info">
+                    <div class="title">{{blog.title}}</div>
+                    <div class="cotent">{{blog.content}}</div>
                 </div>
             </li>
+
         </ul>
 
     </div>
 </body>
+<script>
+    new Vue({
+        el:"#blogList",
+        data: {
+            blogs:{},
+
+        },
+        methods:{
+
+        }
+    });
+</script>
 </html>
