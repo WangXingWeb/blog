@@ -34,13 +34,7 @@ html, body, #editor {
 .tool-Bar .tool-Bar-save{
     position: absolute;
     right:15px;
-    border-radius: 3px;
-    background-color: #fff;
-    border: 1px solid #9b9b9b;
-    height:30px;
-    line-height: 30px;
     margin-top: 5px;
-    color: #9b9b9b;
 }
 .tool-Bar .tool-Bar-loadImg{
     margin: 5px 15px;
