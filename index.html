@@ -5,11 +5,10 @@
     <title>博客</title>
 
     <link href="comp/highlight/styles/ocean.css" rel="stylesheet">
-    <link href="static/editor/editor.css" rel="stylesheet">
-    <link href="static/editor/editor-view.css" rel="stylesheet">
+
     <link href="static/iconfont.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="//unpkg.com/vue-ydui/dist/ydui.px.css">
+    <link rel="stylesheet" href="comp/ydui/ydui.px.css">
 
 
 
@@ -24,23 +23,29 @@
     <!--<script >hljs.initHighlightingOnLoad();</script>-->
 
     <!-- 引入组件库 -->
-    <script src="//unpkg.com/vue-ydui/dist/ydui.px.js"></script>
+    <script src="comp/ydui/ydui.px.js"></script>
+
+    <link href="static/editor/editor.css" rel="stylesheet">
+    <link href="static/editor/editor-view.css" rel="stylesheet">
 </head>
 <body>
 <div id="editor">
     <div class="editorArea">
         <div class="title-bar">
-            <input class="title" type="text" placeholder="请输入题目" @input="updateTitle">
+            <yd-cell-item>
+                <yd-input slot="right" v-model="title" required  @input.native="updateTitle" placeholder="请输入题目"></yd-input>
+            </yd-cell-item>
         </div>
         <div class="tool-Bar">
             <div class="tool-Bar-loadImg" @click="loadImg"><i class="icon iconfont icon-image"></i></div>
-            <yd-button class="tool-Bar-save" type="hollow" @click="save">保存</yd-button>
+            <yd-button class="tool-Bar-save" type="hollow"  @click.native="save">保存</yd-button>
         </div>
 
 
-
+        <input type="file" value="上传" id="fileContainer" @change="getFile">
+        <img src="http://bmob-cdn-20127.b0.upaiyun.com/2018/06/22/ed2779d44082677580f18f411bfb5caa.jpg/" alt="">
         <div class="editor-content">
-            <textarea  @input="update"></textarea>
+            <textarea  @input="update" ></textarea>
         </div>
 
     </div>
@@ -71,16 +76,15 @@
             blogId:'',
             isCreated:false
         },
+        created: function () {
+            mainBmob.init();
+        },
         computed: {
             compiledMarkdown: function () {
                 return "<center><h1>"+this.title+"</h1></center>"+this.dom;
             }
         },
         methods: {
-            updateTitle:function(e){
-                this.title=e.target.value;
-                this.isSubmit=false;
-            },
             update: function(e){
                 this.dom=marked(e.target.value);
                 this.isSubmit=false;
@@ -89,6 +93,7 @@
                 console.log(1323);
             },
             save:function () {
+                console.log(document.getElementById("fileContainer").value);
                 var _this=this;
                 //必须添加标题和内容
                 if(this.title&&this.dom){
@@ -97,7 +102,6 @@
                         this.isSubmit=true;
                         //新建
                         if(!this.isCreated){
-                            mainBmob.init();
                             mainBmob.addData({}, "Blog").then(function (data) {
                                 if(data.status){
                                     _this.blogId=data.objectId;
@@ -111,6 +115,11 @@
                                     console.log('保存失败'+data.objError);
                                 }
                             }).then(function (data) {
+                                _this.$dialog.toast({
+                                    mes: '保存成功',
+                                    timeout: 1500,
+                                    icon: 'success'
+                                });
                                 console.log(data);
                             });
                         //修改
@@ -119,15 +128,47 @@
                                 title:_this.title,
                                 content:_this.dom
                             },"Blog",_this.blogId).then(function (data) {
+                                _this.$dialog.toast({
+                                    mes: '保存成功',
+                                    timeout: 1500,
+                                    icon: 'success'
+                                });
                                 console.log(data);
                             })
                         }
                     }else{
+                        this.$dialog.toast({
+                                mes: '您已提交请勿重复提交',
+                                timeout: 1500,
+                                icon: 'error'
+                        });
                         console.log('您已提交请勿重复提交');
                     }
                 }else{
+                    this.$dialog.toast({
+                        mes: '请添加题目和内容',
+                        timeout: 1500,
+                        icon: 'error'
+
+                    });
                     console.log('请添加题目和内容');
                 }
+            },
+            getFile:function (e) {
+                var _this=this;
+                console.log(e);
+                var fileImg = e.target.files[0];
+                mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
+                    if(data.status){
+                        console.log(data.url);
+                        var html='<img src='+data.url+'/>';
+                        _this.dom+=html;
+                    }else{
+                        console.log(data.error);
+
+                    }
+                });
+
             }
         }
     });

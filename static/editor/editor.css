@@ -16,15 +16,7 @@ html, body, #editor {
     flex-direction: column;
     border-right: 1px solid #ccc;
 }
-.editorArea .title-bar input{
-    width: 100%;
-    line-height: 40px;
-    font-size: 16px;
-    border: none;
-    outline: none;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
+
 .editorArea .tool-Bar{
     width: 100%;
     height: 40px;
