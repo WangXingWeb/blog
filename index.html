@@ -33,19 +33,22 @@
     <div class="editorArea">
         <div class="title-bar">
             <yd-cell-item>
-                <yd-input slot="right" v-model="title" required  @input.native="updateTitle" placeholder="请输入题目"></yd-input>
+                <yd-input slot="right" v-model="title" required   placeholder="请输入题目"></yd-input>
             </yd-cell-item>
         </div>
         <div class="tool-Bar">
-            <div class="tool-Bar-loadImg" @click="loadImg"><i class="icon iconfont icon-image"></i></div>
+            <div class="tool-Bar-loadImg" @click="loadImg">
+                <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
+                <i class="icon iconfont icon-image"></i>
+
+            </div>
             <yd-button class="tool-Bar-save" type="hollow"  @click.native="save">保存</yd-button>
         </div>
 
 
-        <input type="file" value="上传" id="fileContainer" @change="getFile">
-        <img src="http://bmob-cdn-20127.b0.upaiyun.com/2018/06/22/ed2779d44082677580f18f411bfb5caa.jpg/" alt="">
+
         <div class="editor-content">
-            <textarea  @input="update" ></textarea>
+            <textarea v-model="content"  @input="update" ></textarea>
         </div>
 
     </div>
@@ -74,7 +77,8 @@
             title:'',
             isSubmit:false,
             blogId:'',
-            isCreated:false
+            isCreated:false,
+            content:''
         },
         created: function () {
             mainBmob.init();
@@ -86,11 +90,11 @@
         },
         methods: {
             update: function(e){
-                this.dom=marked(e.target.value);
+                this.dom=marked(this.content);
                 this.isSubmit=false;
             },
-            loadImg:function () {
-                console.log(1323);
+            loadImg:function (e) {
+               document.getElementById("imgUpload").click();
             },
             save:function () {
                 console.log(document.getElementById("fileContainer").value);
@@ -161,8 +165,8 @@
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
                     if(data.status){
                         console.log(data.url);
-                        var html='<img src='+data.url+'/>';
-                        _this.dom+=html;
+                        _this.content+='![fileImg.name]('+data.url+')';
+                        e.target.files[0]='';
                     }else{
                         console.log(data.error);
 
