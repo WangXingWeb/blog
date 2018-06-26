@@ -44,13 +44,9 @@
             </div>
             <yd-button class="tool-Bar-save" type="hollow"  @click.native="save">保存</yd-button>
         </div>
-
-
-
         <div class="editor-content">
             <textarea v-model="content"  @input="update" ></textarea>
         </div>
-
     </div>
     <div v-html="compiledMarkdown" class="preview">
     </div>
@@ -97,7 +93,6 @@
                document.getElementById("imgUpload").click();
             },
             save:function () {
-                console.log(document.getElementById("fileContainer").value);
                 var _this=this;
                 //必须添加标题和内容
                 if(this.title&&this.dom){
@@ -113,7 +108,8 @@
                                     _this.isCreated=true;
                                     return mainBmob.changeData({
                                         title:_this.title,
-                                        content:_this.dom
+                                        content:_this.dom,
+                                        info:_this.content
                                     },"Blog",_this.blogId);
                                 }else{
                                     console.log('保存失败'+data.objError);
@@ -130,7 +126,8 @@
                         }else{
                             mainBmob.changeData({
                                 title:_this.title,
-                                content:_this.dom
+                                content:_this.dom,
+                                info:_this.content
                             },"Blog",_this.blogId).then(function (data) {
                                 _this.$dialog.toast({
                                     mes: '保存成功',
@@ -160,6 +157,7 @@
             },
             getFile:function (e) {
                 var _this=this;
+                _this.$dialog.loading.open('正在上传，请稍等...');
                 console.log(e);
                 var fileImg = e.target.files[0];
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
@@ -167,6 +165,7 @@
                         console.log(data.url);
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
+                        _this.$dialog.loading.close();
                     }else{
                         console.log(data.error);
 
