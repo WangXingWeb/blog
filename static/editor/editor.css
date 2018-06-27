@@ -58,15 +58,16 @@ html, body, #editor {
     height: calc(100% - 93px);
 }
 .editorArea .editor-content textarea {
-    width:100%;
+    width: 100%;
     background-color: #fff;
     font-size: 14px;
     font-family: 'Monaco', courier, monospace;
-    border:none;
+    border: none;
     outline: none;
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
+}
 
 
 
