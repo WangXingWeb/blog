@@ -8,7 +8,7 @@
 
     <link href="static/iconfont.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="comp/ydui/ydui.px.css">
+    <!--<link rel="stylesheet" href="comp/ydui/ydui.px.css">-->
 
 
 
@@ -23,7 +23,7 @@
     <!--<script >hljs.initHighlightingOnLoad();</script>-->
 
     <!-- 引入组件库 -->
-    <script src="comp/ydui/ydui.px.js"></script>
+    <!--<script src="comp/ydui/ydui.px.js"></script>-->
 
     <link href="static/editor/editor.css" rel="stylesheet">
     <link href="static/editor/editor-view.css" rel="stylesheet">
@@ -32,17 +32,14 @@
 <div id="editor">
     <div class="editorArea">
         <div class="title-bar">
-            <yd-cell-item>
-                <yd-input slot="right" v-model="title" required   placeholder="请输入题目"></yd-input>
-            </yd-cell-item>
+            <input type="text" v-model="title" required   placeholder="请输入题目">
         </div>
         <div class="tool-Bar">
             <div class="tool-Bar-loadImg" @click="loadImg">
                 <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
                 <i class="icon iconfont icon-image"></i>
-
             </div>
-            <yd-button class="tool-Bar-save" type="hollow"  @click.native="save">保存</yd-button>
+            <button class="tool-Bar-save" type="hollow"  @click="save">保存</button>
         </div>
         <div class="editor-content">
             <textarea v-model="content"  @input="update" ></textarea>

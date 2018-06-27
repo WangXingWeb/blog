@@ -1,3 +1,7 @@
+*{
+    padding: 0;
+    margin: 0;
+}
 html, body, #editor {
     margin: 0;
     height: 100%;
@@ -11,19 +15,26 @@ html, body, #editor {
 #editor .editorArea,#editor .preview{
     flex:1;
     height: 100%;
-    overflow-y: scroll;
 }
 #editor .editorArea{
     display: flex;
     flex-direction: column;
     border-right: 1px solid #ccc;
     height: 100%;
-    overflow-y: hidden;
 }
 .editorArea .title-bar{
     background-color: #fff;
     height: 50px;
+    padding-left: 20px;
 }
+.title-bar input{
+    line-height: 50px;
+    border:none;
+    width: 100%;
+    outline: none;
+    font-size: 20px;
+}
+
 .editorArea .tool-Bar{
     width: 100%;
     height: 40px;
@@ -44,7 +55,7 @@ html, body, #editor {
     font-size: 30px;
 }
 .editorArea .editor-content{
-    height: calc(100% - 90px);
+    height: calc(100% - 93px);
 }
 .editorArea .editor-content textarea {
     width:100%;
@@ -56,6 +67,6 @@ html, body, #editor {
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
-}
+
 
 

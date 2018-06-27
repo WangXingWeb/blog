@@ -1,6 +1,6 @@
 /*预览效果*/
 .preview{
-    padding: 0px 20px 20px;
+    padding: 0;
 }
 .preview img{
     width: 100%;
@@ -55,4 +55,14 @@ h5{
 p{
     font-size: 12px;
     line-height: 18px;
+}
+ol,ul{
+    font-weight: 700;
+    box-sizing: border-box;
+}
+ul{
+    list-style: inherit !important;
+}
+ol{
+    list-style: decimal !important;
 }
