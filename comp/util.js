@@ -50,29 +50,27 @@ var dateFormat = function(date, format){
 /**
  * @description 获取文本中的图片
  * @param {string} html html字符串
+ * @param {int} num  提取图片的数量
  * @return {array} imgs 图片地址的数组
  */
-var pickupImg=function (html) {
+var pickupImg=function (html,num) {
     var imgs=[];
-    /*html.replace(/<img\ssrc=[\'"](.+?)[\'"]\1>/gi, function (match, capture) {
-        console.log(capture+"@@@@@@@@@@");
-        console.log(match+"@@@@@@@@@@");
-
-        imgs.push(capture);                                                                        // match 匹配的img标签
-    }); */
-
-    // capture img中的src
+    var imgNum=parseInt(num);                 //防止num参数错误
+    if(imgNum<1){
+        imgNum=1;
+    }
     var patt1=/<img\b.*?(?:\>|\/>)/gi;
     var patt2=/src=[\'\"]?([^\'\"]*)[\'\"]?/i;
     var arr=html.match(patt1);
-    for(var i=0;i<arr.length;i++){
+    for(var i=0;i<arr.length && i<imgNum;i++){
         var src=arr[i].match(patt2);
         if(src[1]){
             imgs.push(src[1]);
         }
     }
-    console.log(imgs[0]);
-    return imgs[0];
+
+
+    return imgs;
 }
 
 /**
