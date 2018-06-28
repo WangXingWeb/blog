@@ -33,11 +33,33 @@ var mainBmob={
         var promise = new Promise(saveData);
         return promise;
     },
-    /*查询*/
+    /*创建查询*/
     createQuery:function(objName){
         var Query = Bmob.Object.extend(objName);
         var objQuery = new Bmob.Query(Query);
         return objQuery;
+    },
+    // 查询数据
+    queryData:function (objName) {
+        var query=this.createQuery(objName);
+        function queryAllData(resolve, reject) {
+            query.find({
+                success: function(results) {
+                    resolve({
+                        list:results,
+                        code:200
+                    });
+                },
+                error: function(error) {
+                    reject({
+                        code:300,
+                        error:error
+                    });
+                }
+            });
+        }
+        var promise = new Promise(queryAllData);
+        return promise;
     },
     /*删除数据*/
     delData:function (objName,id) {

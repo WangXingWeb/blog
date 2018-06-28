@@ -31,6 +31,8 @@ var dateFormat = function(date, format){
     };
     format = format.replace(/([yMdhmsqS])+/g, function(all, t){
         var v = map[t];
+        alert(v+"@@@@@@@@@@@");
+        alert(all);
         if(v !== undefined){
             if(all.length > 1){
                 v = '0' + v;
@@ -52,10 +54,25 @@ var dateFormat = function(date, format){
  */
 var pickupImg=function (html) {
     var imgs=[];
-    html.replace(/<img\ssrc=[\'"](.+?)[\'"]\>/gi, function (match, capture) {
+    /*html.replace(/<img\ssrc=[\'"](.+?)[\'"]\1>/gi, function (match, capture) {
+        console.log(capture+"@@@@@@@@@@");
+        console.log(match+"@@@@@@@@@@");
+
         imgs.push(capture);                                                                        // match 匹配的img标签
-    });                                                                                            // capture img中的src
-    return imgs;
+    }); */
+
+    // capture img中的src
+    var patt1=/<img\b.*?(?:\>|\/>)/gi;
+    var patt2=/src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+    var arr=html.match(patt1);
+    for(var i=0;i<arr.length;i++){
+        var src=arr[i].match(patt2);
+        if(src[1]){
+            imgs.push(src[1]);
+        }
+    }
+    console.log(imgs[0]);
+    return imgs[0];
 }
 
 /**

@@ -6,6 +6,10 @@
 
     <title>Title</title>
     <link rel="stylesheet" href="static/reset.css">
+    <script src="comp/vue.js"></script>
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
 </head>
 <style>
     .blog{
@@ -34,7 +38,7 @@
         line-height: 2;
         color: rgba(0,0,0,0.6);
     }
-    .cotent{
+    .content{
         color: rgba(0,0,0,0.6);
         overflow: hidden;
         font-size: 12px;
@@ -51,11 +55,11 @@
         <ul>
             <li class="blog" v-for="blog in blogs" v-on:click="readBlog(blog.id)">
                 <div class="img-contianer">
-                    <img v-bind:src="blog.imgSrc" v-bind:alt="blog.title">
+                    <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
                 </div>
                 <div class="info">
-                    <div class="title">{{blog.title}}</div>
-                    <div class="cotent">{{blog.content}}</div>
+                    <div class="title">{{blog.attributes.title}}</div>
+                    <div class="content">{{getContent(blog.attributes.content)}}</div>
                 </div>
             </li>
 
@@ -66,43 +70,30 @@
 <script>
     new Vue({
         el:"#blogList",
+
         data: {
             blogs:{},
 
         },
+        created:function () {
+            var _this=this;
+            mainBmob.init();
+            mainBmob.queryData('Blog').then(function (data) {
+                if(data.code==200){
+                    _this.blogs=data.list;
+                    console.log(data.list);
+                }else{
+                    alert(data.error.code+data.error.message);
+                }
+            });
+        },
         methods:{
-            findInfo:function (strs, len) {
-                var newLength = 0;
-                var newStr = "";
-                var chineseRegex = /[^\x00-\xff]/g;
-
-                //过滤图片
-                var reTag = /<img(?:.|\s)*?>/g;
-                var str=strs.replace(reTag,'');
-
-                //过滤html
-                str=str.replace(/<[^>]+>/g,"");
-
-                var singleChar = "";
-                var strLength = str.replace(chineseRegex,"**").length;
-
-                for(var i = 0;i < strLength;i++) {
-                    singleChar = str.charAt(i).toString();
-                    if(singleChar.match(chineseRegex) != null) {
-                        newLength += 2;
-                    }else {
-                        newLength++;
-                    }
-                    if(newLength > len) {
-                        break;
-                    }
-                    newStr += singleChar;
-                }
-                if(strLength > len) {
-                    newStr += "...";
-                }
-
-                return newStr;
+            getContent:function (str) {
+                return pickupText(str,50);
+            },
+            getImg:function (str) {
+                var img=pickupImg(str);
+                return img;
             }
         }
     });
