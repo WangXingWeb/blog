@@ -71,7 +71,39 @@
 
         },
         methods:{
+            findInfo:function (strs, len) {
+                var newLength = 0;
+                var newStr = "";
+                var chineseRegex = /[^\x00-\xff]/g;
 
+                //过滤图片
+                var reTag = /<img(?:.|\s)*?>/g;
+                var str=strs.replace(reTag,'');
+
+                //过滤html
+                str=str.replace(/<[^>]+>/g,"");
+
+                var singleChar = "";
+                var strLength = str.replace(chineseRegex,"**").length;
+
+                for(var i = 0;i < strLength;i++) {
+                    singleChar = str.charAt(i).toString();
+                    if(singleChar.match(chineseRegex) != null) {
+                        newLength += 2;
+                    }else {
+                        newLength++;
+                    }
+                    if(newLength > len) {
+                        break;
+                    }
+                    newStr += singleChar;
+                }
+                if(strLength > len) {
+                    newStr += "...";
+                }
+
+                return newStr;
+            }
         }
     });
 </script>

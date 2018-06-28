@@ -112,11 +112,7 @@
                                     console.log('保存失败'+data.objError);
                                 }
                             }).then(function (data) {
-                                _this.$dialog.toast({
-                                    mes: '保存成功',
-                                    timeout: 1500,
-                                    icon: 'success'
-                                });
+                                alert('保存成功');
                                 console.log(data);
                             });
                         //修改
@@ -126,35 +122,22 @@
                                 content:_this.dom,
                                 info:_this.content
                             },"Blog",_this.blogId).then(function (data) {
-                                _this.$dialog.toast({
-                                    mes: '保存成功',
-                                    timeout: 1500,
-                                    icon: 'success'
-                                });
+                                alert('保存成功');
                                 console.log(data);
                             })
                         }
                     }else{
-                        this.$dialog.toast({
-                                mes: '您已提交请勿重复提交',
-                                timeout: 1500,
-                                icon: 'error'
-                        });
+                        alert('您已提交请勿重复提交');
                         console.log('您已提交请勿重复提交');
                     }
                 }else{
-                    this.$dialog.toast({
-                        mes: '请添加题目和内容',
-                        timeout: 1500,
-                        icon: 'error'
-
-                    });
+                    alert('请添加题目和内容');
                     console.log('请添加题目和内容');
                 }
             },
             getFile:function (e) {
                 var _this=this;
-                _this.$dialog.loading.open('正在上传，请稍等...');
+                alert('正在上传，请稍等...');
                 console.log(e);
                 var fileImg = e.target.files[0];
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
@@ -162,7 +145,7 @@
                         console.log(data.url);
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
-                        _this.$dialog.loading.close();
+                        alert('上传成功');
                     }else{
                         console.log(data.error);
 
