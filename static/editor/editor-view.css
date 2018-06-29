@@ -1,6 +1,6 @@
 /*预览效果*/
 .preview{
-    padding: 10px;
+    padding:0 10px;
     box-sizing: border-box;
 }
 .preview img{
@@ -55,6 +55,10 @@ h4{
 h5{
     line-height: 28px;
     font-size: 14px;
+}
+h6{
+    line-height: 24px;
+    font-size: 12px;
 }
 p{
     font-size: 12px;
