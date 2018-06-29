@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="static/editor/editor-view.css">
+    <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
+    <script src="comp/vue.js"></script>
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+    <script src="comp/marked.js"></script>
+    <script src="comp/highlight/highlight.pack.js"></script>
+</head>
+<body>
+    <div id="prview" class="preview">
+        <div v-html="blog.attributes.content"></div>
+    </div>
+</body>
+<script>
+    marked.setOptions({
+        highlight: function (code) {
+            return hljs.highlightAuto(code).value;
+        },
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: true,
+        sanitize: true,
+        smartLists: true,
+        smartypants: true
+    });
+    new Vue({
+        el:"#prview",
+        created:function () {
+            var _this=this;
+            var params=getParamsFromUrl(document.URL);
+            mainBmob.init();
+            mainBmob.getSingleData('Blog',params.id).then(function (data) {
+                if(data.code==200){
+                    _this.blog=data.result;
+                    console.log(_this.blog);
+                }else{
+                    alert("获取数据错误");
+                    console.log(data.error);
+                    console.log(data.result);
+                }
+            });
+        },
+        data: {
+            blog:{
+                attributes:{
+                    content:""
+                }
+            },
+        },
+        methods:{
+
+        }
+    });
+</script>
+</html>

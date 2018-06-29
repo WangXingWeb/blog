@@ -6,7 +6,7 @@ Based on Solarized Style from http://ethanschoonover.com/solarized
 
 */
 
-.hljs {
+code {
   display: block;
   overflow-x: auto;
   padding: 0.5em;

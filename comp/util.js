@@ -21,18 +21,16 @@ var dateFormat = function(date, format){
     }
     date = new Date(date);
     var map = {
-        "M": date.getMonth() + 1, //月份
-        "d": date.getDate(), //日
-        "h": date.getHours(), //小时
-        "m": date.getMinutes(), //分
-        "s": date.getSeconds(), //秒
+        "M": date.getMonth() + 1,                   //月份
+        "d": date.getDate(),                        //日
+        "h": date.getHours(),                       //小时
+        "m": date.getMinutes(),                     //分
+        "s": date.getSeconds(),                     //秒
         "q": Math.floor((date.getMonth() + 3) / 3), //季度
         "S": date.getMilliseconds() //毫秒
     };
     format = format.replace(/([yMdhmsqS])+/g, function(all, t){
         var v = map[t];
-        alert(v+"@@@@@@@@@@@");
-        alert(all);
         if(v !== undefined){
             if(all.length > 1){
                 v = '0' + v;
@@ -62,15 +60,17 @@ var pickupImg=function (html,num) {
     var patt1=/<img\b.*?(?:\>|\/>)/gi;
     var patt2=/src=[\'\"]?([^\'\"]*)[\'\"]?/i;
     var arr=html.match(patt1);
-    for(var i=0;i<arr.length && i<imgNum;i++){
-        var src=arr[i].match(patt2);
-        if(src[1]){
-            imgs.push(src[1]);
+    if(arr){
+        for(var i=0;i<arr.length && i<imgNum;i++){
+            var src=arr[i].match(patt2);
+            if(src[1]){
+                imgs.push(src[1]);
+            }
         }
     }
-
-
+    console.log(imgs+"@@@@@@@@@@@2");
     return imgs;
+
 }
 
 /**
@@ -85,4 +85,22 @@ var pickupText=function (strs,length) {
     var result=str.substr(0,length);
     console.log(result);
     return result;
+}
+
+/**
+ * @description 分析url，提取参数
+ * @return {object} result 封装好的参数对象
+ */
+var getParamsFromUrl=function (url) {
+    //var thisURL = document.URL;
+    //var url="www.iwangxing.cn/blog/viewBlog.html?id=jk01256&title=测试一下";
+    var paramsStr =url.split('?')[1];
+    var params =paramsStr.split('&');
+    var reslut={};
+    for(var i=0;i<params.length;i++){
+        var paramKey =params[i].split('=')[0];
+        var paramValue =params[i].split('=')[1];
+        reslut[paramKey]=paramValue;
+    }
+    return reslut;
 }

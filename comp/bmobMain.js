@@ -61,6 +61,29 @@ var mainBmob={
         var promise = new Promise(queryAllData);
         return promise;
     },
+    /*获取一条数据*/
+    getSingleData:function (objName,id) {
+        var query=this.createQuery(objName);
+        function getOneData(resolve, reject){
+            query.get(id, {
+                success: function(object) {
+                   resolve({
+                       result:object,
+                       code:200
+                   });
+                },
+                error: function(object, error) {
+                    reject({
+                        code:300,
+                        error:error,
+                        result:object
+                    });
+                }
+            });
+        }
+        var promise = new Promise(getOneData);
+        return promise;
+    },
     /*删除数据*/
     delData:function (objName,id) {
         var query=this.createQuery(objName);

@@ -4,16 +4,12 @@
     <meta charset="utf-8"/>
     <title>博客</title>
 
-    <link href="comp/highlight/styles/ocean.css" rel="stylesheet">
+    <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
+
 
     <link href="static/iconfont.css" rel="stylesheet">
 
-    <!--<link rel="stylesheet" href="comp/ydui/ydui.px.css">-->
-
-
-
-
-
+    <link rel="stylesheet" href="comp/ydui/ydui.px.css">
     <script src="comp/marked.js"></script>
     <script src="comp/vue.js"></script>
     <script src="comp/highlight/highlight.pack.js"></script>
@@ -23,7 +19,7 @@
     <!--<script >hljs.initHighlightingOnLoad();</script>-->
 
     <!-- 引入组件库 -->
-    <!--<script src="comp/ydui/ydui.px.js"></script>-->
+    <script src="comp/ydui/ydui.px.js"></script>
 
     <link href="static/editor/editor.css" rel="stylesheet">
     <link href="static/editor/editor-view.css" rel="stylesheet">
@@ -32,7 +28,7 @@
 <div id="editor">
     <div class="editorArea">
         <div class="title-bar">
-            <input type="text" v-model="title" required   placeholder="请输入题目">
+            <input type="text" @input="update" v-model="title"  placeholder="请输入题目">
         </div>
         <div class="tool-Bar">
             <div class="tool-Bar-loadImg" @click="loadImg">
@@ -45,8 +41,7 @@
             <textarea v-model="content"  @input="update" ></textarea>
         </div>
     </div>
-    <div v-html="compiledMarkdown" class="preview">
-    </div>
+    <div class="preview" v-html="dom"></div>
 </div>
 </body>
 <script>
@@ -76,14 +71,9 @@
         created: function () {
             mainBmob.init();
         },
-        computed: {
-            compiledMarkdown: function () {
-                return "<center><h1>"+this.title+"</h1></center>"+this.dom;
-            }
-        },
         methods: {
             update: function(e){
-                this.dom=marked(this.content);
+                this.dom="<center><h1>"+this.title+"</h1></center>"+marked(this.content);
                 this.isSubmit=false;
             },
             loadImg:function (e) {
@@ -105,8 +95,7 @@
                                     _this.isCreated=true;
                                     return mainBmob.changeData({
                                         title:_this.title,
-                                        content:_this.dom,
-                                        info:_this.content
+                                        content:_this.dom
                                     },"Blog",_this.blogId);
                                 }else{
                                     console.log('保存失败'+data.objError);
@@ -119,8 +108,7 @@
                         }else{
                             mainBmob.changeData({
                                 title:_this.title,
-                                content:_this.dom,
-                                info:_this.content
+                                content:_this.dom
                             },"Blog",_this.blogId).then(function (data) {
                                 alert('保存成功');
                                 console.log(data);
@@ -145,10 +133,10 @@
                         console.log(data.url);
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
+                        _this.update();
                         alert('上传成功');
                     }else{
                         console.log(data.error);
-
                     }
                 });
 
@@ -156,5 +144,8 @@
         }
     });
 
+    function sayhi() {
+        console.log('hi');
+    }
 </script>
 </html>

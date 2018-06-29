@@ -1,10 +1,12 @@
 /*预览效果*/
 .preview{
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
 }
 .preview img{
-    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
 }
 .preview blockquote{
     border-left: 6px solid #b3b3b3;
@@ -21,7 +23,7 @@ table{
 table th,td{
     border: 1px solid #d9d9d9;
 }
-pre{
+/*pre{
     border: 1px solid #d9d9d9;
     background-color: #f2f2f2;
     padding: 10px;
@@ -29,7 +31,7 @@ pre{
 }
 code{
     white-space: pre;
-}
+}*/
 h1,h2,h3,h4,h5{
     font-weight: 700 ;
 }
@@ -62,4 +64,10 @@ ul,ol{
     font-size: 14px;
     line-height: 1.5;
     font-weight: 700;
+}
+ul{
+    list-style: inherit;
+}
+ol{
+    list-style: decimal;
 }
