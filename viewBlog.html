@@ -16,7 +16,7 @@
 </head>
 <body>
     <div id="prview" class="preview">
-        <div v-html="blog.attributes.content"></div>
+        <div v-html="mosaicDom(blog.attributes.title,blog.attributes.content)"></div>
     </div>
 </body>
 <script>
@@ -52,12 +52,15 @@
         data: {
             blog:{
                 attributes:{
-                    content:""
+                    content:"",
+                    title:''
                 }
             },
         },
         methods:{
-
+            mosaicDom:function (title,content) {
+                return '<center><h1>'+title+'</h1></center>'+content;
+            }
         }
     });
 </script>

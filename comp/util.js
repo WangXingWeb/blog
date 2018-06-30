@@ -81,7 +81,9 @@ var pickupImg=function (html,num) {
  */
 var pickupText=function (strs,length) {
     //过滤html
-    var str=strs.replace(/<[^>]+>/g,"");
+
+    var str=strs.replace(/<code[^>]*>(?:(?!<\/code>)[\s\S])*<\/code>/gi,"");
+    str=str.replace(/<[^>]+>/g,"");
     var result=str.substr(0,length);
     console.log(result);
     return result;

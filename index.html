@@ -5,11 +5,9 @@
     <title>博客</title>
 
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
-
-
     <link href="static/iconfont.css" rel="stylesheet">
-
     <link rel="stylesheet" href="comp/ydui/ydui.px.css">
+
     <script src="comp/marked.js"></script>
     <script src="comp/vue.js"></script>
     <script src="comp/highlight/highlight.pack.js"></script>
@@ -17,9 +15,6 @@
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
     <script src="comp/prompt.js"></script>
-    <!--<script >hljs.initHighlightingOnLoad();</script>-->
-
-    <!-- 引入组件库 -->
     <script src="comp/ydui/ydui.px.js"></script>
 
     <link href="static/editor/editor.css" rel="stylesheet">
@@ -67,14 +62,16 @@
             isSubmit:false,
             blogId:'',
             isCreated:false,
-            content:''
+            content:'',
+            htmlContent:''
         },
         created: function () {
             mainBmob.init();
         },
         methods: {
             update: function(e){
-                this.dom="<center><h1>"+this.title+"</h1></center>"+marked(this.content);
+                this.htmlContent=marked(this.content);
+                this.dom="<center><h1>"+this.title+"</h1></center>"+this.htmlContent;
                 this.isSubmit=false;
             },
             loadImg:function (e) {
@@ -82,32 +79,28 @@
             },
             save:function () {
                 var _this=this;
-                //必须添加标题和内容
-                if(this.title&&this.dom){
-                    //防止重复提交
-                    if(!this.isSubmit){
+                if(this.title&&this.dom){                     //必须添加标题和内容
+                    if(!this.isSubmit){                       //防止重复提交
                         this.isSubmit=true;
-                        //新建
-                        if(!this.isCreated){
+                        if(!this.isCreated){                  //新建
                             mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
                                 if(data.status){
                                     _this.blogId=data.objectId;                      //创建成功数据后修改数据
                                     _this.isCreated=true;
                                     return mainBmob.changeData({
                                         title:_this.title,
-                                        content:_this.dom
+                                        content:_this.htmlContent
                                     },"Blog",_this.blogId);
-                                }else{                                               //创建失败
+                                }else{                              //创建失败
                                     toastX.call(_this,'保存失败',1);
                                 }
                             }).then(function (data) {
                                 toastX.call(_this,'保存成功',0);
                             });
-                        //修改
-                        }else{
+                        }else{                                      //修改
                             mainBmob.changeData({
                                 title:_this.title,
-                                content:_this.dom
+                                content:_this.htmlContent
                             },"Blog",_this.blogId).then(function (data) {
                                 toastX.call(_this,'保存成功',0);
                             })
@@ -121,7 +114,7 @@
             },
             getFile:function (e) {
                 var _this=this;
-                alert('正在上传，请稍等...');
+                loadingX.call(_this,'正在上传，请稍等...');
                 console.log(e);
                 var fileImg = e.target.files[0];
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
@@ -130,10 +123,9 @@
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
                         _this.update();
-                        alert('上传成功');
+                        closeLoadingX.call(_this);
                     }else{
-                        console.log(data.error);
-
+                        toastX.call(_this,'上传失败，请重试',1);
                     }
                 });
 
