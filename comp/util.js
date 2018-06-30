@@ -104,3 +104,4 @@ var getParamsFromUrl=function (url) {
     }
     return reslut;
 }
+

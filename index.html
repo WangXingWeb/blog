@@ -16,6 +16,7 @@
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
+    <script src="comp/prompt.js"></script>
     <!--<script >hljs.initHighlightingOnLoad();</script>-->
 
     <!-- 引入组件库 -->
@@ -88,21 +89,19 @@
                         this.isSubmit=true;
                         //新建
                         if(!this.isCreated){
-                            mainBmob.addData({}, "Blog").then(function (data) {
+                            mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
                                 if(data.status){
-                                    _this.blogId=data.objectId;
-                                    console.log(_this.blogId);
+                                    _this.blogId=data.objectId;                      //创建成功数据后修改数据
                                     _this.isCreated=true;
                                     return mainBmob.changeData({
                                         title:_this.title,
                                         content:_this.dom
                                     },"Blog",_this.blogId);
-                                }else{
-                                    console.log('保存失败'+data.objError);
+                                }else{                                               //创建失败
+                                    toastX.call(_this,'保存失败',1);
                                 }
                             }).then(function (data) {
-                                alert('保存成功');
-                                console.log(data);
+                                toastX.call(_this,'保存成功',0);
                             });
                         //修改
                         }else{
@@ -110,17 +109,14 @@
                                 title:_this.title,
                                 content:_this.dom
                             },"Blog",_this.blogId).then(function (data) {
-                                alert('保存成功');
-                                console.log(data);
+                                toastX.call(_this,'保存成功',0);
                             })
                         }
                     }else{
-                        alert('您已提交请勿重复提交');
-                        console.log('您已提交请勿重复提交');
+                        toastX.call(_this,'您已提交，请勿重复提交',1);
                     }
                 }else{
-                    alert('请添加题目和内容');
-                    console.log('请添加题目和内容');
+                    toastX.call(_this,'请添加题目和内容',0);
                 }
             },
             getFile:function (e) {
@@ -142,10 +138,7 @@
 
             }
         }
-    });
+    });  
 
-    function sayhi() {
-        console.log('hi');
-    }
 </script>
 </html>
