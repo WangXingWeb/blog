@@ -25,7 +25,7 @@ html, body, #editor {
 .editorArea .title-bar{
     background-color: #fff;
     height: 50px;
-    padding-left: 20px;
+    padding: 0 10px;
 }
 .title-bar input{
     line-height: 50px;

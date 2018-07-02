@@ -33,20 +33,20 @@ h1,h2,h3,h4,h5{
     margin: 0;
 }
 h1{
-    line-height: 60px;
-    font-size: 30px;
-}
-h2{
-    line-height: 52px;
-    font-size: 26px;
-}
-h3{
     line-height: 44px;
     font-size: 22px;
 }
-h4{
+h2{
+    line-height: 40px;
+    font-size: 20px;
+}
+h3{
     line-height: 36px;
     font-size: 18px;
+}
+h4{
+    line-height: 32px;
+    font-size: 16px;
 }
 h5{
     line-height: 28px;
@@ -72,4 +72,7 @@ ul{
 }
 ol{
     list-style: decimal;
+}
+p{
+    margin: 1em 0;
 }
