@@ -81,10 +81,10 @@
             },
             save:function () {
                 var _this=this;
-                if(this.title&&this.dom){                     //必须添加标题和内容
-                    if(!this.isSubmit){                       //防止重复提交
+                if(this.title&&this.dom){                                            //必须添加标题和内容
+                    if(!this.isSubmit){                                              //防止重复提交
                         this.isSubmit=true;
-                        if(!this.isCreated){                  //新建
+                        if(!this.isCreated){                                         //新建
                             mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
                                 if(data.status){
                                     _this.blogId=data.objectId;                      //创建成功数据后修改数据
@@ -93,13 +93,13 @@
                                         title:_this.title,
                                         content:_this.htmlContent
                                     },"Blog",_this.blogId);
-                                }else{                              //创建失败
+                                }else{                                               //创建失败
                                     toastX.call(_this,'保存失败',1);
                                 }
                             }).then(function (data) {
                                 toastX.call(_this,'保存成功',0);
                             });
-                        }else{                                      //修改
+                        }else{                                                       //修改
                             mainBmob.changeData({
                                 title:_this.title,
                                 content:_this.htmlContent
