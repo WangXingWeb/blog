@@ -6,7 +6,9 @@
 
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link href="static/iconfont.css" rel="stylesheet">
-    <link rel="stylesheet" href="comp/ydui/ydui.px.css">
+
+    <link rel="stylesheet" href="comp/vueBeauty/vue-beauty.min.css">
+
 
     <script src="comp/marked.js"></script>
     <script src="comp/vue.js"></script>
@@ -15,7 +17,8 @@
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
     <script src="comp/prompt.js"></script>
-    <script src="comp/ydui/ydui.px.js"></script>
+    <script src="comp/vueBeauty/vue-beauty.min.js"></script>
+
 
     <link href="static/editor/editor.css" rel="stylesheet">
     <link href="static/editor/editor-view.css" rel="stylesheet">
@@ -27,6 +30,8 @@
             <yd-input  required v-model="title" @input.native="update" placeholder="请输入题目"></yd-input>
             <!--<input type="text" @input="update" v-model="title"  placeholder="请输入题目">-->
         </div>
+        <v-button type="primary">Primary</v-button>
+        <v-button type="primary" shape="circle" icon="search"></v-button>
         <div class="tool-Bar">
             <div class="tool-Bar-loadImg" @click="loadImg">
                 <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
