@@ -4,19 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>Title</title>
-
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link rel="stylesheet" href="static/editor/editor-view.css">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
     <script src="comp/vue.js"></script>
+
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
     <script src="comp/marked.js"></script>
     <script src="comp/highlight/highlight.pack.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
 </head>
+<style>
+    .content{
+        margin-top: 40px;
+    }
+    .wx-header{
+        background-color: #dc4036;
+    }
+</style>
 <body>
     <div id="prview" class="preview">
-        <div v-html="mosaicDom(blog.attributes.title,blog.attributes.content)"></div>
+        <mt-header fixed  v-bind:title="blog.attributes.title" class="wx-header">
+            <mt-button icon="back" @click='router' slot="left">返回</mt-button>
+            <mt-button icon="more" slot="right"></mt-button>
+        </mt-header>
+        <div class="content" v-html="mosaicDom(blog.attributes.title,blog.attributes.content)"></div>
     </div>
 </body>
 <script>
@@ -35,6 +49,7 @@
     new Vue({
         el:"#prview",
         created:function () {
+            this.$indicator.open();
             var _this=this;
             var params=getParamsFromUrl(document.URL);
             mainBmob.init();
@@ -42,12 +57,14 @@
                 if(data.code==200){
                     _this.blog=data.result;
                     console.log(_this.blog);
+                    _this.$indicator.close();
                 }else{
-                    alert("获取数据错误");
+                    _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                     console.log(data.error);
                     console.log(data.result);
                 }
             });
+            _this.$indicator.close();
         },
         data: {
             blog:{
@@ -60,6 +77,9 @@
         methods:{
             mosaicDom:function (title,content) {
                 return '<center><h3>'+title+'</h3></center>'+content;
+            },
+            router:function () {
+                history.back();
             }
         }
     });

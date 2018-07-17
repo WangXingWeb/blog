@@ -42,6 +42,7 @@ var mainBmob={
     // 查询数据
     queryData:function (objName) {
         var query=this.createQuery(objName);
+        query.descending("createdAt");                   //根据创建时间倒序，最新的在最前面
         function queryAllData(resolve, reject) {
             query.find({
                 success: function(results) {

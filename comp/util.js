@@ -68,7 +68,6 @@ var pickupImg=function (html,num) {
             }
         }
     }
-    console.log(imgs+"@@@@@@@@@@@2");
     return imgs;
 
 }
@@ -85,7 +84,6 @@ var pickupText=function (strs,length) {
     var str=strs.replace(/<code[^>]*>(?:(?!<\/code>)[\s\S])*<\/code>/gi,"");
     str=str.replace(/<[^>]+>/g,"");
     var result=str.substr(0,length);
-    console.log(result);
     return result;
 }
 

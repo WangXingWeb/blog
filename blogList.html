@@ -6,12 +6,20 @@
 
     <title>Title</title>
     <link rel="stylesheet" href="static/reset.css">
+
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+
     <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
 </head>
 <style>
+    .blogList{
+        margin-top: 40px;
+    }
     .blog{
         margin: 10px;
         padding-bottom: 10px;
@@ -47,11 +55,19 @@
         -webkit-line-clamp:2;
         -webkit-box-orient: vertical;
     }
+    .wx-header{
+        background-color: #dc4036;
+    }
 </style>
 
 <body>
+
     <div id="blogList">
-        <ul>
+        <mt-header fixed  title="博客" class="wx-header">
+            <mt-button icon="back" @click='router' slot="left">返回</mt-button>
+            <mt-button icon="more" slot="right"></mt-button>
+        </mt-header>
+        <ul class="blogList">
             <li class="blog" v-for="blog in blogs" v-on:click="readBlog(blog.id)">
                 <div class="img-contianer" v-if="getImg(blog.attributes.content)">
                     <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
@@ -61,29 +77,30 @@
                     <div class="content">{{getContent(blog.attributes.content)}}</div>
                 </div>
             </li>
-
         </ul>
-
     </div>
 </body>
 <script>
+
     new Vue({
         el:"#blogList",
-
         data: {
             blogs:{}
         },
         created:function () {
             var _this=this;
+            this.$indicator.open();
             mainBmob.init();
             mainBmob.queryData('Blog').then(function (data) {
                 if(data.code==200){
                     _this.blogs=data.list;
                     console.log(data.list);
+                    _this.$indicator.close();
                 }else{
                     alert(data.error.code+data.error.message);
                 }
             });
+            _this.$indicator.close();
         },
         methods:{
             getContent:function (str) {
@@ -98,6 +115,9 @@
             },
             readBlog:function (id) {
                 window.location.href = 'viewBlog.html?id='+id;
+            },
+            router:function () {
+                history.back()
             }
         }
     });

@@ -47,7 +47,8 @@ html, body, #editor {
     margin-top: 5px;
 }
 .tool-Bar .tool-Bar-loadImg{
-    margin: 5px 15px;
+    margin: 5px;
+    width: 35px;
     display: inline-block;
 }
 .tool-Bar-loadImg i{
