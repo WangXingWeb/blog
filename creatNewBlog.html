@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>博客</title>
+
+    <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
+    <link href="static/iconfont.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="comp/ydui/ydui.px.css">
+
+
+    <script src="comp/marked.js"></script>
+    <script src="comp/vue.js"></script>
+    <script src="comp/highlight/highlight.pack.js"></script>
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+    <script src="comp/prompt.js"></script>
+    <script src="comp/ydui/ydui.px.js"></script>
+
+
+    <link href="static/editor/editor.css" rel="stylesheet">
+    <link href="static/editor/editor-view.css" rel="stylesheet">
+</head>
+<body>
+<div id="editor">
+    <div class="editorArea">
+        <div class="title-bar">
+            <yd-input  required v-model="title" @input="update" placeholder="请输入题目"></yd-input>
+            <!--<input type="text" @input="update" v-model="title"  placeholder="请输入题目">-->
+        </div>
+        <div class="tool-Bar">
+            <div class="tool-Bar-loadImg" @click="loadImg">
+                <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
+                <i class="icon iconfont icon-image"></i>
+            </div>
+            <div class="tool-Bar-loadImg" @click="addTodo">
+                <i class="icon iconfont icon-image"></i>
+            </div>
+            <yd-button class="tool-Bar-save" type="hollow" @click.native="save">保存</yd-button>
+           <!-- <button class="tool-Bar-save" type="hollow"  @click="save">保存</button>-->
+        </div>
+        <div class="editor-content">
+            <textarea v-model="content"  @input="update" ></textarea>
+        </div>
+    </div>
+    <div class="preview" v-html="dom"></div>
+</div>
+</body>
+<script>
+
+    marked.setOptions({
+        highlight: function (code) {
+            return hljs.highlightAuto(code).value;
+        },
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false
+    });
+    new Vue({
+        el: '#editor',
+        data: {
+            dom: '',                            //title和content拼接好的html字符串
+            title:'',                           //标题
+            isSubmit:false,                     //是否提交过
+            blogId:'',                          //当前文章blog的id
+            isCreated:false,                    //是否新创建
+            content:'',                         //textarea中的文本
+            htmlContent:''                      //content经过markdown处理的html字符串
+        },
+        created: function () {
+            mainBmob.init();
+        },
+        methods: {
+            update: function(e){
+                this.htmlContent=marked(this.content);
+                this.dom="<center><h3>"+this.title+"</h3></center>"+this.htmlContent;
+                console.log(this.title);
+                this.isSubmit=false;
+            },
+            loadImg:function (e) {
+               document.getElementById("imgUpload").click();
+            },
+            save:function () {
+                var _this=this;
+                if(this.title&&this.dom){                                            //必须添加标题和内容
+                    if(!this.isSubmit){                                              //防止重复提交
+                        this.isSubmit=true;
+                        if(!this.isCreated){                                         //新建
+                            mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
+                                if(data.status){
+                                    _this.blogId=data.objectId;                      //创建成功数据后修改数据
+                                    _this.isCreated=true;
+                                    return mainBmob.changeData({
+                                        title:_this.title,
+                                        contentText:_this.content,
+                                        content:_this.htmlContent
+                                    },"Blog",_this.blogId);
+                                }else{                                               //创建失败
+                                    toastX.call(_this,'保存失败',1);
+                                }
+                            }).then(function (data) {
+                                toastX.call(_this,'保存成功',0);
+                            });
+                        }else{                                                       //修改
+                            mainBmob.changeData({
+                                title:_this.title,
+                                contentText:_this.content,
+                                content:_this.htmlContent
+                            },"Blog",_this.blogId).then(function (data) {
+                                toastX.call(_this,'保存成功',0);
+                            })
+                        }
+                    }else{
+                        toastX.call(_this,'您已提交，请勿重复提交',1);
+                    }
+                }else{
+                    toastX.call(_this,'请添加题目和内容',1);
+                }
+            },
+            getFile:function (e) {
+                var _this=this;
+                loadingX.call(_this,'正在上传，请稍等...');
+                console.log(e);
+                var fileImg = e.target.files[0];
+                mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
+                    if(data.status){
+                        console.log(data.url);
+                        _this.content+='![fileImg.name]('+data.url+')';
+                        e.target.files[0]='';
+                        _this.update();
+                        closeLoadingX.call(_this);
+                    }else{
+                        toastX.call(_this,'上传失败，请重试',1);
+                    }
+                });
+
+            },
+            addTodo:function () {
+                this.content+='<input type="checkbox" checked>'
+            }
+        }
+    });
+
+</script>
+</html>
