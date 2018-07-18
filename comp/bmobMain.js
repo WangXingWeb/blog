@@ -85,6 +85,29 @@ var mainBmob={
         var promise = new Promise(getOneData);
         return promise;
     },
+    /*查询某个属性等于value*/
+    equalTo:function (objName,key,value) {
+        var query=this.createQuery(objName);
+        function queryData(resolve, reject) {
+            query.equalTo(key, value);
+            query.find({
+                success: function(results) {
+                    resolve({
+                        list:results,
+                        code:200
+                    });
+                },
+                error: function(error) {
+                    reject({
+                        code:300,
+                        error:error
+                    });
+                }
+            });
+        }
+        var promise = new Promise(queryData);
+        return promise;
+    },
     /*删除数据*/
     delData:function (objName,id) {
         var query=this.createQuery(objName);

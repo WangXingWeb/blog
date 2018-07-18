@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>注册</title>
+    <link rel="stylesheet" href="static/reset.css">
+    <link href="static/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link rel="stylesheet" href="static/base.css">
+
+    <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+</head>
+<style>
+    .logo{
+        margin: 0 auto;
+        width:120px;
+        height: 80px;
+        display: block;
+    }
+    .app-name{
+        text-align: center;
+        color: #dc4036;
+        font-weight: bold;
+        font-family: 华文新魏;
+        font-size: 16px;
+    }
+    .login-form{
+        width: 80%;
+        margin: 20px 10%;
+        border:#cfcfcf 2px solid;
+        border-radius: 5px;
+    }
+    .login-form-item{
+        display: flex;
+        padding: 0 10px;
+        line-height: 50px;
+        height: 50px;
+        border-bottom: #cfcfcf 2px solid;
+
+    }
+    .login-form-item:last-child{
+        border-bottom: none;
+    }
+    .login-form-item .icon{
+        float: left;
+        width: 30px;
+        font-size: 20px;
+        color:#969696;
+    }
+    .login-form-item input{
+        display: flex;
+        flex-grow: 1;
+        border:none;
+        font-size: 14px;
+        color:#969696;
+    }
+    .btn-login{
+        background-color: #dc4036;
+        width: 80%;
+        margin: 20px 10%;
+    }
+</style>
+<body>
+    <div id="login">
+        <!--<mt-header fixed  title="星仔笔记" class="wx-header">
+            <mt-button icon="back" slot="left">返回</mt-button>
+            <mt-button icon="more" slot="right"></mt-button>
+        </mt-header>-->
+        <mt-button icon="back" slot="left">返回</mt-button>
+        <div class="wx-content">
+            <img class="logo" src="images/logo.png" alt="logo">
+            <div class="app-name">星仔云笔记</div>
+            <div class="login-form">
+                <div class="login-form-item">
+                    <i class="icon iconfont icon-wode2"></i>
+                    <input type="text" placeholder="你的昵称" v-model="userName">
+                </div>
+                <div class="login-form-item">
+                    <i class="icon iconfont icon-suo"></i>
+                    <input type="password" placeholder="密码" v-model="password">
+                </div>
+                <div class="login-form-item">
+                    <i class="icon iconfont icon-suo"></i>
+                    <input type="password" placeholder="确认密码" v-model="confirmPassword">
+                </div>
+            </div>
+            <mt-button @click="register" class="btn-login" type="primary">注册</mt-button>
+        </div>
+
+    </div>
+</body>
+<script>
+    new Vue({
+        el: "#login",
+        data:{
+            userName:'',
+            password:'',
+            confirmPassword:''
+        },
+        created:function () {
+            mainBmob.init();
+        },
+        methods:{
+            register:function () {
+                if(!this.validate()){
+
+                }
+            },
+            isExist:function () {
+                mainBmob.equalTo('User','userName',this.userName);
+            },
+            validate:function(){
+                if(!(this.userName && this.password && this.confirmPassword)){    //非空验证
+                    this.$messagebox('请将数据填写完整');
+                    return false
+                }
+                if(this.password.length<6){                                       //密码不能小于6位
+                    this.$messagebox('密码的长度最小为6位');
+                    return false
+                }
+                if(this.password!=this.confirmPassword){                          //确认密码
+                    this.$messagebox('两次输入的密码不一致');
+                    return false
+                }
+            }
+        }
+    });
+</script>
+</html>

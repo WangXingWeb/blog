@@ -1,0 +1,47 @@
+/*头部*/
+.wx-header{
+    background-color: #dc4036;
+}
+.wx-content{
+    margin-top: 40px;
+}
+/*blog列表*/
+.blog{
+    margin: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px rgba(0,0,0,0.1);;
+    overflow: hidden;
+}
+.img-contianer{
+    width: 120px;
+    height: 70px;
+    background-color: #666;
+    float: left;
+    margin-right: 10px;
+}
+.img-contianer img{
+    width: 100%;
+    height: 100%;
+}
+
+.title{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2;
+    color: rgba(0,0,0,0.6);
+}
+.blog-content{
+    color: rgba(0,0,0,0.6);
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient: vertical;
+}
+.blog-time{
+    color: rgba(0,0,0,0.6);
+    font-size: 12px;
+    line-height: 1.6;
+}
