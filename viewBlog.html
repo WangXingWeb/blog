@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>Title</title>
+    <title>博客</title>
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link rel="stylesheet" href="static/editor/editor-view.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
@@ -30,7 +30,7 @@
             <mt-button icon="back" @click='router' slot="left">返回</mt-button>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <div class="content" v-html="mosaicDom(blog.attributes.title,blog.attributes.content)"></div>
+        <div class="content" v-html="mosaicDom(blog.attributes.title,blog.attributes.content,blog.createdAt)"></div>
     </div>
 </body>
 <script>
@@ -75,8 +75,8 @@
             },
         },
         methods:{
-            mosaicDom:function (title,content) {
-                return '<center><h3>'+title+'</h3></center>'+content;
+            mosaicDom:function (title,content,time) {
+                return '<center><h3>'+title+'</h3></center>'+'<span>'+time+'</span>'+content;
             },
             router:function () {
                 history.back();

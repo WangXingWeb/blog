@@ -43,15 +43,20 @@
         line-height: 2;
         color: rgba(0,0,0,0.6);
     }
-    .content{
+    .blog-content{
         color: rgba(0,0,0,0.6);
         overflow: hidden;
         font-size: 12px;
         line-height: 1.6;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp:2;
+        -webkit-line-clamp:1;
         -webkit-box-orient: vertical;
+    }
+    .blog-time{
+        color: rgba(0,0,0,0.6);
+        font-size: 12px;
+        line-height: 1.6;
     }
     .wx-header{
         background-color: #dc4036;
@@ -71,26 +76,43 @@
     }
     .mint-tabbar>.mint-tab-item.is-selected{
         background-color: #fafafa;
-        color:#dc4036;
+
     }
     .mint-tabbar{
         background-image: none;
+
+    }
+    .mint-tabbar>.mint-tab-item.is-selected .mint-tab-item-label{
+        color:#dc4036;
+    }
+    .mint-tab-item-label{
+        color:#707070;
     }
 </style>
 
 <body>
 
 <div id="blogList">
+    <mt-header fixed  title="星仔笔记" class="wx-header">
+        <mt-button icon="back" slot="left">返回</mt-button>
+        <mt-button icon="more" slot="right"></mt-button>
+    </mt-header>
     <div class="page-tabbar">
         <div class="page-wrap">
-            <mt-header fixed  title="星仔笔记" class="wx-header">
-                <mt-button icon="back" slot="left">返回</mt-button>
-                <mt-button icon="more" slot="right"></mt-button>
-            </mt-header>
-
             <mt-tab-container class="page-tabbar-container content" v-model="selected">
                 <mt-tab-container-item id="0">
-                    <mt-cell v-for="n in 10" :title="'餐厅 ' + n" />
+                    <ul class="blogList">
+                        <li class="blog" v-for="blog in blogs" v-on:click="readBlog(blog.id)">
+                            <div class="img-contianer" v-if="getImg(blog.attributes.content)">
+                                <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
+                            </div>
+                            <div class="info">
+                                <div class="title">{{blog.attributes.title}}</div>
+                                <div class="blog-content">{{getContent(blog.attributes.content)}}</div>
+                                <div class="blog-time" v-html="resetTime(blog.createdAt)"></div>
+                            </div>
+                        </li>
+                    </ul>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="1">
                     <mt-cell v-for="n in 5" :title="'订单 ' + n" />
@@ -98,17 +120,10 @@
                 <mt-tab-container-item id="2">
                     <mt-cell v-for="n in 7" :title="'发现 ' + n" />
                 </mt-tab-container-item>
-                <mt-tab-container-item id="3">
-                    <div class="page-part">
-                        <mt-cell v-for="n in 12" :title="'我的 ' + n" />
-                    </div>
 
-                    <mt-button type="danger" size="large">退出</mt-button>
-
-                </mt-tab-container-item>
             </mt-tab-container>
         </div>
-
+        <!--tabbar-->
         <mt-tabbar v-model="selected" fixed>
             <mt-tab-item id="0">
                 <img slot="icon" v-if="selected==0" src="images/blog-active.png">
@@ -136,22 +151,33 @@
         el:"#blogList",
         data: {
             selected:"0",
-            value:'0',
             blogs:{}
         },
         created:function () {
-
+            mainBmob.init();
+            this.getList();
         },
         watch:{
             selected:function () {
                 if(this.selected==0){
-
+                    this.getList();
                 }
             }
         },
         methods:{
             getList:function () {
-
+                var _this=this;
+                this.$indicator.open();
+                mainBmob.queryData('Blog').then(function (data) {
+                    if(data.code==200){
+                        _this.blogs=data.list;
+                        console.log(data.list);
+                        _this.$indicator.close();
+                    }else{
+                        alert(data.error.code+data.error.message);
+                    }
+                });
+                _this.$indicator.close();
             },
             getContent:function (str) {
                 return pickupText(str,50);
@@ -163,6 +189,12 @@
                 }
                 return imgs[0];
             },
+            resetTime:function (time) {
+                return dateFormat(time,'yyyy.MM.dd hh:mm');
+            },
+            readBlog:function (id) {
+                window.location.href = 'viewBlog.html?id='+id;
+            }
         }
     });
 </script>
