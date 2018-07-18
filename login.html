@@ -113,7 +113,13 @@
                 }
             },
             isExist:function () {
-                mainBmob.equalTo('User','userName',this.userName);
+                mainBmob.equalTo('User','userName',this.userName).then(function (data) {
+                    if(data.code==200){
+
+                    }else{
+
+                    }
+                });
             },
             validate:function(){
                 if(!(this.userName && this.password && this.confirmPassword)){    //非空验证
