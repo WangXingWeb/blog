@@ -72,7 +72,6 @@
             <mt-button icon="back" slot="left">返回</mt-button>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>-->
-        <mt-button icon="back" slot="left">返回</mt-button>
         <div class="wx-content">
             <img class="logo" src="images/logo.png" alt="logo">
             <div class="app-name">星仔云笔记</div>
@@ -110,52 +109,44 @@
             register:function () {
                 var _this=this;
                 if(!_this.validate()){
-                    return false;
+                    console.log(1);
+                    return;
                 }
-                if(_this.isExist()){
-                    _this.$messagebox('此昵称已存在，请您更换一个昵称！');
-                    return false;
-                }
-                mainBmob.addData({
-                    username:_this.userName,
-                    password:_this.password
-                },'_User').then(function (data) {
+                mainBmob.equalTo('_User','username',this.userName).then(function (data) {
+                    console.log(data+"5555555555555555555555");
+                    if(data.code==200){
+                        if(data.list.length>0){
+                            _this.$messagebox('此昵称已存在，请您更换一个昵称！');
+                        }else{
+                            return mainBmob.addData({
+                                username:_this.userName,
+                                password:_this.password
+                            },'_User');
+                        }
+                    }else{
+                        _this.$messagebox('请确认网络是否连接！');
+                    }
+                }).then(function (data) {
+                    console.log(data);
                     if(data.status){
                         _this.$messagebox('注册成功，请登录！');
                     }else{
                         _this.$messagebox('注册失败，请重试！');
-                    }
-                })
-            },
-            isExist:function () {
-                var _this=this;
-                mainBmob.equalTo('User','username',this.userName).then(function (data) {
-                    console.log(data);
-                    if(data.code==200){
-                        console.log(1111);
-                        if(data.list.length>0){
-                            _this.$messagebox('此昵称已存在，请您更换一个昵称！');
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }else{
-                        _this.$messagebox('请确认网络是否连接！');
                     }
                 });
             },
             validate:function(){
                 if(!(this.userName && this.password && this.confirmPassword)){    //非空验证
                     this.$messagebox('请将数据填写完整');
-                    return false
+                    return false;
                 }
                 if(this.password.length<6){                                       //密码不能小于6位
                     this.$messagebox('密码的长度最小为6位');
-                    return false
+                    return false;
                 }
                 if(this.password!=this.confirmPassword){                          //确认密码
                     this.$messagebox('两次输入的密码不一致');
-                    return false
+                    return false;
                 }
                 return true;
             }
