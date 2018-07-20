@@ -123,10 +123,15 @@
                 user.set("password", _this.password);
                 user.signUp(null, {
                     success: function(user) {
-                        console.log(user);
+                        //登陆成功跳转
+                        _this.$toast('登陆成功，请登录！');
                     },
                     error: function(user, error) {
-                        alert("Error: " + error.code + " " + error.message);
+                        if(error.code==202){
+                            _this.$toast('用户名已经存在');
+                        }else{
+                            _this.$toast(error.message);
+                        }
                     }
                 });
                 /*
@@ -170,15 +175,15 @@
             },
             validate:function(){
                 if(!(this.userName && this.password && this.confirmPassword)){    //非空验证
-                    this.$messagebox('请将数据填写完整');
+                    this.$toast('请将数据填写完整');
                     return false;
                 }
                 if(this.password.length<6){                                       //密码不能小于6位
-                    this.$messagebox('密码的长度最小为6位');
+                    this.$toast('密码的长度最小为6位');
                     return false;
                 }
                 if(this.password!=this.confirmPassword){                          //确认密码
-                    this.$messagebox('两次输入的密码不一致');
+                    this.$toast('两次输入的密码不一致');
                     return false;
                 }
                 return true;

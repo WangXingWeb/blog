@@ -96,8 +96,8 @@
             },
             save:function () {
                 var _this=this;
-                if(this.title&&this.dom){                                            //必须添加标题和内容
-                    if(!this.isSubmit){                                              //防止重复提交
+                if(this.title&&this.dom){                       //必须添加标题和内容
+                    if(!this.isSubmit){                         //防止重复提交
                         this.isSubmit=true;
                         mainBmob.changeData({
                             title:_this.title,

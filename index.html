@@ -99,14 +99,13 @@
         el:"#blogList",
         data: {
             selected:"0",
-            userId:'',
-            blogs:{}
+            blogs:{},
+            user:{}
         },
         created:function () {
             mainBmob.init();
             var currentUser = Bmob.User.current();
-
-            this.userId=currentUser.id;
+            this.user=currentUser;
             console.log(this.userId);
             this.getList();
         },
@@ -120,17 +119,22 @@
         methods:{
             getList:function () {
                 var _this=this;
-                this.$indicator.open();
-                mainBmob.equalTo('Blog','author',_this.userId).then(function (data) {
-                    if(data.code==200){
-                        _this.blogs=data.list;
-                        console.log(data.list);
-                        _this.$indicator.close();
-                    }else{
-                        console.log(data.error.code+data.error.message);
-                    }
-                });
-                _this.$indicator.close();
+                if(_this.user){
+                    this.$indicator.open();
+                    mainBmob.equalTo('Blog','author',_this.user.id).then(function (data) {
+                        if(data.code==200){
+                            _this.blogs=data.list;
+                            console.log(data.list);
+                            _this.$indicator.close();
+                        }else{
+                            console.log(data.error.code+data.error.message);
+                        }
+                    });
+                    _this.$indicator.close();
+                }else{
+                    window.location.href='login.html';
+                }
+
             },
             getContent:function (str) {
                 return pickupText(str,50);

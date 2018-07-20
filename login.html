@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>注册</title>
+    <title>登录</title>
     <link rel="stylesheet" href="static/reset.css">
     <link href="static/iconfont.css" rel="stylesheet">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
@@ -87,7 +87,7 @@
             </div>
         </div>
         <mt-button @click="login" class="wx-btn" type="primary">登录</mt-button>
-        <div class="wx-go" ><a href="register.html">注册新账号</a ></div>
+        <div class="wx-go" ><a href="register.html">注册新账号</a></div>
     </div>
 </div>
 </body>
@@ -109,17 +109,20 @@
                 }
                 Bmob.User.logIn(_this.userName, _this.password, {
                     success: function(user) {
-                        var currentUser = Bmob.User.current();
                         window.location.href = 'index.html';
                     },
                     error: function(user, error) {
-                        console.log("Error: " + error.code + " " + error.message);
+                        if(error.code==101){
+                            _this.$toast('用户名或密码不正确');
+                        }else{
+                            _this.$toast(error.message);
+                        }
                     }
                 });
             },
             validate:function(){
                 if(!(this.userName && this.password)){    //非空验证
-                    this.$messagebox('请将数据填写完整');
+                    this.$toast('请将数据填写完整');
                     return false;
                 }
                 return true;
