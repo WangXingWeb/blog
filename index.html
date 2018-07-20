@@ -99,10 +99,15 @@
         el:"#blogList",
         data: {
             selected:"0",
+            userId:'',
             blogs:{}
         },
         created:function () {
             mainBmob.init();
+            var currentUser = Bmob.User.current();
+
+            this.userId=currentUser.id;
+            console.log(this.userId);
             this.getList();
         },
         watch:{
@@ -116,13 +121,13 @@
             getList:function () {
                 var _this=this;
                 this.$indicator.open();
-                mainBmob.queryData('Blog').then(function (data) {
+                mainBmob.equalTo('Blog','author',_this.userId).then(function (data) {
                     if(data.code==200){
                         _this.blogs=data.list;
                         console.log(data.list);
                         _this.$indicator.close();
                     }else{
-                        alert(data.error.code+data.error.message);
+                        console.log(data.error.code+data.error.message);
                     }
                 });
                 _this.$indicator.close();

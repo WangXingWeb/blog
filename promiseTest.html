@@ -8,49 +8,58 @@
 
 </body>
 <script>
-    function runAsync(){
-        var p = new Promise(function(resolve, reject){
-            //做一些异步操作
+    //做饭
+    function cook(){
+        console.log('开始做饭。');
+        var p = new Promise(function(resolve, reject){        //做一些异步操作
             setTimeout(function(){
-                console.log('执行完成1');
-                resolve(1);
-            }, 2000);
+                console.log('做饭完毕！');
+                var num=Math.random();
+                if(num>0.99){
+                    resolve(true);
+                }else{
+                    resolve(false);
+                }
+            }, 1000);
         });
         return p;
     }
-    function runAsyn2(){
-        var p = new Promise(function(resolve, reject){
-            //做一些异步操作
-            setTimeout(function(){
-                console.log('执行完成2');
-                resolve('随便什么数据2');
-            }, 2000);
-        });
-        return p;
-    }
-    function runAsyn3(){
-        var p = new Promise(function(resolve, reject){
-            //做一些异步操作
-            setTimeout(function(){
-                console.log('执行完成3');
-                resolve('随便什么数据3');
-            }, 2000);
-        });
-        return p;
-    }
-    runAsync()
-        .then(function(data){
-            console.log(data);
-            if(data==1){
-                alert(1);
-            }else {
-                return runAsyn2();
-            }
 
+    //吃饭
+    function eat(data){
+        console.log('开始吃饭：' + data);
+        var p = new Promise(function(resolve, reject){        //做一些异步操作
+            setTimeout(function(){
+                if(data){
+                    console.log('吃饭完毕!');
+                    resolve('一块碗和一双筷子');
+                }else{
+                    console.log('这里中止');
+                }
+
+            }, 2000);
+        });
+        return p;
+    }
+
+    function wash(data){
+        console.log('开始洗碗：' + data);
+        var p = new Promise(function(resolve, reject){        //做一些异步操作
+            setTimeout(function(){
+                console.log('洗碗完毕!');
+                resolve('干净的碗筷');
+            }, 2000);
+        });
+        return p;
+    }
+    cook()
+        .then(function(data){
+            return eat(data);
+        }).catch(function (data) {
+            console.log(data);
         })
         .then(function(data){
-            console.log(data);
-            return runAsyn3();
+            return wash(data);
         })
         .then(function(data){
             console.log(data);

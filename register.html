@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>注册</title>
+    <link rel="stylesheet" href="static/reset.css">
+    <link href="static/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link rel="stylesheet" href="static/base.css">
+
+    <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+</head>
+<style>
+    .logo{
+        margin: 0 auto;
+        width:120px;
+        height: 80px;
+        display: block;
+    }
+    .app-name{
+        text-align: center;
+        color: #dc4036;
+        font-weight: bold;
+        font-family: 华文新魏;
+        font-size: 16px;
+    }
+    .wx-form{
+        width: 80%;
+        margin: 20px 10%;
+        border:#cfcfcf 2px solid;
+        border-radius: 5px;
+    }
+    .wx-form-item{
+        display: flex;
+        padding: 0 10px;
+        line-height: 50px;
+        height: 50px;
+        border-bottom: #cfcfcf 2px solid;
+
+    }
+    .wx-form-item:last-child{
+        border-bottom: none;
+    }
+    .wx-form-item .icon{
+        float: left;
+        width: 30px;
+        font-size: 20px;
+        color:#969696;
+    }
+    .wx-form-item input{
+        display: flex;
+        flex-grow: 1;
+        border:none;
+        font-size: 14px;
+        color:#969696;
+    }
+    .wx-btn{
+        background-color: #dc4036;
+        width: 80%;
+        margin: 20px 10%;
+    }
+    .wx-go{
+        color:#969696;
+        display: block;
+        text-align: center;
+    }
+</style>
+<body>
+    <div id="login">
+        <!--<mt-header fixed  title="星仔笔记" class="wx-header">
+            <mt-button icon="back" slot="left">返回</mt-button>
+            <mt-button icon="more" slot="right"></mt-button>
+        </mt-header>-->
+        <div class="wx-content">
+            <img class="logo" src="images/logo.png" alt="logo">
+            <div class="app-name">星仔云笔记</div>
+            <div class="wx-form">
+                <div class="wx-form-item">
+                    <i class="icon iconfont icon-wode2"></i>
+                    <input type="text" placeholder="你的昵称" v-model="userName">
+                </div>
+                <div class="wx-form-item">
+                    <i class="icon iconfont icon-suo"></i>
+                    <input type="password" placeholder="密码" v-model="password">
+                </div>
+                <div class="wx-form-item">
+                    <i class="icon iconfont icon-suo"></i>
+                    <input type="password" placeholder="确认密码" v-model="confirmPassword">
+                </div>
+            </div>
+            <mt-button @click="register" class="wx-btn" type="primary">注册</mt-button>
+            <div class="wx-go" ><a href="login.html">已有账号登录</a ></div>
+
+        </div>
+
+    </div>
+</body>
+<script>
+    new Vue({
+        el: "#login",
+        data:{
+            userName:'',
+            password:'',
+            confirmPassword:''
+        },
+        created:function () {
+            mainBmob.init();
+        },
+        methods:{
+            register:function () {
+                var _this=this;
+                if(!_this.validate()){
+                    return;
+                }
+                var user = new Bmob.User();
+                user.set("username", _this.userName);
+                user.set("password", _this.password);
+                user.signUp(null, {
+                    success: function(user) {
+                        console.log(user);
+                    },
+                    error: function(user, error) {
+                        alert("Error: " + error.code + " " + error.message);
+                    }
+                });
+                /*
+                checkExit().then(function () {
+                    return addUser();
+                }).then(function () {
+                    console.log('wancheng ');
+                })
+                function addUser() {
+                    var p = new Promise(function(resolve, reject){
+                        mainBmob.addData({
+                            username:_this.userName,
+                            password:_this.password
+                        },'Member').then(function (data) {
+                            if(data.status){
+                                _this.$messagebox('注册成功，请登录！');
+                            }else{
+                                _this.$messagebox('注册失败，请重试！');
+                            }
+                        })
+                    });
+                    return p;
+                }
+                function checkExit() {
+                    var p = new Promise(function(resolve, reject){
+                        mainBmob.equalTo('Member','username',_this.userName).then(function (data) {
+                            console.log(data);
+                            if(data.code==200){
+                                if(data.list.length>0){
+                                    _this.$messagebox('此昵称已存在，请您更换一个昵称！');
+                                }else{
+                                    resolve(true);
+                                }
+                            }else{
+                                _this.$messagebox('请确认网络是否连接！');
+                            }
+                        })
+                    });
+                    return p;
+                }*/
+            },
+            validate:function(){
+                if(!(this.userName && this.password && this.confirmPassword)){    //非空验证
+                    this.$messagebox('请将数据填写完整');
+                    return false;
+                }
+                if(this.password.length<6){                                       //密码不能小于6位
+                    this.$messagebox('密码的长度最小为6位');
+                    return false;
+                }
+                if(this.password!=this.confirmPassword){                          //确认密码
+                    this.$messagebox('两次输入的密码不一致');
+                    return false;
+                }
+                return true;
+            }
+        }
+    });
+</script>
+</html>
