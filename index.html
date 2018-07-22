@@ -43,7 +43,7 @@
 </style>
 <body>
 <div id="blogList">
-    <mt-header fixed  title="星仔笔记" class="wx-header">
+    <mt-header fixed  :title="selectedTitle" class="wx-header">
         <mt-button icon="back" slot="left">返回</mt-button>
         <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
@@ -99,6 +99,7 @@
         el:"#blogList",
         data: {
             selected:"0",
+            selectedTitle:'',
             blogs:{},
             user:{}
         },
@@ -106,13 +107,18 @@
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
-            console.log(this.userId);
+            this.selectedTitle=this.user.attributes.username+'的笔记';
             this.getList();
         },
         watch:{
             selected:function () {
                 if(this.selected==0){
                     this.getList();
+                    this.selectedTitle=this.user.attributes.username+'的笔记';
+                }else if(this.selected==1){
+                    this.selectedTitle='发现';
+                }else{
+                    this.selectedTitle='我的';
                 }
             }
         },
