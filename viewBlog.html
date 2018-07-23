@@ -17,12 +17,34 @@
     <script src="comp/mint-ui/mint-ui.js"></script>
 </head>
 <style>
-    .content{
-        margin-top: 40px;
-    }
     .wx-header{
         background-color: #dc4036;
     }
+    .createdTime{
+        text-align: center;
+    }
+    .userInfo{
+        color: #666;
+        font-size: 12px;
+    }
+    .headImg-container{
+        background-color: #eee;
+        width: 30px;
+        height: 30px;
+        float: left;
+
+    }
+    .head-img{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    .author-name{
+        margin-left: 5px;
+        line-height: 30px;
+        display: inline-block;
+    }
+
 </style>
 <body>
     <div id="prview" class="preview">
@@ -30,7 +52,17 @@
             <mt-button icon="back" @click='router' slot="left">返回</mt-button>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <div class="content" v-html="mosaicDom(blog.attributes.title,blog.attributes.content,blog.createdAt)"></div>
+        <div style="margin-top: 40px;">
+            <center><h3>{{blog.attributes.title}}</h3></center>
+            <div class="userInfo">
+                <div class="headImg-container">
+                    <img class="head-img" style="" :src="author.attributes.headImg" alt="">
+                </div>
+                <div class="author-name">{{author.attributes.username}}</div>
+                <div style="line-height: 30px;float: right;height: 30px;overflow: hidden;" v-html="restime(blog.createdAt)"></div>
+            </div>
+        </div>
+        <div class="content" v-html="blog.attributes.content"></div>
     </div>
 </body>
 <script>
@@ -57,12 +89,21 @@
                 if(data.code==200){
                     _this.blog=data.result;
                     console.log(_this.blog);
-                    _this.$indicator.close();
+                    var authorId=data.result.attributes.author;
+                    return mainBmob.getSingleData('_User',authorId);
                 }else{
                     _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                     console.log(data.error);
                     console.log(data.result);
                 }
+            }).then(function (data) {
+                if(data.code=200){
+                    _this.author=data.result;
+                    console.log(_this.author);
+                }else{
+                    _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                }
+                _this.$indicator.close();
             });
             _this.$indicator.close();
         },
@@ -73,14 +114,21 @@
                     title:''
                 }
             },
+            author:{
+                attributes:{
+                    username:"",
+                    headImg:''
+                }
+            }
         },
         methods:{
-            mosaicDom:function (title,content,time) {
-                return '<center><h3>'+title+'</h3></center>'+'<span>'+time+'</span>'+content;
-            },
             router:function () {
                 history.back();
+            },
+            restime:function (time) {
+                return dateFormat(time,'yyyy.MM.dd hh:mm');
             }
+
         }
     });
 </script>
