@@ -32,7 +32,7 @@
         width: 30px;
         height: 30px;
         float: left;
-
+        border-radius: 50%;
     }
     .head-img{
         width: 100%;
@@ -63,6 +63,23 @@
             </div>
         </div>
         <div class="content" v-html="blog.attributes.content"></div>
+        <div class="comment">
+            <div v-for="comment in comments">
+                <div class="userInfo">
+                    <div class="headImg-container">
+                        <img class="head-img" style="" :src="author.attributes.headImg" alt="">
+                    </div>
+                    <div class="author-name">{{author.attributes.username}}</div>
+                    <div style="line-height: 30px;float: right;height: 30px;overflow: hidden;" v-html="restime(blog.createdAt)"></div>
+                </div>
+                <div>{{comment.attributes.content}}</div>
+            </div>
+        </div>
+        <comment title="kkkk"></comment>
+    </div>
+
+    <div id="comments">
+
     </div>
 </body>
 <script>
@@ -78,6 +95,22 @@
         smartLists: true,
         smartypants: true
     });
+
+    Vue.component('comment', {
+        data: function () {
+            return {
+                comment: {}
+            }
+        },
+        props:['title'],
+        template: '<div v-html="getComment(title)"></div>',
+        methods:{
+            getComment:function(title){
+                return title;
+            }
+        }
+    })
+
     new Vue({
         el:"#prview",
         created:function () {
@@ -90,16 +123,24 @@
                     _this.blog=data.result;
                     console.log(_this.blog);
                     var authorId=data.result.attributes.author;
-                    return mainBmob.getSingleData('_User',authorId);
+                    return mainBmob.getSingleData('_User',authorId);           //获取作者的信息
                 }else{
                     _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                     console.log(data.error);
                     console.log(data.result);
                 }
-            }).then(function (data) {
+            }).then(function (data) {                                          //获取评论列表
                 if(data.code=200){
                     _this.author=data.result;
-                    console.log(_this.author);
+                    return mainBmob.equalTo('Comment','blog',_this.blog.id);
+                }else{
+                    _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                }
+                _this.$indicator.close();
+            }).then(function (data) {
+                console.log(data);
+                if(data.code==200){
+                    _this.comments=data.list;
                 }else{
                     _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                 }
@@ -119,7 +160,10 @@
                     username:"",
                     headImg:''
                 }
-            }
+            },
+            comments:[
+
+            ]
         },
         methods:{
             router:function () {
