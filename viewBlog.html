@@ -7,6 +7,7 @@
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link rel="stylesheet" href="static/editor/editor-view.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link href="static/iconfont.css" rel="stylesheet">
     <script src="comp/vue.js"></script>
 
     <script src="comp/util.js"></script>
@@ -15,6 +16,7 @@
     <script src="comp/marked.js"></script>
     <script src="comp/highlight/highlight.pack.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
+    <script src="component/userInfo.js"></script>
 </head>
 <style>
     .wx-header{
@@ -44,7 +46,54 @@
         line-height: 30px;
         display: inline-block;
     }
-
+    .created-time{
+        line-height: 30px;
+        float: right;
+        height: 30px;
+        overflow: hidden;
+    }
+    /*评论*/
+    .comment{
+        display: flex;
+        flex-direction: column;
+    }
+    .comment-header{
+        display: flex;
+        flex-direction: row;
+    }
+    .comment .comment-header .commenter-headImg-container{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    .commenter-headImg{
+        height: 100%;
+        width: 100%;
+        border-radius: 50%;
+    }
+    .commenter-info{
+        display: flex;
+        flex-direction: column;
+        height: 40px;
+        margin-left: 10px;
+        flex-grow: 1;
+    }
+    .commenter-info .commenter-name{
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .commenter-info .commented-time{
+        font-size: 12px;
+        line-height: 20px;
+        color:#666;
+    }
+    .comment-operation{
+        line-height: 40px;
+        color:#666;
+    }
+    .comment-operation i{
+        font-size: 20px;
+    }
 </style>
 <body>
     <div id="prview" class="preview">
@@ -53,29 +102,43 @@
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
         <div style="margin-top: 40px;">
+            <!--标题-->
             <center><h3>{{blog.attributes.title}}</h3></center>
-            <div class="userInfo">
-                <div class="headImg-container">
-                    <img class="head-img" style="" :src="author.attributes.headImg" alt="">
-                </div>
-                <div class="author-name">{{author.attributes.username}}</div>
-                <div style="line-height: 30px;float: right;height: 30px;overflow: hidden;" v-html="restime(blog.createdAt)"></div>
-            </div>
+            <!--作者信息组件-->
+            <userinfo :userid="blog.attributes.author" :created="blog.createdAt"></userinfo>
         </div>
-        <div class="content" v-html="blog.attributes.content"></div>
+        <!--文章内容-->
+        <content v-html="blog.attributes.content"></content>
+        <!--评论组件-->
         <div class="comment">
+            <div class="comment-header">
+                <div class="commenter-headImg-container">
+                    <img class="commenter-headImg" style="" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
+                </div>
+                <div class="commenter-info">
+                    <div class="commenter-name">王星</div>
+                    <div class="commented-time">2018.7.24 15:32</div>
+                </div>
+                <div class="comment-operation">
+                    <i class="icon iconfont icon-image"></i>
+                    <i class="icon iconfont icon-image"></i>
+                </div>
+
+            </div>
+            <div>湖人总冠军</div>
+        </div>
+        <!--<div class="comment">
             <div v-for="comment in comments">
                 <div class="userInfo">
                     <div class="headImg-container">
                         <img class="head-img" style="" :src="author.attributes.headImg" alt="">
                     </div>
                     <div class="author-name">{{author.attributes.username}}</div>
-                    <div style="line-height: 30px;float: right;height: 30px;overflow: hidden;" v-html="restime(blog.createdAt)"></div>
+                    <div class="" v-html="restime(blog.createdAt)"></div>
                 </div>
                 <div>{{comment.attributes.content}}</div>
             </div>
-        </div>
-        <comment title="kkkk"></comment>
+        </div>-->
     </div>
 
     <div id="comments">
@@ -96,6 +159,7 @@
         smartypants: true
     });
 
+    //评论组件
     Vue.component('comment', {
         data: function () {
             return {
@@ -109,7 +173,7 @@
                 return title;
             }
         }
-    })
+    });
 
     new Vue({
         el:"#prview",
@@ -123,20 +187,12 @@
                     _this.blog=data.result;
                     console.log(_this.blog);
                     var authorId=data.result.attributes.author;
-                    return mainBmob.getSingleData('_User',authorId);           //获取作者的信息
+                    return mainBmob.equalTo('Comment','blog',_this.blog.id);         //获取评论列表
                 }else{
                     _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                     console.log(data.error);
                     console.log(data.result);
                 }
-            }).then(function (data) {                                          //获取评论列表
-                if(data.code=200){
-                    _this.author=data.result;
-                    return mainBmob.equalTo('Comment','blog',_this.blog.id);
-                }else{
-                    _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-                }
-                _this.$indicator.close();
             }).then(function (data) {
                 console.log(data);
                 if(data.code==200){
@@ -153,12 +209,6 @@
                 attributes:{
                     content:"",
                     title:''
-                }
-            },
-            author:{
-                attributes:{
-                    username:"",
-                    headImg:''
                 }
             },
             comments:[
