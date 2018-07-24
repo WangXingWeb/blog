@@ -1,6 +1,9 @@
 /*预览效果*/
+*{
+    margin: 0;
+    padding: 0;
+}
 .preview{
-    padding:0 10px;
     box-sizing: border-box;
     background-color: #fff;
 }

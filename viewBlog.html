@@ -22,12 +22,16 @@
     .wx-header{
         background-color: #dc4036;
     }
+    .content{
+        padding: 0 10px;
+    }
     .createdTime{
         text-align: center;
     }
     .userInfo{
         color: #666;
         font-size: 12px;
+        padding: 0 10px;
     }
     .headImg-container{
         background-color: #eee;
@@ -52,11 +56,27 @@
         height: 30px;
         overflow: hidden;
     }
+
     /*评论*/
+    .comment-title{
+        background-color: #fcfcfc;
+        font-size: 14px;
+        line-height: 30px;
+        color:#888;
+        margin: 5px 0;
+        border-bottom: 1px solid #ddd;
+        padding: 0 10px;
+    }
     .comment{
         display: flex;
         flex-direction: column;
+        padding:10px;
+        border-bottom: 1px solid #ddd;
     }
+    .comment:last-child{
+        border: none;
+    }
+
     .comment-header{
         display: flex;
         flex-direction: row;
@@ -79,13 +99,13 @@
         flex-grow: 1;
     }
     .commenter-info .commenter-name{
-        font-size: 12px;
-        line-height: 20px;
+        font-size: 14px;
+        line-height: 25px;
     }
     .commenter-info .commented-time{
-        font-size: 12px;
+        font-size: 10px;
         line-height: 20px;
-        color:#666;
+        color:#a9a9a9;
     }
     .comment-operation{
         line-height: 40px;
@@ -93,6 +113,11 @@
     }
     .comment-operation i{
         font-size: 20px;
+    }
+    .comment-content{
+        margin-top: 10px;
+        color:#545454;
+        font-size: 12px;
     }
 </style>
 <body>
@@ -108,25 +133,46 @@
             <userinfo :userid="blog.attributes.author" :created="blog.createdAt"></userinfo>
         </div>
         <!--文章内容-->
-        <content v-html="blog.attributes.content"></content>
+        <div class="content" v-html="blog.attributes.content"></div>
         <!--评论组件-->
-        <div class="comment">
-            <div class="comment-header">
-                <div class="commenter-headImg-container">
-                    <img class="commenter-headImg" style="" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
-                </div>
-                <div class="commenter-info">
-                    <div class="commenter-name">王星</div>
-                    <div class="commented-time">2018.7.24 15:32</div>
-                </div>
-                <div class="comment-operation">
-                    <i class="icon iconfont icon-image"></i>
-                    <i class="icon iconfont icon-image"></i>
-                </div>
+        <div class="comment-list">
+            <div class="comment-title">评论(50)</div>
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="commenter-headImg-container">
+                        <img class="commenter-headImg" style="" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
+                    </div>
+                    <div class="commenter-info">
+                        <div class="commenter-name">王星</div>
+                        <div class="commented-time">2018.7.24 15:32</div>
+                    </div>
+                    <div class="comment-operation">
+                        <i class="icon iconfont icon-changyonghuifu"></i>
+                        <i class="icon iconfont icon-dianzan1"></i>
+                    </div>
 
+                </div>
+                <div class="comment-content">湖人总冠军</div>
             </div>
-            <div>湖人总冠军</div>
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="commenter-headImg-container">
+                        <img class="commenter-headImg" style="" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
+                    </div>
+                    <div class="commenter-info">
+                        <div class="commenter-name">王星</div>
+                        <div class="commented-time">2018.7.24 15:32</div>
+                    </div>
+                    <div class="comment-operation">
+                        <i class="icon iconfont icon-changyonghuifu"></i>
+                        <i class="icon iconfont icon-dianzan1"></i>
+                    </div>
+
+                </div>
+                <div class="comment-content">湖人总冠军</div>
+            </div>
         </div>
+
         <!--<div class="comment">
             <div v-for="comment in comments">
                 <div class="userInfo">
