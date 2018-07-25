@@ -1,5 +1,5 @@
-//用户信息及写作时间组件
-Vue.component('wx-userinfo', {
+//留言回复组件
+Vue.component('wx-comment', {
     data: function () {
         return {
             user: {
@@ -11,7 +11,7 @@ Vue.component('wx-userinfo', {
             createdTime:''
         }
     },
-    props:['userid','created'],
+    props:[],
     watch:{
         userid:function (newVal,oldVal) {
             var _this=this;
@@ -29,13 +29,30 @@ Vue.component('wx-userinfo', {
         }
     },
     template:
-    '<div class="userInfo">'+
+    '<div class="comment">'+
+    '<div class="headImg-box">'+
     '<div class="headImg-container">'+
-    '<img class="headImg" style="" :src="user.attributes.headImg" alt="">'+
+    '<img class="headImg" style="" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">'+
     '</div>'+
-    '<div class="userInfo-content"><div class="author-name">作者：{{ user.attributes.username }}</div>'+
-    '<div class="created-time">发表于：{{ createdTime }}</div></div>'+
-    '<mt-button class="attention " size="small">+ 关注</mt-button></div>',
+    '</div>'+
+    '<div class="comment-info">'+
+    '<div class="comment-header">'+
+    '<div class="commenter-name">王星</div>'+
+    '<i class="icon iconfont icon-gengduo"></i>'+
+    '</div>'+
+    '<div class="comment-content">湖人总冠军</div>'+
+    '<div class="comment-footer">'+
+    '<div class="commented-time">2018.7.24 15:32</div>'+
+    '<div class="comment-operation">'+
+    '<span class="like-num">25</span>'+
+    '<i class="icon iconfont icon-dianzan1"></i>'+
+    '<i class="icon iconfont icon-pinglun"></i>'+
+    '</div>'+
+    '</div>'+
+    '<wx-reply></wx-reply>'+
+    '<wx-reply></wx-reply>'+
+    '</div>'+
+    '</div>',
     methods:{
 
     }
