@@ -48,7 +48,7 @@ Vue.component('wx-reply', {
     '<div class="comment-footer">'+
     '<div class="commented-time">2018.7.24 15:32</div>'+
     '<div class="comment-operation">'+
-    '<span class="like-num">25 </span>'+
+    '<span class="like-num">25</span>'+
     '<i class="icon iconfont icon-dianzan1"></i>'+
     '<i class="icon iconfont icon-pinglun"></i>'+
     '</div>'+
