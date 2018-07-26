@@ -52,7 +52,7 @@
             <mt-tab-container class="page-tabbar-container content" v-model="selected">
                 <mt-tab-container-item id="0">
                     <ul class="blogList">
-                        <li class="blog" v-for="blog in blogs" v-on:click="readBlog(blog.id)">
+                        <li class="blog" v-for="blog in selfBlogs" v-on:click="readBlog(blog.id)">
                             <div class="img-contianer" v-if="getImg(blog.attributes.content)">
                                 <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
                             </div>
@@ -65,7 +65,18 @@
                     </ul>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="1">
-                    <mt-cell v-for="n in 5" :title="'订单 ' + n" />
+                    <ul class="blogList">
+                        <li class="blog" v-for="blog in openBlogs" v-on:click="readBlog(blog.id)">
+                            <div class="img-contianer" v-if="getImg(blog.attributes.content)">
+                                <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
+                            </div>
+                            <div class="info">
+                                <div class="title">{{blog.attributes.title}}</div>
+                                <div class="blog-content">{{getContent(blog.attributes.content)}}</div>
+                                <div class="blog-time" v-html="resetTime(blog.createdAt)"></div>
+                            </div>
+                        </li>
+                    </ul>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
                     <mt-cell v-for="n in 7" :title="'发现 ' + n" />
@@ -78,7 +89,7 @@
             <mt-tab-item id="0">
                 <img slot="icon" v-if="selected==0" src="images/blog-active.png">
                 <img slot="icon" v-else src="images/blog.png">
-                博客
+                我的笔记
             </mt-tab-item>
             <mt-tab-item id="1">
                 <img slot="icon" v-if="selected==1" src="images/discover-active.png">
@@ -100,36 +111,39 @@
         data: {
             selected:"0",
             selectedTitle:'',
-            blogs:{},
+            selfBlogs:{},
+            openBlogs:{},
             user:{}
         },
         created:function () {
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
-            this.selectedTitle=this.user.attributes.username+'的笔记';
-            this.getList();
+            this.selectedTitle=this.user.attributes.username;
+            this.getSelfList();
         },
         watch:{
             selected:function () {
                 if(this.selected==0){
-                    this.getList();
-                    this.selectedTitle=this.user.attributes.username+'的笔记';
+                    this.getSelfList();
+                    this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
                     this.selectedTitle='发现';
+                    this.getOpenList();
+
                 }else{
                     this.selectedTitle='我的';
                 }
             }
         },
         methods:{
-            getList:function () {
+            getSelfList:function () {
                 var _this=this;
                 if(_this.user){
                     this.$indicator.open();
-                    mainBmob.equalTo('Blog','author',_this.user.id).then(function (data) {
+                    mainBmob.equalTo('Blog',{author:_this.user.id}).then(function (data) {
                         if(data.code==200){
-                            _this.blogs=data.list;
+                            _this.selfBlogs=data.list;
                             console.log(data.list);
                             _this.$indicator.close();
                         }else{
@@ -141,6 +155,24 @@
                     window.location.href='login.html';
                 }
 
+            },
+            getOpenList:function () {
+                var _this=this;
+                if(_this.user){
+                    this.$indicator.open();
+                    mainBmob.equalTo('Blog',{'private':false}).then(function (data) {
+                        if(data.code==200){
+                            _this.openBlogs=data.list;
+                            console.log(data.list);
+                            _this.$indicator.close();
+                        }else{
+                            console.log(data.error.code+data.error.message);
+                        }
+                    });
+                    _this.$indicator.close();
+                }else{
+                    window.location.href='login.html';
+                }
             },
             getContent:function (str) {
                 return pickupText(str,50);

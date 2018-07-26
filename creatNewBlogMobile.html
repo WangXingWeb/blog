@@ -21,7 +21,13 @@
 </head>
 <style>
     .editor-header{
+        display: flex;
+        flex-direction: row;
         padding: 10px;
+    }
+    .operation{
+        flex-grow: 1;
+        text-align: right;
     }
 </style>
 <body>
@@ -29,9 +35,10 @@
     <div  style="width: 100vw;height: 100vh;background-color: #eee">
         <div class="editor-header">
             <i class="icon iconfont icon-image"></i>
-            <span>预览</span>
-            <span>发布</span>
-
+            <div class="operation">
+                <span>预览</span>
+                <span>发布</span>
+            </div>
         </div>
     </div>
 </div>

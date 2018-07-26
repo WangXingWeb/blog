@@ -86,10 +86,12 @@ var mainBmob={
         return promise;
     },
     /*查询某个属性等于value*/
-    equalTo:function (objName,key,value) {
+    equalTo:function (objName,option) {
         var query=this.createQuery(objName);
+        for(var key in option){
+            query.equalTo(key, option[key]);
+        }
         function queryData(resolve, reject) {
-            query.equalTo(key, value);
             query.find({
                 success: function(results) {
                     resolve({
