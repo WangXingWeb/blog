@@ -7,7 +7,6 @@
 
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link href="static/iconfont.css" rel="stylesheet">
-    <link href="static/editor/editor.css" rel="stylesheet">
     <link href="static/editor/editor-view.css" rel="stylesheet">
     <link href="comp/mint-ui/mint-ui.css" rel="stylesheet">
     <script src="comp/marked.js"></script>
@@ -20,6 +19,10 @@
 
 </head>
 <style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
     .editor-header{
         display: flex;
         flex-direction: row;
@@ -29,43 +32,111 @@
         flex-grow: 1;
         text-align: right;
     }
+    .prev{
+        margin-right: 10px;
+    }
+    .wx-header-defult{
+        background-color: #fff;
+        color:#666;
+    }
+    .title{
+        height: 30px;
+    }
+    .editor-content{
+        height: calc(100% - 118px);
+        overflow: hidden;
+
+    }
+    .editor-content textarea{
+        box-sizing: border-box;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+    }
+    .tool-Bar{
+        display: flex;
+        flex-direction: row;
+        padding: 0 10px;
+        background-color: #f3f3f3;
+        height: 30px;
+    }
+    .tool-Bar i{
+        font-size: 20px;
+        line-height: 30px;
+        color: #666;
+    }
+    .tool-Bar-save{
+        width: 50px;
+        margin-right: 10px;
+    }
+    .preview-content{
+        background-color: #fff;
+        height: calc(100% - 60px);
+        padding: 10px;
+        overflow-y: scroll;
+        border-top: 1px solid #d9d9d9;
+    }
+    .labal-for-private{
+        line-height: 30px;
+        color: #666;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+    /*修改switch组件大小*/
+    .mint-switch-core{
+        width: 42px;
+        height: 22px;
+    }
+    .mint-switch-core:before{
+        width: 40px;
+        height: 20px;
+    }
+    .mint-switch-core:after{
+        width: 20px;
+        height: 20px;
+    }
+    .mint-cell:last-child{
+        background-image: none;
+    }
 </style>
 <body>
-<div id="app">
-    <div  style="width: 100vw;height: 100vh;background-color: #eee">
-        <div class="editor-header">
-            <i class="icon iconfont icon-image"></i>
-            <div class="operation">
-                <span>预览</span>
-                <span>发布</span>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="editor">
-    <div class="editorArea">
-        <div class="title-bar">
-            <yd-input  required v-model="title" @input="update" placeholder="请输入题目"></yd-input>
-            <!--<input type="text" @input="update" v-model="title"  placeholder="请输入题目">-->
+    <div v-if="status" style="width: 100vw;height: 100vh;background-color: #eee">
+        <mt-header class="wx-header-defult">
+            <mt-button slot="left" icon="back">返回</mt-button>
+            <mt-button class="prev" @click="switchStatus" slot="right">预览</mt-button>
+            <mt-button slot="right" @click="save">发布</mt-button>
+        </mt-header>
+        <div style="">
+            <mt-field placeholder="请输入标题" class="title" v-model="title" @input="update"></mt-field>
         </div>
         <div class="tool-Bar">
-            <div class="tool-Bar-loadImg" @click="loadImg">
-                <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
-                <i class="icon iconfont icon-image"></i>
+            <div style="flex-grow: 1">
+                <div class="tool-Bar-loadImg" @click="loadImg">
+                    <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
+                    <i class="icon iconfont icon-image"></i>
+                </div>
             </div>
-            <div class="tool-Bar-loadImg" @click="addTodo">
-                <i class="icon iconfont icon-image"></i>
-            </div>
-
-            <yd-button class="tool-Bar-save" type="hollow" @click.native="save">保存</yd-button>
-           <!-- <button class="tool-Bar-save" type="hollow"  @click="save">保存</button>-->
+            <span class="labal-for-private">公开</span>
+            <mt-switch v-model="isSprivate"></mt-switch>
         </div>
         <div class="editor-content">
-            <textarea v-model="content"  @input="update" ></textarea>
+            <textarea placeholder="请输入正文" v-model="content"  @input="update"></textarea>
+        </div>
+
+    </div>
+    <div v-else style="width: 100vw;height: 100vh;background-color: #eee;" class="preview">
+        <mt-header class="wx-header-defult">
+            <mt-button slot="left" icon="back">返回</mt-button>
+            <mt-button class="prev" @click="switchStatus" slot="right">编辑</mt-button>
+            <mt-button slot="right" @click="save">发布</mt-button>
+        </mt-header>
+        <div class="preview-content" v-html="dom">
+
         </div>
     </div>
-    <div class="preview" v-html="dom"></div>
 </div>
 </body>
 <script>
@@ -82,9 +153,7 @@
         smartLists: true,
         smartypants: false
     });
-    new Vue({
-        el:'#app'
-    });
+
     new Vue({
         el: '#editor',
         data: {
@@ -94,7 +163,9 @@
             blogId:'',                          //当前文章blog的id
             isCreated:false,                    //是否新创建
             content:'',                         //textarea中的文本
-            htmlContent:''                      //content经过markdown处理的html字符串
+            htmlContent:'',                     //content经过markdown处理的html字符串
+            status:'true',
+            isSprivate:false
         },
         created: function () {
             mainBmob.init();
@@ -103,7 +174,6 @@
             update: function(e){
                 this.htmlContent=marked(this.content);
                 this.dom="<center><h3>"+this.title+"</h3></center>"+this.htmlContent;
-                console.log(this.title);
                 this.isSubmit=false;
             },
             loadImg:function (e) {
@@ -111,9 +181,13 @@
             },
             save:function () {
                 var _this=this;
-                if(this.title&&this.dom){                                            //必须添加标题和内容
-                    if(!this.isSubmit){                                              //防止重复提交
-                        this.isSubmit=true;
+                if(_this.title&&_this.dom){                                            //必须添加标题和内容
+                    if(!_this.isSubmit){                                              //防止重复提交
+                        _this.isSubmit=true;
+                        _this.$indicator.open({
+                            text: '正在提交...',
+                            spinnerType: 'fading-circle'
+                        });
                         if(!this.isCreated){                                         //新建
                             mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
                                 if(data.status){
@@ -122,34 +196,42 @@
                                     return mainBmob.changeData({
                                         title:_this.title,
                                         contentText:_this.content,
-                                        content:_this.htmlContent
+                                        content:_this.htmlContent,
+                                        open:_this.isSprivate,
+                                        author:Bmob.User.current().id
                                     },"Blog",_this.blogId);
                                 }else{                                               //创建失败
-                                    toastX.call(_this,'保存失败',1);
+                                    _this.toast('保存失败');
                                 }
                             }).then(function (data) {
-                                toastX.call(_this,'保存成功',0);
+                                _this.$indicator.close();
+                                _this.toast('保存成功');
                             });
                         }else{                                                       //修改
                             mainBmob.changeData({
                                 title:_this.title,
                                 contentText:_this.content,
-                                content:_this.htmlContent
+                                content:_this.htmlContent,
+                                open:_this.isSprivate,
+                                author:Bmob.User.current().id
                             },"Blog",_this.blogId).then(function (data) {
-                                toastX.call(_this,'保存成功',0);
+                                _this.$indicator.close();
+                                _this.toast('保存成功');
                             })
                         }
                     }else{
-                        toastX.call(_this,'您已提交，请勿重复提交',1);
+                        _this.toast('您已提交，请勿重复提交');
                     }
                 }else{
-                    toastX.call(_this,'请添加题目和内容',1);
+                    _this.toast('请添加题目和内容');
                 }
             },
             getFile:function (e) {
                 var _this=this;
-                loadingX.call(_this,'正在上传，请稍等...');
-                console.log(e);
+                _this.$indicator.open({
+                    text: '正在上传图片，请稍等...',
+                    spinnerType: 'fading-circle'
+                });
                 var fileImg = e.target.files[0];
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
                     if(data.status){
@@ -157,15 +239,24 @@
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
                         _this.update();
-                        closeLoadingX.call(_this);
+                        _this.$indicator.close();
                     }else{
-                        toastX.call(_this,'上传失败，请重试',1);
+                        _this.toast('上传失败，请重试');
                     }
                 });
 
             },
             addTodo:function () {
                 this.content+='<input type="checkbox" checked>'
+            },
+            switchStatus:function () {
+                this.status=!this.status;
+            },
+            toast:function (msg) {
+                this.$toast({
+                    message: msg,
+                    duration: 1000
+                });
             }
         }
     });
