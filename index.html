@@ -45,7 +45,7 @@
 <div id="blogList">
     <mt-header fixed  :title="selectedTitle" class="wx-header">
         <mt-button icon="back" slot="left">返回</mt-button>
-        <mt-button icon="more" slot="right"></mt-button>
+        <mt-button v-on:click="createNew"      slot="right">新建笔记 +</mt-button>
     </mt-header>
     <div class="page-tabbar">
         <div class="page-wrap">
@@ -189,6 +189,9 @@
             },
             readBlog:function (id) {
                 window.location.href = 'viewBlog.html?id='+id;
+            },
+            createNew:function () {
+                window.location.href = 'create.html';
             }
         }
     });
