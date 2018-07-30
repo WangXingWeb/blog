@@ -81,6 +81,7 @@
 }
 .like-author-name{
     color:#00b0e8;
+
     flex-grow: 1;
 }
 .like-num{
