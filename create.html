@@ -105,7 +105,7 @@
 <div id="editor">
     <div v-if="status" style="width: 100vw;height: 100vh;background-color: #eee">
         <mt-header class="wx-header-defult">
-            <mt-button slot="left" icon="back">返回</mt-button>
+            <mt-button slot="left" @click="back" icon="back">返回</mt-button>
             <mt-button class="prev" @click="switchStatus" slot="right">预览</mt-button>
             <mt-button slot="right" @click="save">发布</mt-button>
         </mt-header>
@@ -257,6 +257,9 @@
                     message: msg,
                     duration: 1000
                 });
+            },
+            back:function () {
+                window.history.back();
             }
         }
     });

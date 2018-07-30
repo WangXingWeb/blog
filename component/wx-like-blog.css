@@ -1,0 +1,89 @@
+.like-blog{
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    padding: 10px;
+}
+.like-header{
+    display: flex;
+    flex-direction: row;
+}
+.like-headImg-container{
+    width: 30px;
+    height: 30px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+.like-headImg{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.like-header-content{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    height: 30px;
+}
+.like-type-name{
+    display: flex;
+    flex-direction: row;
+    line-height: 14px;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.like-name{
+    font-weight: 700;
+    margin-right: 5px;
+}
+.like-time{
+    line-height: 10px;
+    font-size: 10px;
+}
+.like-content{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+.like-content-img{
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    background-repeat: no-repeat ;
+    background-size: cover;
+    background-position: center ;
+    background-color: #666 ;
+    flex-shrink:0;
+    margin-right: 10px;
+}
+.like-content-main{
+    display: flex;
+    flex-direction: column;
+}
+.like-title{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2;
+    color: rgba(0,0,0,0.6);
+}
+.like-info{
+    color: rgba(0,0,0,0.6);
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient: vertical;
+}
+.like-footer{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+.like-author-name{
+    color:#00b0e8;
+    flex-grow: 1;
+}
+.like-num{
+    width: 50px;
+    text-align: right;
+}

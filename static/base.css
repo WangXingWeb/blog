@@ -13,11 +13,14 @@
     overflow: hidden;
 }
 .img-contianer{
-    width: 120px;
-    height: 70px;
-    background-color: #666;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: #666 ;
     float: left;
     margin-right: 10px;
+    width: 70px;
+    height: 70px;
 }
 .img-contianer img{
     width: 100%;
@@ -44,4 +47,5 @@
     color: rgba(0,0,0,0.6);
     font-size: 12px;
     line-height: 1.6;
+    margin-top: 5px;
 }

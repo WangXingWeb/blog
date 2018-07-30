@@ -8,12 +8,17 @@
     <link rel="stylesheet" href="static/reset.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
     <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/iconfont.css">
+    <link rel="stylesheet" href="component/wx-like-blog.css">
 
     <script src="comp/vue.js"></script>
-    <script src="comp/mint-ui/mint-ui.js"></script>
     <script src="comp/util.js"></script>
+    <script src="component/wx-blog.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
+
 </head>
 <style>
     .page-tabbar {
@@ -40,32 +45,119 @@
     .mint-tab-item-label{
         color:#707070;
     }
+    .await{
+        text-align: center;
+        color: #999;
+        font-size: 18px;
+        line-height: 100px;
+        font-weight: 800;
+    }
+    .img-contianer {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-color: #666;
+        float: left;
+        margin-right: 10px;
+        width: 70px;
+        height: 70px;
+    }
+    .wx-header-title{
+        padding: 5px 0;
+        margin: 0px 12px;
+    }
+    .wx-header-title-active{
+        font-weight: 800;
+        border-bottom: 2px solid #fff;
+    }
 </style>
 <body>
 <div id="blogList">
-    <mt-header fixed  :title="selectedTitle" class="wx-header">
-        <mt-button icon="back" slot="left">返回</mt-button>
-        <mt-button v-on:click="createNew"      slot="right">新建笔记 +</mt-button>
-    </mt-header>
+
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container content" v-model="selected">
                 <mt-tab-container-item id="0">
+                    <mt-header fixed  :title="selectedTitle" class="wx-header">
+                        <mt-button icon="back" slot="left">返回</mt-button>
+                        <mt-button v-on:click="createNew" slot="right">新建笔记 +</mt-button>
+                    </mt-header>
                     <ul class="blogList">
-                        <li class="blog" v-for="blog in selfBlogs" v-on:click="readBlog(blog.id)">
-                            <div class="img-contianer" v-if="getImg(blog.attributes.content)">
-                                <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
-                            </div>
-                            <div class="info">
-                                <div class="title">{{blog.attributes.title}}</div>
-                                <div class="blog-content">{{getContent(blog.attributes.content)}}</div>
-                                <div class="blog-time" v-html="resetTime(blog.createdAt)"></div>
-                            </div>
-                        </li>
+                        <wx-blog  v-for="blog in selfBlogs" :key="blog.id" :blogdata="blog"></wx-blog>
                     </ul>
                 </mt-tab-container-item>
+
                 <mt-tab-container-item id="1">
+                    <header class="mint-header wx-header is-fixed">
+                        <div class="mint-header-button is-left">
+                            <button class="mint-button mint-button--default mint-button--normal">
+                                <span class="mint-button-icon">
+                                    <i class="mintui mintui-back"></i>
+                                </span>
+                                <label class="mint-button-text">返回</label>
+                            </button>
+                        </div>
+                        <div class="wx-header-title" v-bind:class="{ 'wx-header-title-active':isActiveLike }" @click="switchActive(0)">关注</div>
+                        <div class="wx-header-title" v-bind:class="{ 'wx-header-title-active':isActiveRecommend }" @click="switchActive(1)">推荐</div>
+                        <div class="mint-header-button is-right">
+                            <button class="mint-button mint-button--default mint-button--normal">
+                                <label class="mint-button-text">新建笔记 +</label>
+                            </button>
+                        </div>
+                    </header>
+                    <div v-if="isActiveLike">
+                        <ul class="blogList">
+                            <li class="like-blog">
+                                <div class="like-header">
+                                    <div class="like-headImg-container">
+                                        <img class="like-headImg" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
+                                    </div>
+                                    <div class="like-header-content">
+                                        <div class="like-type-name">
+                                            <div class="like-name">闪闪 </div>
+                                            <div class="like-type">赞了</div>
+                                            文章
+                                        </div>
+                                        <div class="like-time">2018.7.30 16:32</div>
+                                    </div>
+                                </div>
+                                <div class="like-content">
+                                    <div class="like-content-img" style="background-image: url('http://bmob-cdn-20127.b0.upaiyun.com/2018/07/02/1343e99c406d1ff780f77795d59d5024.jpg')"></div>
+                                    <div class="like-content-main">
+                                        <div class="like-title">詹姆斯与湖人</div>
+                                        <div class="like-info">詹姆斯与湖人达成4年1.54亿美元口头协议，其中第四年为球员选项。
+                                            接下来湖人一定还有操作鉴于保罗</div>
+                                    </div>
+                                </div>
+                                <div class="like-footer">
+                                    <div class="like-author-name">王星</div>
+                                    <div class="like-num">
+                                        <span >5</span>
+                                        <i class="icon iconfont icon-dianzan1"></i>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        <ul class="blogList">Recommend</ul>
+                    </div>
                     <ul class="blogList">
+
+                        <!--<li class="blog">
+                            <div class="img-contianer" v-style="{background-image: url('')}">
+                            </div>
+                            <div class="info">
+                                <div class="title">詹姆斯加盟湖人</div>
+                                <div class="blog-content">
+                                    詹姆斯与湖人达成4年1.54亿美元口头协议，其中第四年为球员选项。
+                                    接下来湖人一定还有操作鉴于保罗
+                                </div>
+                                <div class="blog-time">2018.07.02 09:07</div>
+                            </div>
+                        </li>-->
+                    </ul>
+                    <!--<ul class="blogList">
                         <li class="blog" v-for="blog in openBlogs" v-on:click="readBlog(blog.id)">
                             <div class="img-contianer" v-if="getImg(blog.attributes.content)">
                                 <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
@@ -76,10 +168,20 @@
                                 <div class="blog-time" v-html="resetTime(blog.createdAt)"></div>
                             </div>
                         </li>
-                    </ul>
+                    </ul>-->
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
-                    <mt-cell v-for="n in 7" :title="'发现 ' + n" />
+                    <mt-header fixed  :title="selectedTitle" class="wx-header">
+                        <mt-button icon="back" slot="left">返回</mt-button>
+                        <mt-button v-on:click="createNew" slot="right">新建笔记 +</mt-button>
+                    </mt-header>
+                    <div class="await">内测版本，待开发</div>
+                </mt-tab-container-item>
+                <mt-tab-container-item id="3">
+                    <div class="await">内测版本，待开发</div>
+                </mt-tab-container-item>
+                <mt-tab-container-item id="4">
+                    <div class="await">内测版本，待开发</div>
                 </mt-tab-container-item>
 
             </mt-tab-container>
@@ -101,6 +203,16 @@
                 <img slot="icon" v-else src="images/mine.png">
                 我的
             </mt-tab-item>
+            <!--<mt-tab-item id="3">
+                <img slot="icon"  v-if="selected==3" src="images/mine-active.png">
+                <img slot="icon" v-else src="images/mine.png">
+                消息
+            </mt-tab-item>
+            <mt-tab-item id="4">
+                <img slot="icon" v-if="selected==4" src="images/mine-active.png">
+                <img slot="icon" v-else src="images/mine.png">
+                我的
+            </mt-tab-item>-->
         </mt-tabbar>
     </div>
 </div>
@@ -113,7 +225,9 @@
             selectedTitle:'',
             selfBlogs:{},
             openBlogs:{},
-            user:{}
+            user:{},
+            isActiveLike:true,
+            isActiveRecommend:false
         },
         created:function () {
             mainBmob.init();
@@ -174,24 +288,18 @@
                     window.location.href='login.html';
                 }
             },
-            getContent:function (str) {
-                return pickupText(str,50);
-            },
-            getImg:function (str) {
-                var imgs=pickupImg(str,1);
-                if(imgs.length==0){
-                    return false;
-                }
-                return imgs[0];
-            },
-            resetTime:function (time) {
-                return dateFormat(time,'yyyy.MM.dd hh:mm');
-            },
-            readBlog:function (id) {
-                window.location.href = 'viewBlog.html?id='+id;
-            },
+
             createNew:function () {
                 window.location.href = 'create.html';
+            },
+            switchActive:function (data) {
+                if(data==0){
+                    this.isActiveLike=true;
+                    this.isActiveRecommend=false;
+                }else{
+                    this.isActiveLike=false;
+                    this.isActiveRecommend=true;
+                }
             }
         }
     });
