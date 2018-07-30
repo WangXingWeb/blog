@@ -7,8 +7,8 @@
     flex-direction: row;
 }
 .like-headImg-container{
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     background-color: #eee;
     border-radius: 50%;
 }
@@ -17,51 +17,49 @@
     height: 100%;
     border-radius: 50%;
 }
-.like-header-content{
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-    height: 30px;
-}
+
 .like-type-name{
     display: flex;
     flex-direction: row;
-    line-height: 14px;
+    line-height: 20px;
     font-size: 14px;
-    margin-bottom: 6px;
+    flex-grow: 1;
+    margin-left: 10px;
 }
 .like-name{
     font-weight: 700;
     margin-right: 5px;
 }
 .like-time{
-    line-height: 10px;
+    line-height: 20px;
     font-size: 10px;
+    width: 100px;
+    text-align: right;
 }
 .like-content{
     display: flex;
-    flex-direction: row;
-    margin-top: 10px;
+    flex-direction: column;
 }
 .like-content-img{
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 60px;
     overflow: hidden;
     background-repeat: no-repeat ;
     background-size: cover;
     background-position: center ;
     background-color: #666 ;
     flex-shrink:0;
-    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
 }
 .like-content-main{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 .like-title{
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 2;
+    padding: 5px 0;
     color: rgba(0,0,0,0.6);
 }
 .like-info{
@@ -71,20 +69,34 @@
     line-height: 1.6;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp:2;
+    -webkit-line-clamp:3;
     -webkit-box-orient: vertical;
 }
 .like-footer{
     display: flex;
     flex-direction: row;
+    line-height: 20px;
+    height: 20px;
     margin-top: 5px;
+}
+.like-footer-left{
+    flex-grow: 1;
+    display: inline-block;
 }
 .like-author-name{
     color:#00b0e8;
-
-    flex-grow: 1;
+    display: inline-block;
 }
 .like-num{
     width: 50px;
     text-align: right;
+    height: 20px;
+    line-height: 20px;
+    color:#666;
+    display: inline-block;
+}
+.like-footer i{
+    font-size: 18px;
+    line-height: 20px;
+    color:#666;
 }
