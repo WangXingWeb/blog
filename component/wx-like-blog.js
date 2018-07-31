@@ -68,7 +68,6 @@ Vue.component('wx-like-blog', {
     '<div class="like-num">'+
     '<span >{{ blog.attributes.applaudNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
     '</div></div>'+
-    '<i class="icon iconfont icon-gengduo"></i>'+
     '</div> </li>',
     methods:{
         getContent:function (str) {

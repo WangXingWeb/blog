@@ -1,6 +1,6 @@
 .like-blog{
-    border-bottom: solid 1px rgba(0,0,0,0.1);
-    padding: 10px 10px 5px;
+    border-bottom: solid 8px #ebebeb;
+    padding: 10px;
 }
 .like-header{
     display: flex;
@@ -25,19 +25,23 @@
     font-size: 14px;
     flex-grow: 1;
     margin-left: 10px;
+    color:#888;
 }
 .like-name{
     font-weight: 700;
     margin-right: 5px;
+    color:#000;
 }
 .like-type{
     margin-right: 5px;
+    color:#666;
 }
 .like-time{
     line-height: 20px;
     font-size: 10px;
     width: 100px;
     text-align: right;
+    color:#999;
 }
 .like-content{
     display: flex;
@@ -96,8 +100,12 @@
     text-align: right;
     height: 20px;
     line-height: 20px;
-    color:#666;
+    color:#999;
     display: inline-block;
+    margin-left: 20px;
+}
+.like-num span{
+    margin-right: 5px;
 }
 .like-footer i{
     font-size: 20px;
