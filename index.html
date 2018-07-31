@@ -14,6 +14,7 @@
     <script src="comp/vue.js"></script>
     <script src="comp/util.js"></script>
     <script src="component/wx-blog.js"></script>
+    <script src="component/wx-like-blog.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
 
     <script src="comp/bmob-min.js"></script>
@@ -74,7 +75,6 @@
 </style>
 <body>
 <div id="blogList">
-
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container content" v-model="selected">
@@ -108,77 +108,44 @@
                     </header>
                     <div v-if="isActiveLike">
                         <ul class="blogList">
-                            <li class="like-blog">
-                                <div class="like-header">
-                                    <div class="like-headImg-container">
-                                        <img class="like-headImg" src="https://avatars1.githubusercontent.com/u/22054263?s=460&v=4" alt="">
-                                    </div>
-
-                                    <div class="like-type-name">
-                                        <div class="like-name">闪闪 </div>
-                                        <div class="like-type">赞了</div>
-                                        文章
-                                    </div>
-                                    <div class="like-time">2018.7.30 16:32</div>
-
-                                </div>
-                                <div class="like-content">
-                                    <div class="like-title">詹姆斯与湖人达成口头协议</div>
-                                    <div class="like-content-main">
-
-                                        <div class="like-info">詹姆斯与湖人达成4年1.54亿美元口头协议，其中第四年为球员选项。
-                                            接下来湖人一定还有操作鉴于保罗接下来湖人一定还有操作鉴于保罗接下来湖人一定还有操作鉴于保罗</div>
-                                        <div class="like-content-img" style="background-image: url('http://bmob-cdn-20127.b0.upaiyun.com/2018/07/02/1343e99c406d1ff780f77795d59d5024.jpg')"></div>
-                                    </div>
-                                </div>
-                                <div class="like-footer">
-                                    <div class="like-footer-left">
-                                        <div class="like-author-name">王星</div>
-                                        <div class="like-num">
-                                            <span >5</span>
-                                            <i class="icon iconfont icon-dianzan1"></i>
-                                        </div>
-                                        <div class="like-num">
-                                            <span >5</span>
-                                            <i class="icon iconfont icon-pinglun"></i>
-                                        </div>
-                                    </div>
-
-                                    <i class="icon iconfont icon-gengduo"></i>
-                                </div>
-                            </li>
+                            <wx-like-blog v-for="dynamic in dynamicBlogs" :dynamic="dynamic"></wx-like-blog>
                         </ul>
                     </div>
                     <div v-else>
-                        <ul class="blogList">Recommend</ul>
-                    </div>
-                    <ul class="blogList">
-
-                        <!--<li class="blog">
-                            <div class="img-contianer" v-style="{background-image: url('')}">
-                            </div>
-                            <div class="info">
-                                <div class="title">詹姆斯加盟湖人</div>
-                                <div class="blog-content">
-                                    詹姆斯与湖人达成4年1.54亿美元口头协议，其中第四年为球员选项。
-                                    接下来湖人一定还有操作鉴于保罗
+                        <ul class="blogList">
+                            <li class="like-blog">
+                                <div class="like-header">
+                                    <div class="like-headImg-container">
+                                        <img alt="" class="like-headImg">
+                                    </div>
+                                    <div class="like-type-name">
+                                        <div class="like-name">晶晶 </div>
+                                    </div>
+                                    <div class="like-time">2018.07.31 15:37</div>
+                                </div><div class="like-content">
+                                <div class="like-title">今天去看一下装修进度</div>
+                                <div class="like-content-main">
+                                    <div class="like-info">天气很热</div>
+                                    <div class="like-content-img" style="background: url(&quot;http://bmob-cdn-20127.b0.upaiyun.com/2018/07/28/87b47c2140f4ddcd80aff9755996e0d2.jpg&quot;);"></div>
                                 </div>
-                                <div class="blog-time">2018.07.02 09:07</div>
                             </div>
-                        </li>-->
-                    </ul>
-                    <!--<ul class="blogList">
-                        <li class="blog" v-for="blog in openBlogs" v-on:click="readBlog(blog.id)">
-                            <div class="img-contianer" v-if="getImg(blog.attributes.content)">
-                                <img v-bind:src="getImg(blog.attributes.content)" v-bind:alt="blog.attributes.title">
+                            <div class="like-footer">
+                                <div class="like-footer-left">
+                                    <div class="like-num">
+                                        <span>0</span>
+                                        <i class="icon iconfont icon-dianzan1"></i>
+                                    </div>
+                                    <div class="like-num">
+                                        <span>0</span>
+                                        <i class="icon iconfont icon-pinglun"></i>
+                                    </div>
+                                </div>
+                                <i class="icon iconfont icon-gengduo"></i>
                             </div>
-                            <div class="info">
-                                <div class="title">{{blog.attributes.title}}</div>
-                                <div class="blog-content">{{getContent(blog.attributes.content)}}</div>
-                                <div class="blog-time" v-html="resetTime(blog.createdAt)"></div>
-                            </div>
-                        </li>
-                    </ul>-->
+                            </li>
+                        </ul>
+                    </div>
+
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
                     <mt-header fixed  :title="selectedTitle" class="wx-header">
@@ -233,8 +200,9 @@
         data: {
             selected:"0",
             selectedTitle:'',
-            selfBlogs:{},
-            openBlogs:{},
+            selfBlogs:[],
+            openBlogs:[],
+            dynamicBlogs:[],
             user:{},
             isActiveLike:true,
             isActiveRecommend:false
@@ -244,7 +212,6 @@
             var currentUser = Bmob.User.current();
             this.user=currentUser;
             this.selectedTitle=this.user.attributes.username;
-            this.getSelfList();
         },
         watch:{
             selected:function () {
@@ -253,7 +220,9 @@
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
                     this.selectedTitle='发现';
-                    this.getOpenList();
+                    /*获取关注动态*/
+                    this.getDynamic();
+                    //this.getOpenList();
 
                 }else{
                     this.selectedTitle='我的';
@@ -309,6 +278,39 @@
                 }else{
                     this.isActiveLike=false;
                     this.isActiveRecommend=true;
+                }
+            },
+            getDynamic:function () {
+                var _this=this;
+                if(_this.user){
+                    this.$indicator.open();
+                    console.log(_this.user.id);
+                    //查关系表获取到用户关注的人的列表
+                    mainBmob.equalTo('Attention',{'user':_this.user.id}).then(function (data) {
+                        if(data.code==200){
+                            console.log(data.list);
+                            var list=data.list;
+                            var arr=[];
+                            for(var i=0;i<list.length;i++){
+                                arr.push(list[i].attributes.attented);
+                            }
+                            return mainBmob.queryMultipleData('Dynamic','user',arr);
+                        }else{
+                            console.log(data.error.code+data.error.message);
+                            _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                        }
+                    }).then(function (data) {
+                        if(data.code==200){
+                            console.log(data.list);
+                            _this.dynamicBlogs=data.list;
+                            _this.$indicator.close();
+                        }else{
+                            _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                        }
+                    });
+                    _this.$indicator.close();
+                }else{
+                    window.location.href='login.html';
                 }
             }
         }

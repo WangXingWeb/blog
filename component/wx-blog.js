@@ -21,7 +21,7 @@ Vue.component('wx-blog', {
     '</li>',
     methods:{
         getContent:function (str) {
-            return pickupText(str,50);
+            return pickupText(str,100);
         },
         getImg:function (str) {
             var imgs=pickupImg(str,1);

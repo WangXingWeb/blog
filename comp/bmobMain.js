@@ -62,6 +62,30 @@ var mainBmob={
         var promise = new Promise(queryAllData);
         return promise;
     },
+    // 复合查询
+    queryMultipleData:function (objName,field,list) {
+        var query=this.createQuery(objName);
+        query.containedIn(field,list);
+        query.descending("createdAt");                   //根据创建时间倒序，最新的在最前面
+        function queryAllData(resolve, reject) {
+            query.find({
+                success: function(results) {
+                    resolve({
+                        list:results,
+                        code:200
+                    });
+                },
+                error: function(error) {
+                    reject({
+                        code:300,
+                        error:error
+                    });
+                }
+            });
+        }
+        var promise = new Promise(queryAllData);
+        return promise;
+    },
     /*获取一条数据*/
     getSingleData:function (objName,id) {
         var query=this.createQuery(objName);
@@ -85,7 +109,7 @@ var mainBmob={
         var promise = new Promise(getOneData);
         return promise;
     },
-    /*查询某个属性等于value*/
+    /*查询某一个或多个属性等于value*/
     equalTo:function (objName,option) {
         var query=this.createQuery(objName);
         for(var key in option){
