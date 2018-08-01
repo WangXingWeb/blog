@@ -129,7 +129,7 @@
     </div>
     <div v-else style="width: 100vw;height: 100vh;background-color: #eee;" class="preview">
         <mt-header class="wx-header-defult">
-            <mt-button slot="left" icon="back">返回</mt-button>
+            <mt-button slot="left" @click="back" icon="back">返回</mt-button>
             <mt-button class="prev" @click="switchStatus" slot="right">编辑</mt-button>
             <mt-button slot="right" @click="save">发布</mt-button>
         </mt-header>
@@ -181,7 +181,7 @@
             },
             save:function () {
                 var _this=this;
-                if(_this.title&&_this.dom){                                            //必须添加标题和内容
+                if(_this.title&&_this.dom){                                           //必须添加标题和内容
                     if(!_this.isSubmit){                                              //防止重复提交
                         _this.isSubmit=true;
                         _this.$indicator.open({

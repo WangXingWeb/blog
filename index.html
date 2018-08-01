@@ -15,6 +15,7 @@
     <script src="comp/util.js"></script>
     <script src="component/wx-blog.js"></script>
     <script src="component/wx-like-blog.js"></script>
+    <script src="component/wx-recommend-blog.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
 
     <script src="comp/bmob-min.js"></script>
@@ -119,36 +120,7 @@
                     </div>
                     <div v-else>
                         <ul class="blogList">
-                            <li class="like-blog">
-                                <div class="like-header">
-                                    <div class="like-headImg-container">
-                                        <img alt="" class="like-headImg">
-                                    </div>
-                                    <div class="like-type-name">
-                                        <div class="like-name">晶晶 </div>
-                                    </div>
-                                    <div class="like-time">2018.07.31 15:37</div>
-                                </div><div class="like-content">
-                                <div class="like-title">今天去看一下装修进度</div>
-                                <div class="like-content-main">
-                                    <div class="like-info">天气很热</div>
-                                    <div class="like-content-img" style="background: url(&quot;http://bmob-cdn-20127.b0.upaiyun.com/2018/07/28/87b47c2140f4ddcd80aff9755996e0d2.jpg&quot;);"></div>
-                                </div>
-                            </div>
-                            <div class="like-footer">
-                                <div class="like-footer-left">
-                                    <div class="like-num">
-                                        <span>0</span>
-                                        <i class="icon iconfont icon-dianzan1"></i>
-                                    </div>
-                                    <div class="like-num">
-                                        <span>0</span>
-                                        <i class="icon iconfont icon-pinglun"></i>
-                                    </div>
-                                </div>
-                                <i class="icon iconfont icon-gengduo"></i>
-                            </div>
-                            </li>
+                            <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
                         </ul>
                     </div>
 
@@ -230,7 +202,7 @@
                     this.selectedTitle='发现';
                     /*获取关注动态*/
                     this.getDynamic();
-                    //this.getOpenList();
+                    this.getOpenList();
 
                 }else{
                     this.selectedTitle='我的';
