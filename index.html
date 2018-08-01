@@ -73,11 +73,22 @@
                         <mt-button v-on:click="createNew" slot="right">新建笔记 +</mt-button>
                     </mt-header>
 
-                    <div class="mine-info">
+                    <div class="mine-info interval">
                         <img class="mine-info-headImg" :src="user.attributes.headImg" alt="">
                         <div class="mine-info-name">{{user.attributes.username}}</div>
                     </div>
-                    <div class="interval"></div>
+                    <div class="mine-item interval">
+                        <img src="images/shoucang.png" alt="">
+                        <span>收藏</span>
+                    </div>
+                    <div class="mine-item">
+                        <img src="images/guanzhu.png" alt="">
+                        <span>关注</span>
+                    </div>
+                    <div class="mine-item interval">
+                        <img src="images/shezhi.png" alt="">
+                        <span>设置</span>
+                    </div>
 
                     <!--<div class="await">内测版本，待开发</div>-->
                 </mt-tab-container-item>

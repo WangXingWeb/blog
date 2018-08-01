@@ -44,7 +44,7 @@
     display: flex;
     flex-direction: row;
     background-color: #fff;
-    padding: 10px;
+    padding: 10px 10px 10px 20px;
 }
 .mine-info-headImg{
     width: 40px;
@@ -56,4 +56,21 @@
     line-height: 40px;
     color: #000;
     font-weight: 700;
+}
+.mine-item{
+    padding: 10px 10px 10px 20px;
+    background-color: #fff;
+    line-height: 20px;
+    height: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+.mine-item img{
+    width: 20px;
+    height: 20px;
+}
+
+.mine-item span{
+    padding-left: 10px;
 }
