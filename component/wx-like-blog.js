@@ -48,7 +48,7 @@ Vue.component('wx-like-blog', {
     },
     props:['dynamic'],
     template:
-    '<li class="like-blog" @click="readBlog(blog.id)"><div class="like-header"><div class="like-headImg-container">'+
+    '<li class="like-blog interval" @click="readBlog(blog.id)"><div class="like-header"><div class="like-headImg-container">'+
     '<img class="like-headImg" :src="user.attributes.headImg" alt="">'+
     '</div><div class="like-type-name">'+
     '<div class="like-name">{{user.attributes.username}} </div>'+

@@ -1,0 +1,41 @@
+/*blog列表*/
+.self-blog{
+    padding: 10px;
+    overflow: hidden;
+    background-color: #fff;
+}
+.self-blog-imgContianer{
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: #666 ;
+    float: left;
+    margin-right: 10px;
+    width: 90px;
+    height: 60px;
+    background-color: #666;
+    border-radius: 5px;
+}
+
+.self-blog-title{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    color: rgba(0,0,0,0.6);
+}
+.self-blog-content{
+    color: rgba(0,0,0,0.6);
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient: vertical;
+}
+.self-blog-time{
+    color: rgba(0,0,0,0.6);
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 5px;
+}

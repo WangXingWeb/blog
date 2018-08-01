@@ -1,0 +1,22 @@
+.reply{
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+.reply .commenter-name{
+    display: flex;
+    flex-direction: row;
+}
+.reply .commenter-name i{
+    color: #d2d2d2;
+    font-size: 12px;
+    margin: 0 0px 0 8px;
+}
+.reply .headImg-container{
+    width: 20px;
+    height: 20px;
+}
+.reply .comment-footer{
+    margin-bottom: 0;
+}

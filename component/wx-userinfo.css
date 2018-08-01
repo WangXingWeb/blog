@@ -1,0 +1,38 @@
+.userInfo{
+    color: #666;
+    font-size: 12px;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+}
+.headImg-container{
+    background-color: #eee;
+    width: 30px;
+    height: 30px;
+    float: left;
+    border-radius: 50%;
+}
+.headImg{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.userInfo-content{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+.author-name{
+    line-height: 15px;
+    display: inline-block;
+}
+.created-time{
+    line-height: 15px;
+    float: right;
+    height: 15px;
+    overflow: hidden;
+}
+.attention{
+    height: 25px;
+}

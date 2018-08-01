@@ -2,47 +2,14 @@
 .wx-header{
     background-color: #dc4036;
 }
-.wx-content{
-    margin-top: 40px;
+/*待开发*/
+.await{
+    text-align: center;
+    color: #999;
+    font-size: 18px;
+    line-height: 100px;
+    font-weight: 800;
 }
-/*blog列表*/
-.blog{
-    padding: 10px;
-    border-top: solid 8px #ebebeb;
-    overflow: hidden;
-}
-.img-contianer{
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-color: #666 ;
-    float: left;
-    margin-right: 10px;
-    width: 90px;
-    height: 60px;
-    background-color: #666;
-    border-radius: 5px;
-}
-
-.title{
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    color: rgba(0,0,0,0.6);
-}
-.blog-content{
-    color: rgba(0,0,0,0.6);
-    overflow: hidden;
-    font-size: 12px;
-    line-height: 20px;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp:1;
-    -webkit-box-orient: vertical;
-}
-.blog-time{
-    color: rgba(0,0,0,0.6);
-    font-size: 12px;
-    line-height: 16px;
-    margin-top: 5px;
+.interval{
+    margin-top: 10px;
 }

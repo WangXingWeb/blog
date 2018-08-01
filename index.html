@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="static/reset.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
     <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/index.css">
     <link rel="stylesheet" href="static/iconfont.css">
     <link rel="stylesheet" href="component/wx-like-blog.css">
+    <link rel="stylesheet" href="component/wx-blog.css">
 
     <script src="comp/vue.js"></script>
     <script src="comp/util.js"></script>
@@ -17,67 +19,19 @@
     <script src="component/wx-like-blog.js"></script>
     <script src="component/wx-recommend-blog.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
-
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
-
 </head>
 <style>
-    .page-wrap{
-        background-color: #ebebeb;
-    }
-    .page-tabbar {
-        overflow: hidden;
-        height: 100vh;
-    }
-    .page-wrap {
-        overflow: auto;
-        height: 100%;
-        padding-bottom: 100px;
-    }
-    .content{
-        margin: 40px 0 80px;
-    }
-    .mint-tabbar>.mint-tab-item.is-selected{
-        background-color: #fafafa;
-    }
-    .mint-tabbar{
-        background-image: none;
-    }
-    .mint-tabbar>.mint-tab-item.is-selected .mint-tab-item-label{
-        color:#dc4036;
-    }
-    .mint-tab-item-label{
-        color:#707070;
-    }
-    .await{
-        text-align: center;
-        color: #999;
-        font-size: 18px;
-        line-height: 100px;
-        font-weight: 800;
-    }
-    .wx-header-title{
-        padding: 5px 0;
-        margin: 0px 12px;
-    }
-    .wx-header-title-active{
-        font-weight: 800;
-        border-bottom: 2px solid #fff;
-        margin-bottom: -2px;
-    }
-    .like-blog,.blog{
-        background-color: #fff;
-    }
+
 </style>
 <body>
-<div id="blogList">
+<div id="app">
     <div class="page-tabbar">
         <div class="page-wrap">
             <mt-tab-container class="page-tabbar-container content" v-model="selected">
                 <mt-tab-container-item id="0">
                     <mt-header fixed  :title="selectedTitle" class="wx-header">
-                        <mt-button icon="back" slot="left">返回</mt-button>
                         <mt-button v-on:click="createNew" slot="right">新建笔记 +</mt-button>
                     </mt-header>
                     <ul class="blogList">
@@ -88,12 +42,12 @@
                 <mt-tab-container-item id="1">
                     <header class="mint-header wx-header is-fixed">
                         <div class="mint-header-button is-left">
-                            <button class="mint-button mint-button--default mint-button--normal">
+                            <!--<button class="mint-button mint-button&#45;&#45;default mint-button&#45;&#45;normal">
                                 <span class="mint-button-icon">
                                     <i class="mintui mintui-back"></i>
                                 </span>
                                 <label class="mint-button-text">返回</label>
-                            </button>
+                            </button>-->
                         </div>
                         <div class="wx-header-title" v-bind:class="{ 'wx-header-title-active':isActiveLike }" @click="switchActive(0)">关注</div>
                         <div class="wx-header-title" v-bind:class="{ 'wx-header-title-active':isActiveRecommend }" @click="switchActive(1)">热门</div>
@@ -113,22 +67,20 @@
                             <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
                         </ul>
                     </div>
-
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
                     <mt-header fixed  :title="selectedTitle" class="wx-header">
-                        <mt-button icon="back" slot="left">返回</mt-button>
                         <mt-button v-on:click="createNew" slot="right">新建笔记 +</mt-button>
                     </mt-header>
-                    <div class="await">内测版本，待开发</div>
-                </mt-tab-container-item>
-                <mt-tab-container-item id="3">
-                    <div class="await">内测版本，待开发</div>
-                </mt-tab-container-item>
-                <mt-tab-container-item id="4">
-                    <div class="await">内测版本，待开发</div>
-                </mt-tab-container-item>
 
+                    <div class="mine-info">
+                        <img class="mine-info-headImg" :src="user.attributes.headImg" alt="">
+                        <div class="mine-info-name">{{user.attributes.username}}</div>
+                    </div>
+                    <div class="interval"></div>
+
+                    <!--<div class="await">内测版本，待开发</div>-->
+                </mt-tab-container-item>
             </mt-tab-container>
         </div>
         <!--tabbar-->
@@ -148,23 +100,13 @@
                 <img slot="icon" v-else src="images/mine.png">
                 我的
             </mt-tab-item>
-            <!--<mt-tab-item id="3">
-                <img slot="icon"  v-if="selected==3" src="images/mine-active.png">
-                <img slot="icon" v-else src="images/mine.png">
-                消息
-            </mt-tab-item>
-            <mt-tab-item id="4">
-                <img slot="icon" v-if="selected==4" src="images/mine-active.png">
-                <img slot="icon" v-else src="images/mine.png">
-                我的
-            </mt-tab-item>-->
         </mt-tabbar>
     </div>
 </div>
 </body>
 <script>
     new Vue({
-        el:"#blogList",
+        el:"#app",
         data: {
             selected:"0",
             selectedTitle:'',

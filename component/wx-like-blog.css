@@ -1,6 +1,6 @@
 .like-blog{
-    border-top: solid 8px #ebebeb;
     padding: 10px;
+    background-color: #fff;
 }
 .like-header{
     display: flex;

@@ -10,13 +10,13 @@ Vue.component('wx-blog', {
     },
     props:['blogdata'],
     template:
-    '<li class="blog" v-on:click="readBlog(blogdata.id)">'+
-    '<div class="img-contianer" v-if="img" :style="{background: \'url(\'+ img +\')\'}">'+
+    '<li class="self-blog interval" v-on:click="readBlog(blogdata.id)">'+
+    '<div class="self-blog-imgContianer" v-if="img" :style="{background: \'url(\'+ img +\')\'}">'+
     '</div>'+
-    '<div class="info">'+
-    '<div class="title">{{blogdata.attributes.title}}</div>'+
-    '<div class="blog-content">{{getContent(blogdata.attributes.content)}}</div>'+
-    '<div class="blog-time" v-html="resetTime(blogdata.createdAt,\'yyyy.MM.dd hh:mm\')"></div>'+
+    '<div class="self-blog-info">'+
+    '<div class="self-blog-title">{{blogdata.attributes.title}}</div>'+
+    '<div class="self-blog-content">{{getContent(blogdata.attributes.content)}}</div>'+
+    '<div class="self-blog-time" v-html="resetTime(blogdata.createdAt,\'yyyy.MM.dd hh:mm\')"></div>'+
     '</div>'+
     '</li>',
     methods:{

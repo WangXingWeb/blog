@@ -27,7 +27,7 @@ Vue.component('wx-recommend-blog', {
     },
     props:['recommend'],
     template:
-    '<li class="like-blog" @click="readBlog(recommend.id)"> <div class="like-header"> <div class="like-headImg-container">'+
+    '<li class="like-blog interval" @click="readBlog(recommend.id)"> <div class="like-header"> <div class="like-headImg-container">'+
     '<img alt="" :src="author.attributes.headImg" class="like-headImg"></div><div class="like-type-name">'+
     '<div class="like-name">{{author.attributes.username}} </div> </div>'+
     '<div class="like-time">{{ resetTime(recommend.createdAt) }}</div>'+

@@ -1,0 +1,59 @@
+.page-wrap{
+    background-color: #ebebeb;
+}
+.page-tabbar {
+    overflow: hidden;
+    height: 100vh;
+}
+.page-wrap {
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 100px;
+}
+.content{
+    margin: 40px 0 80px;
+}
+.mint-tabbar>.mint-tab-item.is-selected{
+    background-color: #fafafa;
+}
+.mint-tabbar{
+    background-image: none;
+}
+.mint-tabbar>.mint-tab-item.is-selected .mint-tab-item-label{
+    color:#dc4036;
+}
+.mint-tab-item-label{
+    color:#707070;
+}
+
+.wx-header-title{
+    padding: 5px 0;
+    margin: 0px 12px;
+}
+.wx-header-title-active{
+    font-weight: 800;
+    border-bottom: 2px solid #fff;
+    margin-bottom: -2px;
+}
+
+.wx-content{
+    margin-top: 40px;
+}
+/*user信息*/
+.mine-info{
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    padding: 10px;
+}
+.mine-info-headImg{
+    width: 40px;
+    height: 40px;
+}
+.mine-info-name{
+    margin-left: 10px;
+    font-size:16px;
+    line-height: 40px;
+    color: #000;
+    font-weight: 700;
+}
