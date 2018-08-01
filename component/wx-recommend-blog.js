@@ -35,7 +35,7 @@ Vue.component('wx-recommend-blog', {
     '<div class="like-title">{{ recommend.attributes.title }}</div>'+
     '<div class="like-content-main">'+
     '<div class="like-info">{{getContent(recommend.attributes.content)}}</div>'+
-    '<div class="like-content-img" :style="{background: \'url(\'+ getImg(recommend.attributes.content) +\')\'}"></div>'+
+    '<div class="like-content-img" v-if="getImg(recommend.attributes.content)" :style="{background: \'url(\'+ getImg(recommend.attributes.content) +\')\'}"></div>'+
     '</div> </div> <div class="like-footer">'+
     '<div class="like-num recommend-num">'+
     '<span>{{ recommend.attributes.commentNum }}</span>'+

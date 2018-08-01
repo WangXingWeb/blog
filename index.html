@@ -57,16 +57,6 @@
         line-height: 100px;
         font-weight: 800;
     }
-    .img-contianer {
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        background-color: #666;
-        float: left;
-        margin-right: 10px;
-        width: 70px;
-        height: 70px;
-    }
     .wx-header-title{
         padding: 5px 0;
         margin: 0px 12px;
@@ -196,14 +186,19 @@
         watch:{
             selected:function () {
                 if(this.selected==0){
-                    this.getSelfList();
+                    if(this.selfBlogs.length<1){
+                        this.getSelfList();
+                    }
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
                     this.selectedTitle='发现';
                     /*获取关注动态*/
-                    this.getDynamic();
-                    this.getOpenList();
-
+                    if(this.dynamicBlogs.length<1){
+                        this.getDynamic();
+                    }
+                    if(this.openBlogs.length<1){
+                        this.getOpenList();
+                    }
                 }else{
                     this.selectedTitle='我的';
                 }

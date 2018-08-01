@@ -58,7 +58,7 @@ Vue.component('wx-like-blog', {
     '<div class="like-title">{{ blog.attributes.title }}</div>'+
     '<div class="like-content-main">'+
     '<div class="like-info">{{getContent(blog.attributes.content)}}</div>'+
-    '<div class="like-content-img" :style="{background: \'url(\'+ getImg(blog.attributes.content) +\')\'}"></div>'+
+    '<div class="like-content-img" v-if="getImg(blog.attributes.content)" :style="{background: \'url(\'+ getImg(blog.attributes.content) +\')\'}"></div>'+
     '</div> </div> <div class="like-footer">'+
     '<div class="like-footer-left">'+
     '<div class="like-author-name">{{ author.attributes.username }}</div>'+
