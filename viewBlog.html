@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="static/editor/editor-view.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
     <link href="static/iconfont.css" rel="stylesheet">
-    <link href="component/wx-reply.css" rel="stylesheet">
-    <link href="component/wx-comment.css" rel="stylesheet">
-    <link href="component/wx-userinfo.css" rel="stylesheet">
+    <link href="static/base.css" rel="stylesheet">
+    <link href="component/wx-reply/wx-reply.css" rel="stylesheet">
+    <link href="component/wx-comment/wx-comment.css" rel="stylesheet">
+    <link href="component/wx-blogheader/wx-blogheader.css" rel="stylesheet">
     <script src="comp/vue.js"></script>
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
@@ -18,20 +19,14 @@
     <script src="comp/marked.js"></script>
     <script src="comp/highlight/highlight.pack.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
-    <script src="component/wx-userinfo.js"></script>
-    <script src="component/wx-comment.js"></script>
-    <script src="component/wx-reply.js"></script>
+    <script src="component/wx-blogheader/wx-blogheader.js"></script>
+    <script src="component/wx-comment/wx-comment.js"></script>
+    <script src="component/wx-reply/wx-reply.js"></script>
 </head>
 <style>
-    .wx-header{
-        background-color: #dc4036;
-    }
     .content{
         padding: 0 10px;
     }
-
-
-
 </style>
 <body>
     <div id="prview" class="preview">
@@ -43,7 +38,7 @@
             <!--标题-->
             <center><h3>{{blog.attributes.title}}</h3></center>
             <!--作者信息组件-->
-            <wx-userinfo :userid="blog.attributes.author" :created="blog.createdAt"></wx-userinfo>
+            <wx-blogheader :userid="blog.attributes.author" :created="blog.createdAt"></wx-blogheader>
         </div>
         <!--文章内容-->
         <div class="content" v-html="blog.attributes.content"></div>
@@ -67,22 +62,6 @@
         sanitize: true,
         smartLists: true,
         smartypants: true
-    });
-
-    //评论组件
-    Vue.component('comment', {
-        data: function () {
-            return {
-                comment: {}
-            }
-        },
-        props:['title'],
-        template: '<div v-html="getComment(title)"></div>',
-        methods:{
-            getComment:function(title){
-                return title;
-            }
-        }
     });
 
     new Vue({

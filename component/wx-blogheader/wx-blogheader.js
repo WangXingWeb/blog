@@ -1,5 +1,5 @@
 //用户信息及写作时间组件
-Vue.component('wx-userinfo', {
+Vue.component('wx-blogheader', {
     data: function () {
         return {
             author: {

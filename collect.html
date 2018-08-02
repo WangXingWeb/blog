@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>收藏</title>
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link href="static/reset.css" rel="stylesheet">
+    <link href="static/iconfont.css" rel="stylesheet">
+    <link href="static/base.css" rel="stylesheet">
+    <link href="component/wx-like-blog/wx-like-blog.css" rel="stylesheet">
+    <script src="comp/vue.js"></script>
+    <script src="comp/util.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+    <script src="component/wx-collect/wx-collect.js "></script>
+</head>
+<body>
+    <div id="app">
+        <mt-header fixed  title="收藏" class="wx-header">
+            <mt-button icon="back" @click='router' slot="left">返回</mt-button>
+            <mt-button icon="more" slot="right"></mt-button>
+        </mt-header>
+        <div class="wx-content">
+            <wx-collect v-for="collect in collects" :dynamicid="collect.id" :blogid="collect.attributes.blog"></wx-collect>
+        </div>
+    </div>
+</body>
+<script>
+
+    new Vue({
+        el:"#app",
+        created:function () {
+            var _this=this;
+            mainBmob.init();
+            var user=Bmob.User.current();
+            _this.$indicator.open();
+            mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
+                if(data.code==200){
+                    _this.collects=data.list;
+                    console.log(data.list);
+                    _this.$indicator.close();
+                }else{
+                    console.log(data.error.code+data.error.message);
+                    _this.$indicator.close();
+                }
+            });
+            _this.$indicator.close();
+        },
+        data: {
+            collects:[]
+        },
+        methods:{
+            router:function () {
+                history.back();
+            }
+
+        }
+    });
+</script>
+</html>

@@ -1,6 +1,13 @@
-/*头部*/
+body{
+    background-color: #ebebeb;
+}
+/*头部导航*/
 .wx-header{
     background-color: #dc4036;
+}
+/*内容*/
+.wx-content{
+    margin-top: 40px;
 }
 /*待开发*/
 .await{
@@ -10,6 +17,7 @@
     line-height: 100px;
     font-weight: 800;
 }
+/*分割*/
 .interval{
     margin-top: 10px;
 }
