@@ -63,9 +63,12 @@
                         </ul>
                     </div>
                     <div v-else>
-                        <ul class="blogList">
-                            <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
-                        </ul>
+                        <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+                            <ul class="blogList">
+                                <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
+                            </ul>
+                        </mt-loadmore>
+
                     </div>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
@@ -123,6 +126,7 @@
             selectedTitle:'',
             selfBlogs:[],
             openBlogs:[],
+            openBlogNum:0,
             dynamicBlogs:[],
             user:{},
             isActiveLike:true,
@@ -181,7 +185,7 @@
                 var _this=this;
                 if(_this.user){
                     this.$indicator.open();
-                    mainBmob.equalTo('Blog',{'open':true}).then(function (data) {
+                    mainBmob.fenye('Blog',{'open':true},_this.openBlogs.length).then(function (data) {
                         if(data.code==200){
                             _this.openBlogs=data.list;
                             console.log(data.list);
@@ -240,6 +244,11 @@
                 }else{
                     window.location.href='login.html';
                 }
+            },
+            loadBottom:function() {
+                this.getOpenList();
+                this.allLoaded = true;// 若数据已全部获取完毕
+                this.$refs.loadmore.onBottomLoaded();
             }
         }
     });

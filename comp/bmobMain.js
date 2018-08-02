@@ -134,6 +134,33 @@ var mainBmob={
         var promise = new Promise(queryData);
         return promise;
     },
+    /*分页查询*/
+    fenye:function (objName,option,skipNum) {
+        var query=this.createQuery(objName);
+        for(var key in option){
+            query.equalTo(key, option[key]);
+        }
+        query.limit(5);
+        query.skip(skipNum);
+        function queryData(resolve, reject) {
+            query.find({
+                success: function(results) {
+                    resolve({
+                        list:results,
+                        code:200
+                    });
+                },
+                error: function(error) {
+                    reject({
+                        code:300,
+                        error:error
+                    });
+                }
+            });
+        }
+        var promise = new Promise(queryData);
+        return promise;
+    },
     /*删除数据*/
     delData:function (objName,id) {
         var query=this.createQuery(objName);
