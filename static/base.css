@@ -21,3 +21,8 @@ body{
 .interval{
     margin-top: 10px;
 }
+/*数据加载完成*/
+.wx-allLoaded{
+    text-align: center;
+    margin-top: 10px;
+}

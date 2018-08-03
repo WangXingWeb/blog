@@ -39,6 +39,18 @@
             mainBmob.equalTo('Attention',{user:user.id}).then(function (data) {
                 if(data.code==200){
                     _this.attentions=data.list;
+                    var arr=data.list;
+                    for(var i=0;i<arr.length;i++){
+                        var post = arr[i].get("attented");
+                        post.fetch({
+                            success: function(post) {
+                                console.log(post);
+                                var title = post.get("username");
+                                console.log(title);
+                                console.log('@@@@@@@@@@@@@@');
+                            }
+                        });
+                    }
                     console.log(data.list);
                     _this.$indicator.close();
                 }else{

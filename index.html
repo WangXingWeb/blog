@@ -68,7 +68,7 @@
                                 <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
                             </ul>
                         </mt-loadmore>
-
+                        <div class="wx-allLoaded" v-if="allLoaded">-- 我是有底线的 --</div>
                     </div>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
@@ -130,28 +130,29 @@
             dynamicBlogs:[],
             user:{},
             isActiveLike:true,
-            isActiveRecommend:false
+            isActiveRecommend:false,
+            allLoaded:false
         },
         created:function () {
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
             this.selectedTitle=this.user.attributes.username;
-            this.getSelfList();
+            //this.getSelfList();
 
         },
         watch:{
             selected:function () {
                 if(this.selected==0){
                     if(this.selfBlogs.length<1){
-                        this.getSelfList();
+                        //this.getSelfList();
                     }
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
                     this.selectedTitle='发现';
                     /*获取关注动态*/
                     if(this.dynamicBlogs.length<1){
-                        this.getDynamic();
+                        //this.getDynamic();
                     }
                     if(this.openBlogs.length<1){
                         this.getOpenList();
@@ -187,8 +188,10 @@
                     this.$indicator.open();
                     mainBmob.fenye('Blog',{'open':true},_this.openBlogs.length).then(function (data) {
                         if(data.code==200){
-                            _this.openBlogs=data.list;
-                            console.log(data.list);
+                            _this.openBlogs = _this.openBlogs.concat(data.list);
+                            if(data.isAllLoad){
+                                _this.allLoaded = true;// 若数据已全部获取完毕
+                            }
                             _this.$indicator.close();
                         }else{
                             console.log(data.error.code+data.error.message);
@@ -199,7 +202,6 @@
                     window.location.href='login.html';
                 }
             },
-
             router:function (url) {
                 window.location.href = url+'.html';
             },
@@ -222,7 +224,7 @@
                         if(data.code==200){
                             console.log(data.list);
                             var list=data.list;
-                            var arr=[];
+
                             for(var i=0;i<list.length;i++){
                                 arr.push(list[i].attributes.attented);
                             }
@@ -247,7 +249,6 @@
             },
             loadBottom:function() {
                 this.getOpenList();
-                this.allLoaded = true;// 若数据已全部获取完毕
                 this.$refs.loadmore.onBottomLoaded();
             }
         }

@@ -36,3 +36,7 @@
 .attention{
     height: 25px;
 }
+.attention-btn-attented{
+    background-color: #dc4036;
+    color:#fff;
+}

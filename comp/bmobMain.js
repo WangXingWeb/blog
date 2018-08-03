@@ -11,18 +11,21 @@ var mainBmob={
     addData:function(option,objName){
         var Obj = Bmob.Object.extend(objName);
         var obj = new Obj();
+        console.log(option);
         for(var key in option){
             obj.set(key,option[key]);
         }
         function saveData(resolve, reject) {
             obj.save(null, {
                 success: function (object) {
+                    console.log(object);
                     resolve({
                         status:true,
                         objectId:object.id
                     });
                 },
                 error: function (model, error) {
+                    console.log(error);
                     resolve({
                         status:false,
                         objError:error
@@ -135,19 +138,28 @@ var mainBmob={
         return promise;
     },
     /*分页查询*/
-    fenye:function (objName,option,skipNum) {
+    fenye:function (objName,option,skipNum,pageNum) {
         var query=this.createQuery(objName);
         for(var key in option){
             query.equalTo(key, option[key]);
         }
-        query.limit(5);
+        if(!pageNum){
+            pageNum=5
+        }
+        query.limit(pageNum);
         query.skip(skipNum);
         function queryData(resolve, reject) {
             query.find({
                 success: function(results) {
+                    if(results.length<pageNum){
+                        var isAllLoad=true;
+                    }else{
+                        isAllLoad=false;
+                    }
                     resolve({
                         list:results,
-                        code:200
+                        code:200,
+                        isAllLoad:isAllLoad
                     });
                 },
                 error: function(error) {
