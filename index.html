@@ -155,7 +155,7 @@
                         //this.getDynamic();
                     }
                     if(this.openBlogs.length<1){
-                        this.getOpenList();
+                        this.loadBottom();
                     }
                 }else{
                     this.selectedTitle='我的';
@@ -184,13 +184,14 @@
             getOpenList:function () {
                 var _this=this;
                 _this.$indicator.open();
-                console.log("kaishichaxun")
+                console.log("kaishichaxun");
                 mainBmob.fenye('Blog',{'open':true},_this.openBlogs.length).then(function (data) {
                     if(data.code==200){
                         _this.openBlogs = _this.openBlogs.concat(data.list);
                         if(data.isAllLoad){
                             _this.allLoaded = true;// 若数据已全部获取完毕
                         }
+                        _this.$refs.loadmore.onBottomLoaded();
                         _this.$indicator.close();
                         console.log("查到了数")
                     }else{
@@ -247,7 +248,7 @@
             },
             loadBottom:function() {
                 this.getOpenList();
-                this.$refs.loadmore.onBottomLoaded();
+
             }
         }
     });
