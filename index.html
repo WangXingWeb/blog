@@ -191,7 +191,7 @@
                         if(data.isAllLoad){
                             _this.allLoaded = true;// 若数据已全部获取完毕
                         }
-                        _this.$refs.loadmore.onBottomLoaded();
+
                         _this.$indicator.close();
                         console.log("查到了数")
                     }else{
@@ -248,7 +248,7 @@
             },
             loadBottom:function() {
                 this.getOpenList();
-
+                this.$refs.loadmore.onBottomLoaded();
             }
         }
     });
