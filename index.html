@@ -63,7 +63,7 @@
                         </ul>
                     </div>
                     <div v-else>
-                        <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+                        <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
                             <ul class="blogList">
                                 <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
                             </ul>
@@ -138,14 +138,15 @@
             var currentUser = Bmob.User.current();
             this.user=currentUser;
             this.selectedTitle=this.user.attributes.username;
-            this.getSelfList();
+            //this.getSelfList();
 
         },
         watch:{
             selected:function () {
+
                 if(this.selected==0){
                     if(this.selfBlogs.length<1){
-                        this.getSelfList();
+                        //this.getSelfList();
                     }
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
@@ -155,7 +156,7 @@
                         //this.getDynamic();
                     }
                     if(this.openBlogs.length<1){
-                        this.loadBottom();
+                        this.getOpenList();
                     }
                 }else{
                     this.selectedTitle='我的';
@@ -191,16 +192,14 @@
                         if(data.isAllLoad){
                             _this.allLoaded = true;// 若数据已全部获取完毕
                         }
-
                         _this.$indicator.close();
-                        console.log("查到了数")
                     }else{
                         console.log(data.error.code+data.error.message);
                     }
                 });
                 _this.$indicator.close();
-
             },
+
             router:function (url) {
                 window.location.href = url+'.html';
             },
