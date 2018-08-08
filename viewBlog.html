@@ -12,6 +12,7 @@
     <link href="component/wx-reply/wx-reply.css" rel="stylesheet">
     <link href="component/wx-comment/wx-comment.css" rel="stylesheet">
     <link href="component/wx-blogheader/wx-blogheader.css" rel="stylesheet">
+    <link href="component/wx-toolbar/wx-toolbar.css" rel="stylesheet">
     <script src="comp/vue.js"></script>
     <script src="comp/util.js"></script>
     <script src="comp/bmob-min.js"></script>
@@ -23,38 +24,14 @@
     <script src="component/wx-blogheader/wx-blogheader.js"></script>
     <script src="component/wx-comment/wx-comment.js"></script>
     <script src="component/wx-reply/wx-reply.js"></script>
+    <script src="component/wx-toolbar/wx-toolbar.js"></script>
 </head>
 <style>
     .content{
         padding: 0 10px;
         margin-bottom: 50px;
     }
-    .toolBar-container{
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #fff;
-    }
-    .toolBar{
-        display: flex;
-        flex-direction: row;
-        border-top: 1px solid #dedede;
-        padding: 5px 0;
-    }
-    .toolBar .toolBar-item{
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        text-align: center;
-    }
-    .toolBar-item  i{
-        font-size: 20px;
-        color:#979797;
-    }
-    .toolBar-item  span{
-        font-size: 10px;
-        color:#979797;
-    }
+
 </style>
 <body>
     <div id="prview" class="preview">
@@ -76,26 +53,7 @@
             <!--<wx-comment></wx-comment>
             <wx-comment></wx-comment>-->
         </div>
-        <div class="toolBar-container">
-            <div class="toolBar">
-                <div class="toolBar-item">
-                    <i class="icon iconfont icon-dianzan1"></i>
-                    <span>赞同 {{blog.attributes.applaudNum}}</span>
-                </div>
-                <div class="toolBar-item">
-                    <i class="icon iconfont icon-pinglun"></i>
-                    <span>评论 {{blog.attributes.commentNum}}</span>
-                </div>
-                <div class="toolBar-item">
-                    <i class="icon iconfont icon-shoucang"></i>
-                    <span>收藏 {{blog.attributes.collectNum}}</span>
-                </div>
-                <div class="toolBar-item" id="copy" @click="copyUrl" :data-clipboard-text="shareUrl">
-                    <i class="icon iconfont icon-fenxiang"></i>
-                    <span>分享</span>
-                </div>
-            </div>
-        </div>
+        <wx-toolbar :blog="blog"></wx-toolbar>
 
     </div>
 </body>
@@ -123,7 +81,8 @@
             mainBmob.getSingleData('Blog',params.id).then(function (data) {
                 if(data.code==200){
                     _this.blog=data.result;
-                    _this.shareUrl='www.iwangxing.cn/blog/viewBlog.html?id='+_this.blog.id;  //分享路径
+                    console.log(_this.blog);
+                    console.log("#######");
                     var authorId=data.result.attributes.author;
                     return mainBmob.equalTo('Comment',{'blog':_this.blog.id});         //获取评论列表
                 }else{
@@ -153,8 +112,8 @@
             },
             comments:[
 
-            ],
-            shareUrl:''
+            ]
+
         },
         methods:{
             router:function () {
@@ -162,19 +121,14 @@
             },
             restime:function (time) {
                 return dateFormat(time,'yyyy.MM.dd hh:mm');
-            },
-            copyUrl:function () {
-                this.$toast('已复制地址，请去第三方工具粘贴');
             }
-
         }
     });
+    //复制链接到剪切板
     var btn = document.getElementById('copy');
     var clipboard = new Clipboard(btn);
-
     clipboard.on('success', function(e) {
-
-
+        console.log(e);
     });
 
     clipboard.on('error', function(e) {
