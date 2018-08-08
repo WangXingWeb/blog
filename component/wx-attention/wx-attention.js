@@ -13,25 +13,25 @@ Vue.component('wx-attention', {
     },
     created:function () {
         var _this=this;
-        mainBmob.getSingleData('_User',_this.attented).then(function (data) {
-            if(data.code==200){
-                _this.member=data.result;
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-                console.log(data.error);
-                console.log(data.result);
+        var post = _this.attention.get("attented");
+        console.log(post);
+        post.fetch({
+            success: function(data) {
+                console.log(data);
+                _this.member=data;
             }
-        })
+        });
+
     },
-    props:['attentionid','attented'],
+    props:['attention'],
     template:
     '<div class="attention" >'+
     '<div class="attention-headImg-container">'+
     '<img :src="member.attributes.headImg" class="attention-headImg" alt="">'+
     '</div>'+
     '<div class="attention-name">{{member.attributes.username}}</div>'+
-    '<mt-button v-if="isAttented" class="attention-btn attention-btn-attented" @click="attent(attentionid)" size="small">已关注</mt-button>'+
-    '<mt-button v-else class="attention-btn" @click="attent(attented)" size="small">+ 关注</mt-button>'+
+    '<mt-button v-if="isAttented" class="attention-btn attention-btn-attented" @click="attent(attention.id)" size="small">已关注</mt-button>'+
+    '<mt-button v-else class="attention-btn" @click="attent(member.id)" size="small">+ 关注</mt-button>'+
     '</div>',
     methods:{
         //查看个人信息
@@ -51,15 +51,19 @@ Vue.component('wx-attention', {
                    }
                 });
             }else{                         //关注
+                var myuser = new Bmob.User();
+                myuser.id=Bmob.User.current().id;
+                var myattented = new Bmob.User();
+                myattented.id=id;
                 mainBmob.addData({
-                    user:Bmob.User.current().id,
-                    attented:id
+                    user:myuser,
+                    attented:myattented
                 },'Attention').then(function (data) {
                     if(data.status){
                         _this.$toast('已关注');
                         _this.isAttented=! _this.isAttented;
                     }else{
-                        _this.$toast('获取数据错误', '请确认您的网络是否通畅');
+                        _this.$toast('关注失败');
                     }
                 });
             }

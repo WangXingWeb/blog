@@ -28,7 +28,10 @@ Vue.component('wx-blogheader', {
             mainBmob.getSingleData('_User',newVal).then(function (data) {
                 if(data.code==200){
                     _this.author=data.result;
-                    return mainBmob.equalTo('Attention',{'user':_this.user.id,'attented':newVal});
+                    if(_this.user){
+                        return mainBmob.equalTo('Attention',{'user':_this.user.id,'attented':newVal});
+
+                    }
                 }else{
                     _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                 }

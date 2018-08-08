@@ -23,7 +23,7 @@
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
         <div class="wx-content">
-            <wx-attention v-for="attention in attentions" :attentionid="attention.id" :attented="attention.attributes.attented"></wx-attention>
+            <wx-attention v-for="attention in attentions" :attention="attention"></wx-attention>
         </div>
     </div>
 </body>
@@ -39,7 +39,7 @@
             mainBmob.equalTo('Attention',{user:user.id}).then(function (data) {
                 if(data.code==200){
                     _this.attentions=data.list;
-                    var arr=data.list;
+                    /*var arr=data.list;
                     for(var i=0;i<arr.length;i++){
                         var post = arr[i].get("attented");
                         post.fetch({
@@ -51,7 +51,7 @@
                             }
                         });
                     }
-                    console.log(data.list);
+                    console.log(data.list);*/
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);
