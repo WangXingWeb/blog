@@ -38,10 +38,10 @@ Vue.component('wx-recommend-blog', {
     '<div class="like-content-img" v-if="getImg(recommend.attributes.content)" :style="{background: \'url(\'+ getImg(recommend.attributes.content) +\')\'}"></div>'+
     '</div> </div> <div class="like-footer">'+
     '<div class="like-num recommend-num">'+
-    '<span>{{ recommend.attributes.commentNum }}</span>'+
+    '<span>{{ recommend.attributes.applaudNum }}</span>'+
     '<i class="icon iconfont icon-dianzan1"></i>'+
     '</div> <div class="like-num recommend-num">'+
-    '<span>{{ recommend.attributes.applaudNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
+    '<span>{{ recommend.attributes.commentNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
     '</div> </div> </li>',
     methods:{
         getContent:function (str) {

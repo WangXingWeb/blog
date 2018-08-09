@@ -47,10 +47,10 @@ Vue.component('wx-collect', {
     '<div class="like-content-img" v-if="getImg(blog.attributes.content)" :style="{background: \'url(\'+ getImg(blog.attributes.content) +\')\'}"></div>'+
     '</div> </div> <div class="like-footer">'+
     '<div class="like-num recommend-num">'+
-    '<span>{{ blog.attributes.commentNum }}</span>'+
+    '<span>{{ blog.attributes.applaudNum }}</span>'+
     '<i class="icon iconfont icon-dianzan1"></i>'+
     '</div> <div class="like-num recommend-num">'+
-    '<span>{{ blog.attributes.applaudNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
+    '<span>{{ blog.attributes.commentNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
     '</div> </div> </li>',
     methods:{
         getContent:function (str) {

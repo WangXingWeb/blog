@@ -82,7 +82,6 @@
                 if(data.code==200){
                     _this.blog=data.result;
                     console.log(_this.blog);
-                    console.log("#######");
                     var authorId=data.result.attributes.author;
                     return mainBmob.equalTo('Comment',{'blog':_this.blog.id});         //获取评论列表
                 }else{

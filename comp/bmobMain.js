@@ -225,6 +225,33 @@ var mainBmob={
         var promise = new Promise(change);
         return promise;
     },
+    /*改变值*/
+    AddOne:function(objName,id,item,num){
+        var query=this.createQuery(objName);
+        function change(resolve, reject){
+            query.get(id, {
+                success: function(object){
+                    var newVal=object.get(item)+parseInt(num);
+                    object.set(item,newVal);
+                    object.save(null, {
+                        success: function(objectUpdate) {
+                            resolve(1);
+                            //alert("create object success, object score:"+objectUpdate.get("score"));
+                        },
+                        error: function(model, error) {
+                            resolve(2);
+                            //alert("create object fail");
+                        }
+                    });
+                },
+                error: function(object, error) {
+                    resolve(3);
+                }
+            });
+        }
+        var promise = new Promise(change);
+        return promise;
+    },
     /*上传文件*/
     loadFile:function(fileName,file){
         //文件名必须带后缀

@@ -71,9 +71,13 @@ Vue.component('wx-toolbar', {
                 if(data==1){
                     _this.isApplaud=false;
                     _this.$toast('已取消赞同');
+                    _this.blog.attributes.applaudNum--;
+                    return mainBmob.AddOne('Blog',_this.blog.id,'applaudNum',-1);
                 }else{
                     _this.$toast('取消赞同失败');
                 }
+            }).then(function (data) {
+
             });
         },
         addApplaud:function () {
@@ -83,8 +87,14 @@ Vue.component('wx-toolbar', {
                     _this.isApplaud=true;
                     _this.$toast('已赞同');
                     _this.applaud.id=data.objectId;
+                    _this.blog.attributes.applaudNum++;
+                    return mainBmob.AddOne('Blog',_this.blog.id,'applaudNum',1);
                 }else{
                     _this.$toast('赞同失败');
+                }
+            }).then(function (data) {
+                if(data==1){
+
                 }
             });
         },
@@ -97,9 +107,13 @@ Vue.component('wx-toolbar', {
                 if(data==1){
                     _this.isCollected=false;
                     _this.$toast('已取消收藏');
+                    _this.blog.attributes.collectNum--;
+                    return mainBmob.AddOne('Blog',_this.blog.id,'collectNum',-1);
                 }else{
                     _this.$toast('取消收藏失败');
                 }
+            }).then(function (data) {
+                
             });
         },
         addCollected:function () {
@@ -109,9 +123,13 @@ Vue.component('wx-toolbar', {
                     _this.isCollected=true;
                     _this.$toast('已收藏');
                     _this.collect.id=data.objectId;
+                    _this.blog.attributes.collectNum++;
+                    return mainBmob.AddOne('Blog',_this.blog.id,'collectNum',1);
                 }else{
                     _this.$toast('收藏失败');
                 }
+            }).then(function (data) {
+                
             });
         }
         
