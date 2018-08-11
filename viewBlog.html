@@ -31,7 +31,12 @@
         padding: 0 10px;
         margin-bottom: 50px;
     }
-
+    #blogContainer{
+        position: absolute;
+        top:40px;
+        bottom: 40px;
+        overflow-y: scroll;
+    }
 </style>
 <body>
     <div id="prview" class="preview">
@@ -39,21 +44,23 @@
             <mt-button icon="back" @click='router' slot="left">返回</mt-button>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <div style="margin-top: 40px;">
+        <div  id="blogContainer">
             <!--标题-->
             <center><h3>{{blog.attributes.title}}</h3></center>
             <!--作者信息组件-->
             <wx-blogheader :userid="blog.attributes.author" :created="blog.createdAt"></wx-blogheader>
+            <!--文章内容-->
+            <div class="content" v-html="blog.attributes.content"></div>
+            <!--评论组件-->
+            <div class="comment-list">
+                <div class="comment-title">评论</div>
+                <!--<wx-comment></wx-comment>
+                <wx-comment></wx-comment>-->
+            </div>
         </div>
-        <!--文章内容-->
-        <div class="content" v-html="blog.attributes.content"></div>
-        <!--评论组件-->
-        <div class="comment-list">
-            <div class="comment-title">评论</div>
-            <!--<wx-comment></wx-comment>
-            <wx-comment></wx-comment>-->
-        </div>
+
         <wx-toolbar :blog="blog"></wx-toolbar>
+
 
     </div>
 </body>

@@ -4,9 +4,11 @@ Vue.component('wx-toolbar', {
         return {
             isCollected:false,
             isApplaud:false,
+            isComment:false,
             shareUrl:'',
             collect:{},
-            applaud:{}
+            applaud:{},
+            popupVisible:false
         }
     },
     created:function () {
@@ -34,6 +36,7 @@ Vue.component('wx-toolbar', {
     },
     template:
     '<div class="toolBar-container">'+
+    '<div v-if="isComment" class="toolBar-comment"><textarea placeholder="请输入评论内容" cols="30" rows="2"></textarea></div>'+
     '<div class="toolBar">'+
     '<div v-if="isApplaud" class="toolBar-item active" @click="delApplaud">'+
     '<i class="icon iconfont icon-dianzan"></i>'+
@@ -60,6 +63,10 @@ Vue.component('wx-toolbar', {
     '<span>分享</span>'+
     '</div>'+
     '</div>'+
+        '<mt-popup class="comment-popup" position="bottom" v-model="popupVisible" popup-transition="popup-fade">' +
+        '<textarea class="comment-textarea" name="" id="" cols="30" rows="3"></textarea>'+
+        '<mt-button size="small">提交</mt-button>'+
+    '</mt-popup>'+
     '</div>',
     methods:{
         copyUrl:function () {
@@ -99,7 +106,7 @@ Vue.component('wx-toolbar', {
             });
         },
         addComment:function () {
-            
+            this.popupVisible=true;
         },
         delCollected:function () {
             var _this=this;
@@ -131,6 +138,9 @@ Vue.component('wx-toolbar', {
             }).then(function (data) {
                 
             });
+        },
+        startComment:function () {
+
         }
         
         
