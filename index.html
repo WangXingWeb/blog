@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="static/index.css">
     <link rel="stylesheet" href="static/iconfont.css">
     <link rel="stylesheet" href="component/wx-like-blog/wx-like-blog.css">
+    <link rel="stylesheet" href="component/wx-recommend-list/wx-recommend-list.css">
     <link rel="stylesheet" href="component/wx-blog/wx-blog.css">
 
     <script src="comp/vue.js"></script>
@@ -18,6 +19,8 @@
     <script src="component/wx-blog/wx-blog.js"></script>
     <script src="component/wx-like-blog/wx-like-blog.js"></script>
     <script src="component/wx-recommend-blog/wx-recommend-blog.js"></script>
+    <script src="component/wx-recommend-list/wx-recommend-list.js"></script>
+    <script src="component/wx-dynamic-list/wx-dynamic-list.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
@@ -58,17 +61,10 @@
                         </div>
                     </header>
                     <div v-if="isActiveLike">
-                        <ul class="blogList">
-                            <wx-like-blog v-for="dynamic in dynamicBlogs" :dynamic="dynamic"></wx-like-blog>
-                        </ul>
+                        <wx-dynamic-list></wx-dynamic-list>
                     </div>
                     <div v-else>
-                        <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-                            <ul class="blogList">
-                                <wx-recommend-blog v-for="recommend in openBlogs" :recommend="recommend"></wx-recommend-blog>
-                            </ul>
-                        </mt-loadmore>
-                        <div class="wx-allLoaded" v-if="allLoaded">-- 我是有底线的 --</div>
+                        <wx-recommend-list></wx-recommend-list>
                     </div>
                 </mt-tab-container-item>
                 <mt-tab-container-item id="2">
@@ -125,13 +121,9 @@
             selected:"0",
             selectedTitle:'',
             selfBlogs:[],
-            openBlogs:[],
-            openBlogNum:0,
-            dynamicBlogs:[],
             user:{},
             isActiveLike:true,
-            isActiveRecommend:false,
-            allLoaded:false
+            isActiveRecommend:false
         },
         created:function () {
             mainBmob.init();
@@ -139,7 +131,6 @@
             this.user=currentUser;
             this.selectedTitle=this.user.attributes.username;
             //this.getSelfList();
-
         },
         watch:{
             selected:function () {
@@ -150,14 +141,7 @@
                     }
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
-                    this.selectedTitle='发现';
-                    /*获取关注动态*/
-                    if(this.dynamicBlogs.length<1){
-                        //this.getDynamic();
-                    }
-                    if(this.openBlogs.length<1){
-                        this.getOpenList();
-                    }
+
                 }else{
                     this.selectedTitle='我的';
                 }
@@ -182,24 +166,6 @@
                     window.location.href='login.html';
                 }
             },
-            getOpenList:function () {
-                var _this=this;
-                _this.$indicator.open();
-                console.log("kaishichaxun");
-                mainBmob.fenye('Blog',{'open':true},_this.openBlogs.length).then(function (data) {
-                    if(data.code==200){
-                        _this.openBlogs = _this.openBlogs.concat(data.list);
-                        if(data.isAllLoad){
-                            _this.allLoaded = true;// 若数据已全部获取完毕
-                        }
-                        _this.$indicator.close();
-                    }else{
-                        console.log(data.error.code+data.error.message);
-                    }
-                });
-                _this.$indicator.close();
-            },
-
             router:function (url) {
                 window.location.href = url+'.html';
             },
@@ -211,44 +177,8 @@
                     this.isActiveLike=false;
                     this.isActiveRecommend=true;
                 }
-            },
-            getDynamic:function () {
-                var _this=this;
-                if(_this.user){
-                    this.$indicator.open();
-                    console.log(_this.user.id);
-                    //查关系表获取到用户关注的人的列表
-                    mainBmob.equalTo('Attention',{'user':_this.user.id}).then(function (data) {
-                        if(data.code==200){
-                            console.log(data.list);
-                            var list=data.list;
-
-                            for(var i=0;i<list.length;i++){
-                                arr.push(list[i].attributes.attented);
-                            }
-                            return mainBmob.queryMultipleData('Dynamic','user',arr);
-                        }else{
-                            console.log(data.error.code+data.error.message);
-                            _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-                        }
-                    }).then(function (data) {
-                        if(data.code==200){
-                            console.log(data.list);
-                            _this.dynamicBlogs=data.list;
-                            _this.$indicator.close();
-                        }else{
-                            _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-                        }
-                    });
-                    _this.$indicator.close();
-                }else{
-                    window.location.href='login.html';
-                }
-            },
-            loadBottom:function() {
-                this.getOpenList();
-                this.$refs.loadmore.onBottomLoaded();
             }
+
         }
     });
 </script>
