@@ -64,7 +64,7 @@ Vue.component('wx-toolbar', {
     '</div>'+
     '</div>'+
         '<mt-popup class="comment-popup" position="bottom" v-model="popupVisible" popup-transition="popup-fade">' +
-        '<textarea class="comment-textarea" name="" id="" cols="30" rows="3"></textarea>'+
+        '<div class="comment-textarea-container"><textarea class="comment-textarea" name="" id="" cols="30" rows="3"></textarea></div>'+
         '<mt-button size="small">提交</mt-button>'+
     '</mt-popup>'+
     '</div>',
