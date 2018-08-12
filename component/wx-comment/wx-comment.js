@@ -11,7 +11,7 @@ Vue.component('wx-comment', {
             createdTime:''
         }
     },
-    props:[],
+    props:['comment'],
     watch:{
         userid:function (newVal,oldVal) {
             var _this=this;
@@ -40,9 +40,9 @@ Vue.component('wx-comment', {
     '<div class="commenter-name">王星</div>'+
     '<i class="icon iconfont icon-gengduo"></i>'+
     '</div>'+
-    '<div class="comment-content">湖人总冠军</div>'+
+    '<div class="comment-content">{{comment.attributes.content}}</div>'+
     '<div class="comment-footer">'+
-    '<div class="commented-time">2018.7.24 15:32</div>'+
+    '<div class="commented-time">{{comment.createdAt}}</div>'+
     '<div class="comment-operation">'+
     '<span class="like-num">25</span>'+
     '<i class="icon iconfont icon-dianzan1"></i>'+

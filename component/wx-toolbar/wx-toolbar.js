@@ -8,7 +8,8 @@ Vue.component('wx-toolbar', {
             shareUrl:'',
             collect:{},
             applaud:{},
-            popupVisible:false
+            popupVisible:false,
+            commentContent:''
         }
     },
     created:function () {
@@ -64,8 +65,8 @@ Vue.component('wx-toolbar', {
     '</div>'+
     '</div>'+
         '<mt-popup class="comment-popup" position="bottom" v-model="popupVisible" popup-transition="popup-fade">' +
-        '<div class="comment-textarea-container"><textarea class="comment-textarea" name="" id="" cols="30" rows="3"></textarea></div>'+
-        '<mt-button size="small">提交</mt-button>'+
+        '<div class="comment-textarea-container"><textarea v-model="commentContent" class="comment-textarea" name="" id="" cols="30" rows="3"></textarea></div>'+
+        '<button class="comment-btn" @click="comment">发表评论</button>'+
     '</mt-popup>'+
     '</div>',
     methods:{
@@ -139,8 +140,33 @@ Vue.component('wx-toolbar', {
                 
             });
         },
-        startComment:function () {
+        comment:function () {
+            var _this=this;
+            _this.$indicator.open();
+            var commenter = new Bmob.User();
+            commenter.id=Bmob.User.current().id;
+            mainBmob.addData({
+                'type':'0',
+                'content':_this.commentContent,
+                'commenter':commenter,
+                'blog':_this.blog.id
+            },'Comment').then(function (data) {
+                if(data.status){
+                    return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
+                }else{
+                    _this.$indicator.close();
+                    _this.$toast('评论失败');
+                }
+            }).then(function (data) {
+                if(data==1){
+                    _this.popupVisible=false;
+                    _this.$indicator.close();
+                    _this.$toast('评论成功');
+                    _this.blog.attributes.commentNum++;
+                    _this.commentContent='';
 
+                }
+            })
         }
         
         

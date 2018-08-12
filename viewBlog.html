@@ -29,13 +29,13 @@
 <style>
     .content{
         padding: 0 10px;
-        margin-bottom: 50px;
     }
     #blogContainer{
         position: absolute;
         top:40px;
         bottom: 40px;
         overflow-y: scroll;
+        background-color: #fff;
     }
 </style>
 <body>
@@ -53,9 +53,9 @@
             <div class="content" v-html="blog.attributes.content"></div>
             <!--评论组件-->
             <div class="comment-list">
-                <div class="comment-title">评论</div>
-                <!--<wx-comment></wx-comment>
-                <wx-comment></wx-comment>-->
+                <div class="comment-title">评论({{blog.attributes.commentNum}})</div>
+                <wx-comment v-for="comment in comments" :comment="comment"></wx-comment>
+
             </div>
         </div>
 
