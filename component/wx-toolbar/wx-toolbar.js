@@ -147,7 +147,7 @@ Vue.component('wx-toolbar', {
                 var commenter = new Bmob.User();
                 commenter.id=Bmob.User.current().id;
                 var newCommemt={
-                    'type':'0',
+                    'type':0,
                     'content':_this.commentContent,
                     'commenter':commenter,
                     'blog':_this.blog.id,
@@ -156,8 +156,7 @@ Vue.component('wx-toolbar', {
                 var newCommemtId='';
                 mainBmob.addData(newCommemt,'Comment').then(function (data) {
                     if(data.status){
-                        newCommemt=data.object;
-                        _this.$emit('comment-back', newCommemt);
+                        _this.$emit('comment-back', data.object);
                         return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
                     }else{
                         _this.$indicator.close();

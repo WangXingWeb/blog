@@ -40,7 +40,12 @@ Vue.component('wx-comment', {
             }
         });
         //获取这条评论的回复
-
+        mainBmob.equalTo('Comment',{'parrentComment':_this.comment.id,'type':1}).then(function (data) {
+            if(data.code==200){
+                console.log(data.list);
+                _this.replys=data.list;
+            }
+        });
 
     },
     template:
@@ -61,54 +66,67 @@ Vue.component('wx-comment', {
     '<div class="comment-operation">'+
     '<div class="comment-operation-item" v-bind:class="{ active: isApplaud }" @click="addLike"><span class="like-num">{{comment.attributes.applaudNum}}</span>'+
     '<i class="icon iconfont icon-dianzan1"></i></div>'+
-    '<div class="comment-operation-item" @click="addComment"><i class="icon iconfont icon-pinglun"></i></div>'+
+    '<div class="comment-operation-item" @click="showComment"><i class="icon iconfont icon-pinglun"></i></div>'+
     '</div>'+
     '<mt-popup class="comment-popup" position="bottom" v-model="popupVisible" popup-transition="popup-fade">' +
     '<div class="comment-textarea-container"><textarea v-model="commentContent" class="comment-textarea" name="" id="" cols="30" rows="3"></textarea></div>'+
-    '<button class="comment-btn" @click="comment">发表评论</button>'+
+    '<button class="comment-btn" @click="addComment">发表评论</button>'+
     '</mt-popup>'+
     '</div>'+
-   /* '<wx-reply v-for="reply in replys" :reply="reply"></wx-reply>'+*/
+    '<wx-reply v-for="reply in replys" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack"></wx-reply>'+
     '</div>'+
     '</div>',
     methods:{
         resetTime:function (time) {
             return dateFormat(time,'yyyy.MM.dd hh:mm');
         },
+        showComment:function () {
+            this.popupVisible=true;
+        },
+        replyBack:function (data) {
+            this.replys.unshift(data);
+        },
         addComment:function () {
             var _this=this;
-            var Comment = Bmob.Object.extend('Comment');
-            var thisComment = new Comment();
-            thisComment.id=_this.comment.id;
+            if(_this.commentContent){
+                var Comment = Bmob.Object.extend('Comment');
+                var thisComment = new Comment();
+                thisComment.id=_this.comment.id;
 
-            var myuser = new Bmob.User();
-            myuser.id=Bmob.User.current().id;
+                var myuser = new Bmob.User();
+                myuser.id=Bmob.User.current().id;
 
-            var newComment={
-                'parrentComment':thisComment,
-                'type':1,
-                'content':_this.commentContent,
-                'commenter':myuser,
-                'applaudNum':0
+                var toUser = new Bmob.User();
+                toUser.id=_this.commenter.id;
+
+                var newComment={
+                    'parrentComment':thisComment,
+                    'type':1,
+                    'content':_this.commentContent,
+                    'commenter':myuser,
+                    'applaudNum':0,
+                    'toUser':toUser
+                }
+                mainBmob.addData(newComment,'Comment').then(function (data) {
+                    if(data.status){
+                        _this.replys.unshift(data.object);
+                        _this.$toast('回复成功');
+                        _this.comment.attributes.commentNum++;
+                        _this.popupVisible=false;
+                        _this.commentContent='';
+                        return mainBmob.AddOne('Blog',_this.blogid,'commentNum',1);
+                    }else{
+                        _this.$toast('回复失败');
+                    }
+                }).then(function (data) {
+                    if(data==1){
+
+                    }
+                });
+            }else{
+                _this.$toast('请输入评论内容');
             }
-            mainBmob.addData(newComment,'Comment').then(function (data) {
-                if(data.status){
-                    _this.reply.push({
-                        id:data.objectId,
-                        attributes:newComment,
-                        createdAt:new Date()
-                    });
-                    _this.$toast('回复成功');
-                    _this.comment.attributes.applaudNum++;
-                    return mainBmob.AddOne('Blog',_this.blogid,'commentNum',1);
-                }else{
-                    _this.$toast('赞同失败');
-                }
-            }).then(function (data) {
-                if(data==1){
 
-                }
-            });
         },
         addLike:function () {
             var _this=this;
@@ -131,7 +149,7 @@ Vue.component('wx-comment', {
                     'blog':thisBlog
                 },'Message').then(function (data) {
                     if(data.status){
-                        _this.applaud.id=data.objectId;
+                        _this.applaud.id=data.object.id;
                         return mainBmob.AddOne('Comment',_this.comment.id,'applaudNum',1);
                     }else{
                         _this.$toast('赞同失败');
