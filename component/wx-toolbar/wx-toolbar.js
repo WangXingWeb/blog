@@ -142,36 +142,45 @@ Vue.component('wx-toolbar', {
         },
         comment:function () {
             var _this=this;
-            _this.$indicator.open();
-            var commenter = new Bmob.User();
-            commenter.id=Bmob.User.current().id;
-            mainBmob.addData({
-                'type':'0',
-                'content':_this.commentContent,
-                'commenter':commenter,
-                'blog':_this.blog.id
-            },'Comment').then(function (data) {
-                if(data.status){
-                    return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
-                }else{
-                    _this.$indicator.close();
-                    _this.$toast('评论失败');
-                }
-            }).then(function (data) {
-                if(data==1){
-                    _this.popupVisible=false;
-                    _this.$indicator.close();
-                    _this.$toast('评论成功');
-                    _this.blog.attributes.commentNum++;
-                    _this.commentContent='';
+            if(_this.commentContent){
+                _this.$indicator.open();
+                var commenter = new Bmob.User();
+                commenter.id=Bmob.User.current().id;
+                var newCommemt={
+                    'type':'0',
+                    'content':_this.commentContent,
+                    'commenter':commenter,
+                    'blog':_this.blog.id,
+                    'applaudNum':0
+                };
+                var newCommemtId='';
+                mainBmob.addData(newCommemt,'Comment').then(function (data) {
+                    if(data.status){
+                        newCommemtId=data.objectId
+                        return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
+                    }else{
+                        _this.$indicator.close();
+                        _this.$toast('评论失败');
+                    }
+                }).then(function (data) {
+                    if(data==1){
+                        _this.popupVisible=false;
+                        _this.$indicator.close();
+                        _this.$toast('评论成功');
+                        _this.blog.attributes.commentNum++;
+                        _this.commentContent='';
+                        _this.$emit('comment-back', {
+                            attributes:newCommemt,
+                            createdAt:new Date(),
+                            id:newCommemtId
+                        });
+                    }
+                });
+            }else {
+                _this.$toast('请输入评论内容');
+            }
 
-                }
-            })
         }
-        
-        
-
-
     }
 });
 

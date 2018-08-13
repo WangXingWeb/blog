@@ -50,17 +50,21 @@
     height: 20px;
     margin-bottom: 10px;
 }
-.comment-operation i{
-    font-size: 20px;
+.comment-operation{
+    display: flex;
+    flex-direction: row;
+}
+.comment-operation .comment-operation-item{
+    padding-left: 20px;
     color:#a9a9a9;
 }
-.comment-operation i:last-child{
-    padding-left: 20px;
+.comment-operation-item.active {
+    color:#dc4036;
 }
 .like-num{
-    color:#a9a9a9;
     font-size: 12px;
     line-height: 20px;
+    margin-right: 5px;
     vertical-align: text-bottom;
 }
 .commented-time{

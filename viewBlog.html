@@ -30,6 +30,9 @@
     .content{
         padding: 0 10px;
     }
+    .comment-list{
+        margin-bottom: 40px;
+    }
     #blogContainer{
         position: absolute;
         width: 100%;
@@ -53,14 +56,14 @@
             <!--文章内容-->
             <div class="content" v-html="blog.attributes.content"></div>
             <!--评论组件-->
-            <div class="comment-list">
+            <div class="comment-list" v-on:commentBack="commentCall">
                 <div class="comment-title">评论({{blog.attributes.commentNum}})</div>
-                <wx-comment v-for="comment in comments" :comment="comment"></wx-comment>
+                <wx-comment v-for="comment in comments"  :comment="comment" :blogid="blog.id"></wx-comment>
 
             </div>
         </div>
 
-        <wx-toolbar :blog="blog"></wx-toolbar>
+        <wx-toolbar :blog="blog" v-on:comment-back="commentCall"></wx-toolbar>
 
 
     </div>
@@ -91,7 +94,7 @@
                     _this.blog=data.result;
                     console.log(_this.blog);
                     var authorId=data.result.attributes.author;
-                    return mainBmob.equalTo('Comment',{'blog':_this.blog.id});         //获取评论列表
+                    return mainBmob.equalTo('Comment',{'blog':_this.blog.id,'type':0});         //获取评论列表
                 }else{
                     _this.$toast('获取数据错误', '请确认您的网络是否通畅');
                     console.log(data.error);
@@ -128,6 +131,11 @@
             },
             restime:function (time) {
                 return dateFormat(time,'yyyy.MM.dd hh:mm');
+            },
+            commentCall:function (data) {
+                alert(0);
+                alert(data);
+                this.comments.unshift(data);
             }
         }
     });

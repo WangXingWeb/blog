@@ -11,14 +11,13 @@ var mainBmob={
     addData:function(option,objName){
         var Obj = Bmob.Object.extend(objName);
         var obj = new Obj();
-        console.log(option);
         for(var key in option){
             obj.set(key,option[key]);
         }
+
         function saveData(resolve, reject) {
             obj.save(null, {
                 success: function (object) {
-                    console.log(object);
                     resolve({
                         status:true,
                         objectId:object.id
@@ -69,11 +68,11 @@ var mainBmob={
     queryMultipleData:function (objName,field,list,skipNum,pageNum) {
         var query=this.createQuery(objName);
         query.containedIn(field,list);
-        /*if(!pageNum){
+        if(!pageNum){
             pageNum=5;
         }
         query.limit(skipNum);
-        query.skip(pageNum);*/
+        query.skip(pageNum);
         query.descending("createdAt");                   //根据创建时间倒序，最新的在最前面
         function queryAllData(resolve, reject) {
             query.find({
@@ -124,6 +123,7 @@ var mainBmob={
         for(var key in option){
             query.equalTo(key, option[key]);
         }
+        query.descending("createdAt");
         function queryData(resolve, reject) {
             query.find({
                 success: function(results) {
