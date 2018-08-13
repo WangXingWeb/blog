@@ -68,7 +68,7 @@ Vue.component('wx-comment', {
     '<button class="comment-btn" @click="comment">发表评论</button>'+
     '</mt-popup>'+
     '</div>'+
-    '<wx-reply v-for="reply in replys" :reply="reply"></wx-reply>'+
+   /* '<wx-reply v-for="reply in replys" :reply="reply"></wx-reply>'+*/
     '</div>'+
     '</div>',
     methods:{

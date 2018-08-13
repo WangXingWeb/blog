@@ -20,7 +20,7 @@ var mainBmob={
                 success: function (object) {
                     resolve({
                         status:true,
-                        objectId:object.id
+                        object:object
                     });
                 },
                 error: function (model, error) {

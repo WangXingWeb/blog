@@ -191,7 +191,7 @@
                         if(!this.isCreated){                                         //新建
                             mainBmob.addData({}, "Blog").then(function (data) {      //先创建一条数据
                                 if(data.status){
-                                    _this.blogId=data.objectId;                      //创建成功数据后修改数据
+                                    _this.blogId=data.object.id;                      //创建成功数据后修改数据
                                     _this.isCreated=true;
                                     return mainBmob.changeData({
                                         title:_this.title,

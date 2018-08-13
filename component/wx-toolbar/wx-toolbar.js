@@ -156,7 +156,8 @@ Vue.component('wx-toolbar', {
                 var newCommemtId='';
                 mainBmob.addData(newCommemt,'Comment').then(function (data) {
                     if(data.status){
-                        newCommemtId=data.objectId
+                        newCommemt=data.object;
+                        _this.$emit('comment-back', newCommemt);
                         return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
                     }else{
                         _this.$indicator.close();
@@ -169,11 +170,6 @@ Vue.component('wx-toolbar', {
                         _this.$toast('评论成功');
                         _this.blog.attributes.commentNum++;
                         _this.commentContent='';
-                        _this.$emit('comment-back', {
-                            attributes:newCommemt,
-                            createdAt:new Date(),
-                            id:newCommemtId
-                        });
                     }
                 });
             }else {
