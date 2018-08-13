@@ -161,7 +161,6 @@ Vue.component('wx-toolbar', {
                         return mainBmob.AddOne('Blog',_this.blog.id,'commentNum',1);
                     }else{
                         _this.$indicator.close();
-
                         _this.$toast('评论失败');
                     }
                 }).then(function (data) {
