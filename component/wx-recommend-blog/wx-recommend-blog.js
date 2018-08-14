@@ -42,6 +42,8 @@ Vue.component('wx-recommend-blog', {
     '<i class="icon iconfont icon-dianzan1"></i>'+
     '</div> <div class="like-num recommend-num">'+
     '<span>{{ recommend.attributes.commentNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
+    '</div><div class="like-num recommend-num">'+
+    '<span>{{ recommend.attributes.collectNum }}</span> <i class="icon iconfont icon-shoucang"></i>'+
     '</div> </div> </li>',
     methods:{
         getContent:function (str) {

@@ -73,7 +73,7 @@ Vue.component('wx-comment', {
     '<button class="comment-btn" @click="addComment">发表评论</button>'+
     '</mt-popup>'+
     '</div>'+
-    '<wx-reply v-for="reply in replys" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack"></wx-reply>'+
+    '<wx-reply v-for="reply in replys" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack" v-on:comment-back="commentBack"></wx-reply>'+
     '</div>'+
     '</div>',
     methods:{
@@ -85,6 +85,9 @@ Vue.component('wx-comment', {
         },
         replyBack:function (data) {
             this.replys.unshift(data);
+        },
+        commentBack:function (data) {
+            this.$emit('comment-back', 1);
         },
         addComment:function () {
             var _this=this;
@@ -120,7 +123,7 @@ Vue.component('wx-comment', {
                     }
                 }).then(function (data) {
                     if(data==1){
-
+                        _this.$emit('comment-back', 1);
                     }
                 });
             }else{
@@ -131,6 +134,7 @@ Vue.component('wx-comment', {
         addLike:function () {
             var _this=this;
             if(!_this.isApplaud){
+                _this.isApplaud=true;
                 var myuser = new Bmob.User();
                 myuser.id=Bmob.User.current().id;
                 var thisCommenter = new Bmob.User();
@@ -152,11 +156,11 @@ Vue.component('wx-comment', {
                         _this.applaud.id=data.object.id;
                         return mainBmob.AddOne('Comment',_this.comment.id,'applaudNum',1);
                     }else{
+                        _this.isApplaud=false;
                         _this.$toast('赞同失败');
                     }
                 }).then(function (data) {
                     if(data==1){
-                        _this.isApplaud=true;
                         _this.$toast('已赞同');
                         _this.comment.attributes.applaudNum++;
                     }

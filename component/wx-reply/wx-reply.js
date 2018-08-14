@@ -84,6 +84,7 @@ Vue.component('wx-reply', {
         addLike:function () {
             var _this=this;
             if(!_this.isApplaud){
+                _this.isApplaud=true;
                 var myuser = new Bmob.User();
                 myuser.id=Bmob.User.current().id;
                 var thisCommenter = new Bmob.User();
@@ -105,11 +106,11 @@ Vue.component('wx-reply', {
                         _this.applaud.id=data.object.id;
                         return mainBmob.AddOne('Comment',_this.reply.id,'applaudNum',1);
                     }else{
+                        _this.isApplaud=false;
                         _this.$toast('赞同失败');
                     }
                 }).then(function (data) {
                     if(data==1){
-                        _this.isApplaud=true;
                         _this.$toast('已赞同');
                         _this.reply.attributes.applaudNum++;
                     }
@@ -156,13 +157,13 @@ Vue.component('wx-reply', {
                         _this.reply.attributes.commentNum++;
                         _this.popupVisible=false;
                         _this.commentContent='';
-                        return mainBmob.AddOne('Comment',_this.reply.id,'commentNum',1);
+                        return mainBmob.AddOne('Blog',_this.blogid,'commentNum',1);
                     }else{
                         _this.$toast('回复失败');
                     }
                 }).then(function (data) {
                     if(data==1){
-
+                        _this.$emit('comment-back', 1);
                     }
                 });
             }else{

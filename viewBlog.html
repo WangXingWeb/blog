@@ -58,7 +58,7 @@
             <!--评论组件-->
             <div class="comment-list" v-on:commentBack="commentCall">
                 <div class="comment-title">评论({{blog.attributes.commentNum}})</div>
-                <wx-comment v-for="comment in comments"  :comment="comment" :blogid="blog.id"></wx-comment>
+                <wx-comment v-for="comment in comments"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
 
             </div>
         </div>
@@ -135,6 +135,9 @@
             commentCall:function (data) {
                 console.log(data);
                 this.comments.unshift(data);
+            },
+            commentBack:function (data) {
+                this.blog.attributes.commentNum++;
             }
         }
     });

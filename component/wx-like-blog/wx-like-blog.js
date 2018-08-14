@@ -67,6 +67,8 @@ Vue.component('wx-like-blog', {
     '<i class="icon iconfont icon-dianzan1"></i> </div>'+
     '<div class="like-num">'+
     '<span >{{ blog.attributes.commentNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
+    '</div><div class="like-num">'+
+    '<span >{{ blog.attributes.collectNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
     '</div></div>'+
     '</div> </li>',
     methods:{
