@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+
+    <title>个人信息</title>
+    <link rel="stylesheet" href="static/reset.css">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/index.css">
+    <link rel="stylesheet" href="static/iconfont.css">
+    <link rel="stylesheet" href="comp/headImg/aui.css"/>
+    <link rel="stylesheet" href="comp/headImg/intial.css" />
+
+
+    <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="comp/headImg/hammer.min.js" ></script>
+    <script src="comp/headImg/lrz.all.bundle.js" ></script>
+    <script src="comp/headImg/iscroll-zoom-min.js" ></script>
+    <script src="comp/headImg/PhotoClip.js" ></script>
+</head>
+<style>
+    *{
+        font-family: "黑体";
+    }
+    body,html{
+        height: 100%;
+        overflow: auto;
+    }
+    html{ background-color: hsla(0,0%,96%,1.00);
+    }
+    body{
+        background: none;
+    }
+    section{
+        padding-top: 3rem;
+        font-size: 0.9rem;
+    }
+    #headImg{
+        width: 12rem;
+        height: 12rem;
+        border: 2px solid #ffffff;
+        border-radius:100% ;
+        margin: auto;
+        margin-bottom: 1.7rem;
+    }
+    .btn{
+        position: relative;
+        z-index: 10;
+        padding: 0.5rem;
+        height: 1.6rem;
+        line-height: 1.6rem;
+        margin: auto;
+        font-size: 0.8rem;
+        color: #fd1142!important;
+        border:1px solid  #fd1142;
+        border-radius:0.2rem ;
+    }
+    .btn img{
+        display: inline-block;
+        width: 0.75rem;
+        margin-left: 0.1rem;
+    }
+
+
+    /*截图上传页面*/
+    .clipbg{
+        position: fixed;
+        background: black;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        left: 0;
+    }
+    .loading{
+        position: absolute;
+        top: 40%;
+        width: 38%;
+        left: 31%;
+        height: 1.6rem;
+        line-height: 1.6rem;
+        z-index: 99999;
+        text-align: center;
+        color: #ffffff;
+        border-radius:0.2rem ;
+        background: #9f9f9f;
+    }
+    .clipbg #clipArea{
+        width: 100%;
+        height: 80%;
+        margin: auto;
+
+    }
+    .clipbg .footer{
+        width: 90%;
+        position: fixed;
+        left: 5%;
+        bottom: 0px;
+        text-align: center;
+    }
+    .clipbg dl{
+        background: #ffffff;
+        border-radius: 0.4rem;
+        overflow: hidden;
+        margin-bottom: 0.6rem;
+    }
+    .clipbg dd{
+        position: relative;
+        height: 2.25rem;
+        line-height: 2.25rem;
+        border-bottom:1px solid #999999 ;
+    }
+    .clipbg .back{
+        height: 2.25rem;
+        line-height:2.25rem;
+        border-radius: 0.4rem;
+        margin-bottom: 0.4rem;
+        background: #ffffff;
+    }
+    .clipbg dd input{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 11;
+        filter:alpha(opacity=0);
+        -moz-opacity:0;
+        -khtml-opacity: 0;
+        opacity: 0;
+    }
+    .promptIput{
+        border: 1px solid #ededed !important;
+        line-height: 25px !important;
+        height: 25px !important;
+        padding-left:5px !important;
+    }
+</style>
+<body>
+<div id="app">
+    <header class="mint-header wx-header is-fixed">
+        <div class="mint-header-button is-left">
+            <button class="mint-button mint-button--default mint-button--normal" @click="router">
+            <span class="mint-button-icon">
+                <i class="mintui mintui-back"></i>
+            </span>
+                <label class="mint-button-text">返回</label>
+            </button>
+        </div>
+        <h1 class="mint-header-title">设置头像</h1>
+        <div class="mint-header-button is-right"></div>
+    </header>
+    <section class="aui-text-center">
+        <img :src="user.attributes.headImg" id="headImg" alt="">
+        <span class="btn" @click="changeHeadImg">
+				点击设置头像
+			</span>
+    </section>
+    <!--图片裁剪-->
+    <div class="clipbg displaynone">
+        <div id="clipArea"></div>
+        <div class="loading displaynone">正在载入图片...</div>
+        <div class="footer">
+            <dl>
+                <dd style="background: #fe1041; color: #ffffff;border: none;">打开相册<input type="file" id="file" accept="image/*" ></dd>
+                <dd id="clipBtn">完成裁剪</dd>
+            </dl>
+            <div class="back" @click="cancelChange">取消</div>
+        </div>
+    </div>
+    <div class="mint-msgbox-wrapper" v-if="promptShow" style="position: absolute; z-index: 2005;">
+        <div class="mint-msgbox" style="">
+            <div class="mint-msgbox-header">
+                <div class="mint-msgbox-title">请输入密码</div>
+            </div>
+            <div class="mint-msgbox-content">
+                <div class="mint-msgbox-message"> </div>
+                <div class="mint-msgbox-input" style="">
+                    <input placeholder="请输入密码" type="text" v-model="password" class="promptIput">
+                    <div class="mint-msgbox-errormsg" style="visibility: hidden;"></div>
+                </div>
+            </div>
+            <div class="mint-msgbox-btns">
+                <button class="mint-msgbox-btn mint-msgbox-cancel" @click="cancelChangeHeadImg" style="">取消</button>
+                <button class="mint-msgbox-btn mint-msgbox-confirm" @click="changeHeadImg">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data: {
+            user:{},
+            promptShow:false
+        },
+        created:function () {
+            mainBmob.init();
+            var currentUser = Bmob.User.current();
+            this.user=currentUser;
+        },
+        watch:{
+
+        },
+        methods:{
+            router:function () {
+                history.back();
+            },
+            changeHeadImg:function () {
+                $(".clipbg").fadeIn();
+            },
+            cancelChange:function () {
+                $(".clipbg").fadeOut();
+            },
+            cutImgBack:function(data){
+                this.user.attributes.headImg=data;
+                var _this=this;
+                _this.promptShow=true;
+            },
+            changeHeadImg:function () {
+                var user = Bmob.User.logIn(_this.attributes.username, "my_password", {
+                    success: function(user) {
+                        user.set("username", "my_new_username");  // attempt to change username
+                        user.save(null, {
+                            success: function(user) {
+                                // This succeeds, since the user was authenticated on the device
+
+                                // Get the user from a non-authenticated method
+                                var query = new Bmob.Query(Bmob.User);
+                                query.get(user.objectId, {
+                                    success: function(userAgain) {
+                                        userAgain.set("username", "another_username");
+                                        userAgain.save(null, {
+                                            error: function(userAgain, error) {
+                                                // This will error, since the Bmob.User is not authenticated
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            },
+            cancelChangeHeadImg:function () {
+                _this.password='';
+                _this.promptShow=true;
+            }
+
+
+        }
+    });
+
+    var clipArea = new  PhotoClip("#clipArea", {
+        size: [300, 300],//裁剪框大小
+        outputSize:[0,0],//打开图片大小，[0,0]表示原图大小
+        file: "#file",
+        ok: "#clipBtn",
+        loadStart: function() { //图片开始加载的回调函数。this 指向当前 PhotoClip 的实例对象，并将正在加载的 file 对象作为参数传入。（如果是使用非 file 的方式加载图片，则该参数为图片的 url）
+            $(".loading").removeClass("displaynone");
+        },
+        loadComplete: function() {//图片加载完成的回调函数。this 指向当前 PhotoClip 的实例对象，并将图片的 <img> 对象作为参数传入。
+            $(".loading").addClass("displaynone");
+        },
+        done: function(dataURL) { //裁剪完成的回调函数。this 指向当前 PhotoClip 的实例对象，会将裁剪出的图像数据DataURL作为参数传入。
+            console.log(dataURL);//dataURL裁剪后图片地址base64格式提交给后台处理
+            app.cancelChange();
+            app.cutImgBack(dataURL);
+
+        }
+    });
+
+    var user = Bmob.User.logIn(_this.attributes.username, "my_password", {
+        success: function(user) {
+            user.set("username", "my_new_username");  // attempt to change username
+            user.save(null, {
+                success: function(user) {
+                    // This succeeds, since the user was authenticated on the device
+
+                    // Get the user from a non-authenticated method
+                    var query = new Bmob.Query(Bmob.User);
+                    query.get(user.objectId, {
+                        success: function(userAgain) {
+                            userAgain.set("username", "another_username");
+                            userAgain.save(null, {
+                                error: function(userAgain, error) {
+                                    // This will error, since the Bmob.User is not authenticated
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
+</html>

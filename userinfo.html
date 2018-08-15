@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+
+    <title>个人信息</title>
+    <link rel="stylesheet" href="static/reset.css">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/index.css">
+    <link rel="stylesheet" href="static/iconfont.css">
+
+
+    <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+</head>
+<style>
+    .item{
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        background-color: #fff;
+    }
+    .item-name{
+        flex-grow: 1;
+        text-align: left;
+    }
+    .item-content{
+        flex-grow: 1;
+        text-align: right;
+    }
+    .username{
+        line-height: 50px;
+    }
+</style>
+<body>
+<div id="app">
+    <mt-header fixed  title="个人信息" class="wx-header">
+        <mt-button icon="back" @click='router' slot="left">返回</mt-button>
+        <mt-button icon="more" slot="right"></mt-button>
+    </mt-header>
+    <div class="content">
+        <div class="item interval"  @click='router("changeHeadImg")'>
+            <div class="item-name username">
+                头像
+            </div>
+            <div class="item-content">
+                <img class="mine-info-headImg" :src="user.attributes.headImg" alt="">
+            </div>
+        </div>
+        <div class="item interval" >
+            <div class="item-name">
+                昵称
+            </div>
+            <div class="item-content">
+               {{user.attributes.username}}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data: {
+
+        },
+        created:function () {
+            mainBmob.init();
+            var currentUser = Bmob.User.current();
+            this.user=currentUser;
+
+        },
+        watch:{
+
+        },
+        methods:{
+            router:function (url) {
+                if(url){
+                    window.location.href = url+'.html';
+                }else{
+                    history.back();
+                }
+
+            },
+
+        }
+    });
+</script>
+</html>

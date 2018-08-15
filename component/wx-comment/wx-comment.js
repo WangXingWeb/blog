@@ -23,10 +23,8 @@ Vue.component('wx-comment', {
         var _this=this;
         //获取评论人的昵称和头像
         var post = _this.comment.get("commenter");
-        console.log(post);
         post.fetch({
             success: function(data) {
-                console.log(data);
                 _this.commenter=data;
             }
         });
@@ -42,7 +40,6 @@ Vue.component('wx-comment', {
         //获取这条评论的回复
         mainBmob.equalTo('Comment',{'parrentComment':_this.comment.id,'type':1}).then(function (data) {
             if(data.code==200){
-                console.log(data.list);
                 _this.replys=data.list;
             }
         });
