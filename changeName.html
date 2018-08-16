@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+
+    <title>修改昵称</title>
+    <link rel="stylesheet" href="static/reset.css">
+    <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
+    <link rel="stylesheet" href="static/base.css">
+    <link rel="stylesheet" href="static/index.css">
+    <link rel="stylesheet" href="static/iconfont.css">
+
+
+    <script src="comp/vue.js"></script>
+    <script src="comp/mint-ui/mint-ui.js"></script>
+    <script src="comp/bmob-min.js"></script>
+    <script src="comp/bmobMain.js"></script>
+</head>
+<style>
+    body{
+        background-color: #f2f2f2;
+    }
+    .promptIput{
+        border: 1px solid #ededed !important;
+        line-height: 25px !important;
+        height: 25px !important;
+        padding-left:5px !important;
+    }
+    .outer{
+        padding: 20px;
+    }
+    .nickname{
+        width: 100%;
+        line-height: 30px;
+        border: none;
+        background: none;
+        font-size: 14px;
+        color: #000;
+        border-bottom: 1px solid #dc4036;
+    }
+    .btn-save{
+        margin: 100px auto;
+        width: 60%;
+        height: 30px;
+        line-height: 30px;
+        background-color: #666;
+        color: #fff;
+        border: none;
+        display: block;
+        border-radius: 5px;
+    }
+    .isCanSave{
+        background-color: #dc4036;
+    }
+    .message{
+        margin-top: 10px;
+    }
+    .message-success{
+        color:#1ca261;
+    }
+    .message-error{
+        color:#dc4036;
+    }
+</style>
+<body>
+<div id="app">
+    <mt-header fixed  title="修改昵称" class="wx-header">
+        <mt-button icon="back" @click='router()' slot="left">返回</mt-button>
+        <mt-button slot="right"></mt-button>
+    </mt-header>
+    <div class="content">
+        <div class="outer">
+            <input class="nickname" type="text" v-model="newNickname">
+            <div class="message message-success" v-if="validate==0">该昵称可以使用</div>
+            <div class="message message-error" v-else-if="validate==1">改昵称已经被使用</div>
+            <div class="message message-error" v-else-if="validate==2">请输入新的昵称后保存</div>
+            <button class="btn-save"  @click='save' :class="{isCanSave:isCanSave}">保存</button>
+        </div>
+
+    </div>
+    <div class="mint-msgbox-wrapper" v-if="promptShow" style="position: absolute; z-index: 20;">
+        <div class="mint-msgbox" style="">
+            <div class="mint-msgbox-header">
+                <div class="mint-msgbox-title">请输入账户密码</div>
+            </div>
+            <div class="mint-msgbox-content">
+                <div class="mint-msgbox-message"> </div>
+                <div class="mint-msgbox-input" style="">
+                    <input placeholder="请输入密码" type="password" v-model="password" class="promptIput">
+                    <div class="mint-msgbox-errormsg" style="visibility: hidden;"></div>
+                </div>
+            </div>
+            <div class="mint-msgbox-btns">
+                <button class="mint-msgbox-btn mint-msgbox-cancel" @click="cancel" style="">取消</button>
+                <button class="mint-msgbox-btn mint-msgbox-confirm" @click="confirm">确定</button>
+            </div>
+        </div>
+    </div>
+    <div class="v-modal" style="z-index: 19;" v-if="promptShow"></div>
+</div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data: {
+            user:{},
+            promptShow:false,
+            password:'',
+            newNickname:'',
+            isCanSave:false,
+            validate:3
+        },
+        created:function () {
+            mainBmob.init();
+            var currentUser = Bmob.User.current();
+            this.user=currentUser;
+            this.newNickname=this.user.attributes.username;
+        },
+        watch:{
+            newNickname:function (val) {
+                var _this=this;
+
+                if(this.newNickname==_this.user.attributes.username) {
+                    _this.validate=3;
+                    _this.isCanSave=false;
+                }else if(this.newNickname){
+                    checkExit().then(function (data) {
+                        if(data){
+                            _this.validate=0;
+                            _this.isCanSave=true;
+                        }else{
+                            _this.validate=1;
+                            _this.isCanSave=false;
+                        }
+                    });
+                }else{
+                    _this.validate=2;
+                    _this.isCanSave=false;
+                }
+
+                function checkExit() {
+                    function checkIfExit(resolve, reject){
+                        mainBmob.equalTo('_User',{'username':_this.newNickname}).then(function (data) {
+                            console.log(data);
+                            if(data.code==200){
+                                if(data.list.length>0){
+                                    resolve(false);
+                                }else{
+                                    resolve(true);
+                                }
+                            }else{
+                                _this.$messagebox('请确认网络是否连接！');
+                            }
+                        })
+                    }
+                    var promise = new Promise(checkIfExit);
+                    return promise;
+                }
+            }
+
+        },
+        methods:{
+            router:function (url) {
+                if(url){
+                    window.location.href = url+'.html';
+                }else{
+                    history.back();
+                }
+            },
+            confirm:function () {
+                var _this=this;
+                if(!_this.password){
+                    _this.$toast('请输入密码');
+                    return false;
+                }
+                Bmob.User.logIn(_this.user.attributes.username, _this.password, {
+                    success: function(user) {
+                        //user.set("headImg", _this.user.attributes.headImg);  // attempt to change username
+                        user.save(null, {
+                            success: function(user) {
+                                var query = new Bmob.Query(Bmob.User);
+                                query.get(user.objectId, {
+                                    success: function(userAgain) {
+                                        userAgain.set("username", _this.newNickname);
+                                        userAgain.save(null, {
+                                            error: function(userAgain, error) {
+                                                _this.$toast('修改失败');
+                                            },
+                                            success:function (data) {
+                                                _this.$toast('修改成功');
+                                                _this.promptShow=false;
+                                                _this.password='';
+                                                _this.isCanSave=false;
+                                                console.log("#################3");
+                                                Bmob.User.logIn(_this.newNickname, _this.password, {
+                                                    success: function(user) {
+                                                       _this.user=user;
+                                                        console.log(user);
+                                                    },
+                                                    error: function(user, error) {
+                                                        if(error.code==101){
+                                                            _this.$toast('用户名或密码不正确');
+                                                        }else{
+                                                            _this.$toast(error.message);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    },
+                    error:function (error,data) {
+                        console.log(data);
+                        _this.$toast('密码错误');
+                    }
+                });
+            },
+            cancel:function () {
+                this.$toast('取消修改');
+                this.promptShow=false;
+                this.password='';
+            },
+            save:function () {
+                if(this.isCanSave){
+                    this.promptShow = true;
+                }
+            }
+        }
+    });
+</script>
+</html>

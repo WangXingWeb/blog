@@ -51,7 +51,7 @@
                 <img class="mine-info-headImg" :src="user.attributes.headImg" alt="">
             </div>
         </div>
-        <div class="item interval" >
+        <div class="item interval" @click='router("changeName")'>
             <div class="item-name">
                 昵称
             </div>
@@ -72,10 +72,6 @@
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
-
-        },
-        watch:{
-
         },
         methods:{
             router:function (url) {
@@ -84,9 +80,7 @@
                 }else{
                     history.back();
                 }
-
-            },
-
+            }
         }
     });
 </script>

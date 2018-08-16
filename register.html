@@ -64,46 +64,27 @@
                 if(!_this.validate()){
                     return;
                 }
-                var user = new Bmob.User();
-                user.set("username", _this.userName);
-                user.set("password", _this.password);
-                user.signUp(null, {
-                    success: function(user) {
-                        //登陆成功跳转
-                        _this.$toast('登陆成功，请登录！');
-                    },
-                    error: function(user, error) {
-                        if(error.code==202){
-                            _this.$toast('用户名已经存在');
-                        }else{
-                            _this.$toast(error.message);
-                        }
-                    }
-                });
-                /*
                 checkExit().then(function () {
-                    return addUser();
-                }).then(function () {
-                    console.log('wancheng ');
-                })
-                function addUser() {
-                    var p = new Promise(function(resolve, reject){
-                        mainBmob.addData({
-                            username:_this.userName,
-                            password:_this.password
-                        },'Member').then(function (data) {
-                            if(data.status){
-                                _this.$messagebox('注册成功，请登录！');
+                    var user = new Bmob.User();
+                    user.set("username", _this.userName);
+                    user.set("password", _this.password);
+                    user.signUp(null, {
+                        success: function(user) {
+                            //登陆成功跳转
+                            _this.$toast('登陆成功，请登录！');
+                        },
+                        error: function(user, error) {
+                            if(error.code==202){
+                                _this.$toast('用户名已经存在');
                             }else{
-                                _this.$messagebox('注册失败，请重试！');
+                                _this.$toast(error.message);
                             }
-                        })
+                        }
                     });
-                    return p;
-                }
+                });
                 function checkExit() {
-                    var p = new Promise(function(resolve, reject){
-                        mainBmob.equalTo('Member','username',_this.userName).then(function (data) {
+                    function checkIfExit(resolve, reject){
+                        mainBmob.equalTo('_User',{'username':_this.userName}).then(function (data) {
                             console.log(data);
                             if(data.code==200){
                                 if(data.list.length>0){
@@ -115,9 +96,10 @@
                                 _this.$messagebox('请确认网络是否连接！');
                             }
                         })
-                    });
-                    return p;
-                }*/
+                    }
+                    var promise = new Promise(checkIfExit);
+                    return promise;
+                }
             },
             validate:function(){
                 if(!(this.userName && this.password && this.confirmPassword)){    //非空验证

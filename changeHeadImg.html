@@ -57,8 +57,8 @@
         line-height: 1.6rem;
         margin: auto;
         font-size: 0.8rem;
-        color: #fd1142!important;
-        border:1px solid  #fd1142;
+        color: #dc4036!important;
+        border:1px solid  #dc4036;
         border-radius:0.2rem ;
     }
     .btn img{
@@ -141,6 +141,9 @@
         height: 25px !important;
         padding-left:5px !important;
     }
+    .ready{
+        filter: blur(5px);
+    }
 </style>
 <body>
 <div id="app">
@@ -157,7 +160,7 @@
         <div class="mint-header-button is-right"></div>
     </header>
     <section class="aui-text-center">
-        <img :src="user.attributes.headImg" id="headImg" alt="">
+        <img :src="user.attributes.headImg" :class="{ready:isReady}" id="headImg" alt="">
         <span class="btn" @click="changeHeadImg">
 				点击设置头像
 			</span>
@@ -168,30 +171,31 @@
         <div class="loading displaynone">正在载入图片...</div>
         <div class="footer">
             <dl>
-                <dd style="background: #fe1041; color: #ffffff;border: none;">打开相册<input type="file" id="file" accept="image/*" ></dd>
+                <dd style="background: #dc4036; color: #ffffff;border: none;">打开相册<input type="file" id="file" accept="image/*" ></dd>
                 <dd id="clipBtn">完成裁剪</dd>
             </dl>
             <div class="back" @click="cancelChange">取消</div>
         </div>
     </div>
-    <div class="mint-msgbox-wrapper" v-if="promptShow" style="position: absolute; z-index: 2005;">
+    <div class="mint-msgbox-wrapper" v-if="promptShow" style="position: absolute; z-index: 20;">
         <div class="mint-msgbox" style="">
             <div class="mint-msgbox-header">
-                <div class="mint-msgbox-title">请输入密码</div>
+                <div class="mint-msgbox-title">请输入账户密码</div>
             </div>
             <div class="mint-msgbox-content">
                 <div class="mint-msgbox-message"> </div>
                 <div class="mint-msgbox-input" style="">
-                    <input placeholder="请输入密码" type="text" v-model="password" class="promptIput">
+                    <input placeholder="请输入密码" type="password" v-model="password" class="promptIput">
                     <div class="mint-msgbox-errormsg" style="visibility: hidden;"></div>
                 </div>
             </div>
             <div class="mint-msgbox-btns">
                 <button class="mint-msgbox-btn mint-msgbox-cancel" @click="cancelChangeHeadImg" style="">取消</button>
-                <button class="mint-msgbox-btn mint-msgbox-confirm" @click="changeHeadImg">确定</button>
+                <button class="mint-msgbox-btn mint-msgbox-confirm" @click="uploadImg">确定</button>
             </div>
         </div>
     </div>
+    <div class="v-modal" style="z-index: 19;" v-if="promptShow"></div>
 </div>
 
 
@@ -201,12 +205,16 @@
         el:"#app",
         data: {
             user:{},
-            promptShow:false
+            promptShow:false,
+            password:'',
+            isReady:false,
+            oldHeadImg:''
         },
         created:function () {
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
+            this.oldHeadImg=this.user.attributes.headImg;
         },
         watch:{
 
@@ -223,37 +231,52 @@
             },
             cutImgBack:function(data){
                 this.user.attributes.headImg=data;
-                var _this=this;
-                _this.promptShow=true;
+                this.isReady=true;
+                this.promptShow=true;
             },
-            changeHeadImg:function () {
-                var user = Bmob.User.logIn(_this.attributes.username, "my_password", {
+            uploadImg:function () {
+                var _this=this;
+                if(!_this.password){
+                    _this.$toast('请输入密码');
+                    return false;
+                }
+                Bmob.User.logIn(_this.user.attributes.username, _this.password, {
                     success: function(user) {
-                        user.set("username", "my_new_username");  // attempt to change username
+                        //user.set("headImg", _this.user.attributes.headImg);  // attempt to change username
                         user.save(null, {
                             success: function(user) {
-                                // This succeeds, since the user was authenticated on the device
-
-                                // Get the user from a non-authenticated method
                                 var query = new Bmob.Query(Bmob.User);
                                 query.get(user.objectId, {
                                     success: function(userAgain) {
-                                        userAgain.set("username", "another_username");
+                                        userAgain.set("headImg", _this.user.attributes.headImg);
                                         userAgain.save(null, {
                                             error: function(userAgain, error) {
-                                                // This will error, since the Bmob.User is not authenticated
+                                                _this.$toast('上传失败');
+                                            },
+                                            success:function (data) {
+                                                _this.$toast('上传成功');
+                                                _this.promptShow=false;
+                                                _this.isReady=false;
+                                                _this.password='';
                                             }
                                         });
                                     }
                                 });
                             }
                         });
+                    },
+                    error:function (error,data) {
+                        console.log(data);
+                        _this.$toast('密码错误');
                     }
                 });
             },
             cancelChangeHeadImg:function () {
-                _this.password='';
-                _this.promptShow=true;
+                this.$toast('取消上传');
+                this.password='';
+                this.promptShow=false;
+                this.isReady=false;
+                this.user.attributes.headImg=this.oldHeadImg;
             }
 
 
@@ -279,28 +302,6 @@
         }
     });
 
-    var user = Bmob.User.logIn(_this.attributes.username, "my_password", {
-        success: function(user) {
-            user.set("username", "my_new_username");  // attempt to change username
-            user.save(null, {
-                success: function(user) {
-                    // This succeeds, since the user was authenticated on the device
 
-                    // Get the user from a non-authenticated method
-                    var query = new Bmob.Query(Bmob.User);
-                    query.get(user.objectId, {
-                        success: function(userAgain) {
-                            userAgain.set("username", "another_username");
-                            userAgain.save(null, {
-                                error: function(userAgain, error) {
-                                    // This will error, since the Bmob.User is not authenticated
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
 </script>
 </html>
