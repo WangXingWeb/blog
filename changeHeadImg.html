@@ -257,6 +257,14 @@
                                                 _this.$toast('上传成功');
                                                 _this.promptShow=false;
                                                 _this.isReady=false;
+                                                Bmob.User.logIn(_this.user.attributes.username, _this.password, {
+                                                    success:function (data) {
+                                                    },
+                                                    error:function (data,error) {
+                                                        console.log(data);
+                                                        console.log(error);
+                                                    }
+                                                });
                                                 _this.password='';
                                             }
                                         });

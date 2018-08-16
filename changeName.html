@@ -190,9 +190,18 @@
                                             success:function (data) {
                                                 _this.$toast('修改成功');
                                                 _this.promptShow=false;
-                                                _this.password='';
                                                 _this.isCanSave=false;
-                                                window.location.href = 'index.html';
+                                                _this.validate=3;
+                                                Bmob.User.logIn(_this.newNickname, _this.password, {
+                                                    success:function (data) {
+                                                    },
+                                                    error:function (data,error) {
+                                                        console.log(data);
+                                                        console.log(error);
+                                                    }
+                                                });
+                                                _this.password='';
+
                                             }
                                         });
                                     }

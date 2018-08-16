@@ -124,19 +124,23 @@
             user:{},
             isActiveLike:true,
             isActiveRecommend:false
+
         },
         created:function () {
             mainBmob.init();
             var currentUser = Bmob.User.current();
             this.user=currentUser;
+            if(!this.user){
+                window.location.href='login.html';
+            }
             this.selectedTitle=this.user.attributes.username;
-            //this.getSelfList();
+            this.getSelfList();
         },
         watch:{
             selected:function () {
                 if(this.selected==0){
                     if(this.selfBlogs.length<1){
-                        //this.getSelfList();
+                        this.getSelfList();
                     }
                     this.selectedTitle=this.user.attributes.username;
                 }else if(this.selected==1){
