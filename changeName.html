@@ -192,20 +192,7 @@
                                                 _this.promptShow=false;
                                                 _this.password='';
                                                 _this.isCanSave=false;
-                                                console.log("#################3");
-                                                Bmob.User.logIn(_this.newNickname, _this.password, {
-                                                    success: function(user) {
-                                                       _this.user=user;
-                                                        console.log(user);
-                                                    },
-                                                    error: function(user, error) {
-                                                        if(error.code==101){
-                                                            _this.$toast('用户名或密码不正确');
-                                                        }else{
-                                                            _this.$toast(error.message);
-                                                        }
-                                                    }
-                                                });
+                                                window.location.href = 'index.html';
                                             }
                                         });
                                     }
