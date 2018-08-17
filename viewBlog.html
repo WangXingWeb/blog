@@ -132,7 +132,7 @@
         },
         methods:{
             router:function () {
-                window.location.href = 'index.html';
+                history.back();
             },
             restime:function (time) {
                 return dateFormat(time,'yyyy.MM.dd hh:mm');
