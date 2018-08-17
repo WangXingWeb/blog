@@ -198,7 +198,10 @@
                                         contentText:_this.content,
                                         content:_this.htmlContent,
                                         open:_this.isSprivate,
-                                        author:Bmob.User.current().id
+                                        author:Bmob.User.current().id,
+                                        commentNum:0,
+                                        collectNum:0,
+                                        applaudNum:0
                                     },"Blog",_this.blogId);
                                 }else{                                               //创建失败
                                     _this.toast('保存失败');
