@@ -27,7 +27,7 @@ Vue.component('wx-blogheader', {
         userid:function (val) {
             var _this=this;
             if(val==_this.user.id){
-                _this.selfBlog=2;
+                _this.isAttented=2;
                 _this.author=_this.user;
             }else{
                 //获取作者信息
@@ -35,12 +35,13 @@ Vue.component('wx-blogheader', {
                     if(data.code==200){
                         _this.author=data.result;
                         if(_this.user){
-                            return mainBmob.equalTo('Attention',{'user':val,'attented':_this.userid});
+                            return mainBmob.equalTo('Attention',{'user':_this.user.id,'attented':val});
                         }
                     }else{
                         _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
                     }
                 }).then(function (data) {
+                    console.log(data);
                     if(data.code==200){
                         if(data.list.length>0){
                             _this.isAttented=0;
@@ -72,7 +73,7 @@ Vue.component('wx-blogheader', {
 
     '<mt-button v-if="isAttented==0" @click="Attent(author.id)" class="attention attention-btn-attented" size="small">已关注</mt-button>'+
     '<mt-button v-else-if="isAttented==1" class="attention" @click="Attent(author.id)" size="small">+ 关注</mt-button>' +
-    '<mt-button v-else @click="router" class="attention attention-btn-attented" size="small">修改</mt-button>'+
+    '<mt-button v-else-if="isAttented==2" @click="router" class="attention attention-btn-attented" size="small">修改</mt-button>'+
     '</div>',
     methods:{
         Attent:function (id) {
