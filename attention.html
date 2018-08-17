@@ -16,6 +16,7 @@
     <script src="comp/mint-ui/mint-ui.js"></script>
     <script src="component/wx-attention/wx-attention.js"></script>
 </head>
+
 <body>
     <div id="app">
         <mt-header fixed  title="关注" class="wx-header">
@@ -23,6 +24,9 @@
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
         <div class="wx-content">
+            <div class="nodata" v-if="attentions.length==0">
+                暂无关注
+            </div>
             <wx-attention v-for="attention in attentions" :attention="attention"></wx-attention>
         </div>
     </div>
@@ -39,19 +43,6 @@
             mainBmob.equalTo('Attention',{user:user.id}).then(function (data) {
                 if(data.code==200){
                     _this.attentions=data.list;
-                    /*var arr=data.list;
-                    for(var i=0;i<arr.length;i++){
-                        var post = arr[i].get("attented");
-                        post.fetch({
-                            success: function(post) {
-                                console.log(post);
-                                var title = post.get("username");
-                                console.log(title);
-                                console.log('@@@@@@@@@@@@@@');
-                            }
-                        });
-                    }
-                    console.log(data.list);*/
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);

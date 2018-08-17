@@ -56,12 +56,12 @@
             <!--标题-->
             <center><h3>{{blog.attributes.title}}</h3></center>
             <!--作者信息组件-->
-            <wx-blogheader :userid="blog.attributes.author" :created="blog.createdAt"></wx-blogheader>
+            <wx-blogheader :userid="blog.attributes.author" :blogId="blog.id" :created="blog.createdAt"></wx-blogheader>
             <!--文章内容-->
             <div class="content" v-html="blog.attributes.content"></div>
             <!--评论组件-->
             <div class="comment-list" v-on:commentBack="commentCall">
-                <div class="comment-title">评论({{blog.attributes.commentNum}})</div>
+                <div class="comment-title" v-if="blog.attributes.commentNum>0">评论({{blog.attributes.commentNum}})</div>
                 <div>
                     <wx-comment v-for="comment in tempComments"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
                 </div>
@@ -132,14 +132,13 @@
         },
         methods:{
             router:function () {
-                history.back();
+                window.location.href = 'index.html';
             },
             restime:function (time) {
                 return dateFormat(time,'yyyy.MM.dd hh:mm');
             },
             commentCall:function (data) {
                 this.tempComments.push(data);
-
             },
             commentBack:function (data) {
                 this.blog.attributes.commentNum++;

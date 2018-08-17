@@ -41,7 +41,6 @@ Vue.component('wx-dynamic-list', {
             var _this=this;
             mainBmob.queryMultipleData('Dynamic','user',_this.attentions,5,_this.dynamicBlogs.length).then(function (data) {
                 if(data.code==200){
-                    console.log(data.list);
                     _this.dynamicBlogs = _this.dynamicBlogs.concat(data.list);
                     if(data.isAllLoad){
                         _this.allLoaded = true;// 若数据已全部获取完毕

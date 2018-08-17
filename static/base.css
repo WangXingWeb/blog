@@ -21,3 +21,10 @@ body{
 .interval{
     margin-top: 10px;
 }
+/*无数据*/
+.nodata{
+    line-height: 100px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+}

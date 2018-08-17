@@ -68,16 +68,13 @@ var mainBmob={
     queryMultipleData:function (objName,field,list,skipNum,pageNum) {
         var query=this.createQuery(objName);
         query.containedIn(field,list);
-        if(!pageNum){
-            pageNum=5;
-        }
         query.limit(skipNum);
         query.skip(pageNum);
-        query.descending("createdAt");                   //根据创建时间倒序，最新的在最前面
+        query.descending("createdAt");
+        //根据创建时间倒序，最新的在最前面
         function queryAllData(resolve, reject) {
             query.find({
                 success: function(results) {
-                    console.log(results);
                     resolve({
                         list:results,
                         code:200
