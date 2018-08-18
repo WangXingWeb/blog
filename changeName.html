@@ -176,36 +176,22 @@
                 }
                 Bmob.User.logIn(_this.user.attributes.username, _this.password, {
                     success: function(user) {
-                        //user.set("headImg", _this.user.attributes.headImg);  // attempt to change username
+                        user.set("username", _this.newNickname);
                         user.save(null, {
                             success: function(user) {
-                                var query = new Bmob.Query(Bmob.User);
-                                query.get(user.objectId, {
-                                    success: function(userAgain) {
-                                        userAgain.set("username", _this.newNickname);
-                                        userAgain.save(null, {
-                                            error: function(userAgain, error) {
-                                                _this.$toast('修改失败');
-                                            },
-                                            success:function (data) {
-                                                _this.$toast('修改成功');
-                                                _this.promptShow=false;
-                                                _this.isCanSave=false;
-                                                _this.validate=3;
-                                                Bmob.User.logIn(_this.newNickname, _this.password, {
-                                                    success:function (data) {
-                                                    },
-                                                    error:function (data,error) {
-                                                        console.log(data);
-                                                        console.log(error);
-                                                    }
-                                                });
-                                                _this.password='';
-
-                                            }
-                                        });
+                                _this.$toast('修改成功');
+                                _this.promptShow=false;
+                                _this.isCanSave=false;
+                                _this.validate=3;
+                                Bmob.User.logIn(_this.newNickname, _this.password, {
+                                    success:function (data) {
+                                    },
+                                    error:function (data,error) {
+                                        console.log(data);
+                                        console.log(error);
                                     }
                                 });
+                                _this.password='';
                             }
                         });
                     },
