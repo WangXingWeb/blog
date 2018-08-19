@@ -260,6 +260,9 @@
                                     }
                                 });
                                 _this.password='';
+                            },
+                            error:function () {
+                                _this.$toast('上传失败');
                             }
                         });
                     },
