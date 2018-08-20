@@ -52,7 +52,9 @@ Vue.component('wx-like-blog', {
     '<img class="like-headImg" :src="user.attributes.headImg" alt="">'+
     '</div><div class="like-type-name">'+
     '<div class="like-name">{{user.attributes.username}} </div>'+
-    '<div class="like-type" v-if="dynamic.attributes.type==0">赞了</div><div class="like-type" v-else>发布了</div> 文章 </div>'+
+    '<div class="like-type" v-if="dynamic.attributes.type==0">赞了</div>' +
+    '<div class="like-type" v-if="dynamic.attributes.type==1">发布了</div>' +
+    '<div class="like-type" v-else>收藏了</div> 文章 </div>'+
     '<div class="like-time" v-html="resetTime(dynamic.createdAt)"></div> </div>'+
     '<div class="like-content">'+
     '<div class="like-title">{{ blog.attributes.title }}</div>'+
