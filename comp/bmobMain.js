@@ -141,7 +141,7 @@ var mainBmob={
         return promise;
     },
     /*分页查询*/
-    fenye:function (objName,option,skipNum,pageNum) {
+    fenye:function (objName,option,skipNum,pageNum,sortKey) {
         var query=this.createQuery(objName);
         for(var key in option){
             query.equalTo(key, option[key]);
@@ -149,6 +149,7 @@ var mainBmob={
         if(!pageNum){
             pageNum=5
         }
+        query.descending(sortKey);
         query.limit(pageNum);
         query.skip(skipNum);
         function queryData(resolve, reject) {
