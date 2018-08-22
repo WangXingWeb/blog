@@ -51,7 +51,11 @@ Vue.component('wx-collect', {
     '<i class="icon iconfont icon-dianzan1"></i>'+
     '</div> <div class="like-num recommend-num">'+
     '<span>{{ blog.attributes.commentNum }}</span> <i class="icon iconfont icon-pinglun"></i>'+
-    '</div> </div> </li>',
+    '</div>'+
+    '<div class="like-num recommend-num">'+
+    '<span>{{ blog.attributes.collectNum }}</span> <i class="icon iconfont icon-shoucang"></i>'+
+    '</div>'+
+    '</div> </li>',
     methods:{
         getContent:function (str) {
             return pickupText(str,100);

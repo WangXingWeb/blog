@@ -252,7 +252,9 @@
                 });
             },
             back:function () {
-                window.location.href = 'viewBlog.html?id='+this.blogId;
+                history.back();
+                //window.location.href = 'viewBlog.html?id='+this.blogId;
+
             }
         }
     });
