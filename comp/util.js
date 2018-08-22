@@ -69,7 +69,6 @@ var pickupImg=function (html,num) {
         }
     }
     return imgs;
-
 }
 
 /**
