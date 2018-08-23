@@ -26,7 +26,7 @@
             <div class="nodata" v-if="collects.length==0">
                 暂无收藏
             </div>
-            <wx-collect v-for="collect in collects" :dynamicid="collect.id" :blogid="collect.attributes.blog"></wx-collect>
+            <wx-collect v-for="collect in collects" :collect="collect"></wx-collect>
         </div>
     </div>
 </body>

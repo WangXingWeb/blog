@@ -18,23 +18,26 @@ Vue.component('wx-collect', {
     },
     created:function () {
         var _this=this;
-        mainBmob.getSingleData('Blog',_this.blogid).then(function (data) {
-            if(data.code==200){
-                _this.blog=data.result;
-                console.log(data.result);
-                return  mainBmob.getSingleData('_User',_this.blog.attributes.author);
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-            }
-        }).then(function (data) {
-            if(data.code==200){
-                _this.author=data.result;
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+        console.log(_this.collect);
+        var postBlog = _this.collect.get("blog");
+        console.log(postBlog);
+        postBlog.fetch({
+            success: function(data) {
+                _this.blog=data;
+                console.log(_this.blog);
+                mainBmob.getSingleData('_User',_this.blog.attributes.author).then(function (data) {
+                    if(data.code==200){
+                        console.log(data.result);
+                        _this.author=data.result;
+                    }else{
+                        _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                    }
+                });
             }
         });
+
     },
-    props:['dynamicid','blogid'],
+    props:['collect'],
     template:
     '<li class="like-blog interval" @click="readBlog(blog.id)"> <div class="like-header"> <div class="like-headImg-container">'+
     '<img alt="" :src="author.attributes.headImg" class="like-headImg"></div><div class="like-type-name">'+

@@ -28,6 +28,7 @@ Vue.component('wx-toolbar', {
                             _this.applaud=data.list[i];
                         }else if(data.list[i].attributes.type==2){
                             _this.isCollected=true;
+                            console.log('##########3');
                             _this.collect=data.list[i];
                         }
                     }
@@ -90,7 +91,10 @@ Vue.component('wx-toolbar', {
         },
         addApplaud:function () {
             var _this=this;
-            mainBmob.addData({user:Bmob.User.current().id,'type':0,'blog':_this.blog.id},'Dynamic').then(function (data) {
+            var Blog = Bmob.Object.extend('Blog');
+            var thisBlog = new Blog();
+            thisBlog.id=_this.blog.id;
+            mainBmob.addData({user:Bmob.User.current(),'type':0,'blog':thisBlog},'Dynamic').then(function (data) {
                 if(data.status){
                     _this.isApplaud=true;
                     _this.$toast('已赞同');
@@ -126,7 +130,10 @@ Vue.component('wx-toolbar', {
         },
         addCollected:function () {
             var _this=this;
-            mainBmob.addData({user:Bmob.User.current().id,'type':2,'blog':_this.blog.id},'Dynamic').then(function (data) {
+            var Blog = Bmob.Object.extend('Blog');
+            var thisBlog = new Blog();
+            thisBlog.id=_this.blog.id;
+            mainBmob.addData({user:Bmob.User.current(),'type':2,'blog':thisBlog},'Dynamic').then(function (data) {
                 if(data.status){
                     _this.isCollected=true;
                     _this.$toast('已收藏');
