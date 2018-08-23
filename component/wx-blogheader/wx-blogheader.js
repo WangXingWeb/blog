@@ -63,7 +63,6 @@ Vue.component('wx-blogheader', {
         Attent:function (id) {
             var _this=this;
             if(this.isAttented==0){
-                console.log(_this.attentedId);
                 /*取消关注*/
                 mainBmob.delData('Attention',_this.attentedId).then(function (data) {
                     console.log(data);

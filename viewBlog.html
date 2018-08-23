@@ -70,10 +70,7 @@
 
             </div>
         </div>
-
         <wx-toolbar :blog="blog" v-on:comment-back="commentCall"></wx-toolbar>
-
-
     </div>
 </body>
 <script>
@@ -89,7 +86,6 @@
         smartLists: true,
         smartypants: true
     });
-
     new Vue({
         el:"#prview",
         created:function () {
@@ -116,8 +112,6 @@
                 _this.$indicator.close();
             });
             _this.$indicator.close();
-
-
         },
         data: {
             blog:{
@@ -143,7 +137,6 @@
             commentBack:function (data) {
                 this.blog.attributes.commentNum++;
             }
-
         }
     });
     //复制链接到剪切板
@@ -152,7 +145,6 @@
     clipboard.on('success', function(e) {
         console.log(e);
     });
-
     clipboard.on('error', function(e) {
         console.log(e);
     });

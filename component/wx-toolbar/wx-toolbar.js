@@ -28,7 +28,6 @@ Vue.component('wx-toolbar', {
                             _this.applaud=data.list[i];
                         }else if(data.list[i].attributes.type==2){
                             _this.isCollected=true;
-                            console.log('##########3');
                             _this.collect=data.list[i];
                         }
                     }

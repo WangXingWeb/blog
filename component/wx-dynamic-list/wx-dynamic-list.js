@@ -12,14 +12,12 @@ Vue.component('wx-dynamic-list', {
         var _this=this;
         mainBmob.equalTo('Attention',{'user':Bmob.User.current().id}).then(function (data) {
             if(data.code==200){
-                console.log(data.list);
                 var list=data.list;
                 var arr=[];
                 for(var i=0;i<list.length;i++){
                     arr.push(list[i].attributes.attented.id);
                 }
                 _this.attentions=arr;
-                console.log(_this.attentions);
                 _this.getDynamic();
             }else{
                 console.log(data.error.code+data.error.message);
@@ -42,7 +40,6 @@ Vue.component('wx-dynamic-list', {
             mainBmob.queryMultipleData('Dynamic','user',_this.attentions,5,_this.dynamicBlogs.length).then(function (data) {
                 if(data.code==200){
                     _this.dynamicBlogs = _this.dynamicBlogs.concat(data.list);
-                    console.log(_this.dynamicBlogs);
                     if(data.isAllLoad){
                         _this.allLoaded = true;// 若数据已全部获取完毕
                     }

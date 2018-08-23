@@ -4,7 +4,6 @@
     <meta charset="utf-8"/>
     <title>新建博客</title>
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-
     <link href="comp/highlight/styles/pojoaque.css" rel="stylesheet">
     <link href="static/iconfont.css" rel="stylesheet">
     <link href="static/editor/editor-view.css" rel="stylesheet">
@@ -16,7 +15,6 @@
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
     <script src="comp/mint-ui/mint-ui.js"></script>
-
 </head>
 <style>
     *{
@@ -45,7 +43,6 @@
     .editor-content{
         height: calc(100% - 118px);
         overflow: hidden;
-
     }
     .editor-content textarea{
         box-sizing: border-box;
@@ -125,7 +122,6 @@
         <div class="editor-content">
             <textarea placeholder="请输入正文" v-model="content"  @input="update"></textarea>
         </div>
-
     </div>
     <div v-else style="width: 100vw;height: 100vh;background-color: #eee;" class="preview">
         <mt-header class="wx-header-defult">
@@ -133,14 +129,11 @@
             <mt-button class="prev" @click="switchStatus" slot="right">编辑</mt-button>
             <mt-button slot="right" @click="save">发布</mt-button>
         </mt-header>
-        <div class="preview-content" v-html="dom">
-
-        </div>
+        <div class="preview-content" v-html="dom"></div>
     </div>
 </div>
 </body>
 <script>
-
     marked.setOptions({
         highlight: function (code) {
             return hljs.highlightAuto(code).value;
@@ -153,7 +146,6 @@
         smartLists: true,
         smartypants: false
     });
-
     new Vue({
         el: '#editor',
         data: {
@@ -231,7 +223,6 @@
                 var fileImg = e.target.files[0];
                 mainBmob.loadFile(fileImg.name,fileImg).then(function (data) {
                     if(data.status){
-                        console.log(data.url);
                         _this.content+='![fileImg.name]('+data.url+')';
                         e.target.files[0]='';
                         _this.update();
@@ -240,7 +231,6 @@
                         _this.toast('上传失败，请重试');
                     }
                 });
-
             },
             switchStatus:function () {
                 this.status=!this.status;
@@ -254,10 +244,8 @@
             back:function () {
                 history.back();
                 //window.location.href = 'viewBlog.html?id='+this.blogId;
-
             }
         }
     });
-
 </script>
 </html>

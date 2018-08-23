@@ -12,7 +12,6 @@ Vue.component('wx-recommend-blog', {
     },
     created:function () {
         var _this=this;
-        console.log(_this.recommend);
         var postAuthor = _this.recommend.get("author");
         postAuthor.fetch({
             success: function(data) {

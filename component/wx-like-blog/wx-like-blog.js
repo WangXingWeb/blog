@@ -30,11 +30,9 @@ Vue.component('wx-like-blog', {
             }
         });
         var postBlog = _this.dynamic.get("blog");
-        console.log(postBlog);
         postBlog.fetch({
             success: function(data) {
                 _this.blog=data;
-                console.log(_this.blog);
                 var postAuthor = _this.blog.get("author");
                 postAuthor.fetch({
                     success: function(data) {
@@ -43,8 +41,6 @@ Vue.component('wx-like-blog', {
                 });
             }
         });
-
-
     },
     props:['dynamic'],
     template:

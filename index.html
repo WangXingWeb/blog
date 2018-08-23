@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-
     <title>主页</title>
     <link rel="stylesheet" href="static/reset.css">
     <link rel="stylesheet" href="comp/mint-ui/mint-ui.css">
@@ -13,7 +12,6 @@
     <link rel="stylesheet" href="component/wx-like-blog/wx-like-blog.css">
     <link rel="stylesheet" href="component/wx-recommend-list/wx-recommend-list.css">
     <link rel="stylesheet" href="component/wx-blog/wx-blog.css">
-
     <script src="comp/vue.js"></script>
     <script src="comp/util.js"></script>
     <script src="component/wx-blog/wx-blog.js"></script>
@@ -25,9 +23,6 @@
     <script src="comp/bmob-min.js"></script>
     <script src="comp/bmobMain.js"></script>
 </head>
-<style>
-
-</style>
 <body>
 <div id="app">
     <div class="page-tabbar">
@@ -41,7 +36,6 @@
                         <wx-blog  v-for="blog in selfBlogs" :key="blog.id" :blogdata="blog"></wx-blog>
                     </ul>
                 </mt-tab-container-item>
-
                 <mt-tab-container-item id="1">
                     <header class="mint-header wx-header is-fixed">
                         <div class="mint-header-button is-left">
@@ -88,7 +82,6 @@
                         <img src="images/shezhi.png" alt="">
                         <span>设置</span>
                     </div>
-
                     <!--<div class="await">内测版本，待开发</div>-->
                 </mt-tab-container-item>
             </mt-tab-container>
@@ -124,7 +117,6 @@
             user:{},
             isActiveLike:true,
             isActiveRecommend:false
-
         },
         created:function () {
             mainBmob.init();
@@ -181,7 +173,6 @@
                     this.isActiveRecommend=true;
                 }
             }
-
         }
     });
 </script>

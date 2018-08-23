@@ -138,10 +138,8 @@ Vue.component('wx-reply', {
             if(_this.commentContent){
                 var myuser = new Bmob.User();
                 myuser.id=Bmob.User.current().id;
-
                 var toUser = new Bmob.User();
                 toUser.id=_this.commenter.id;
-
                 var newComment={
                     'parrentComment':_this.reply.attributes.parrentComment,
                     'type':1,
@@ -169,8 +167,6 @@ Vue.component('wx-reply', {
             }else{
                 _this.$toast('请输入评论内容');
             }
-
         },
-
     }
 });

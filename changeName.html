@@ -142,7 +142,6 @@
                 function checkExit() {
                     function checkIfExit(resolve, reject){
                         mainBmob.equalTo('_User',{'username':_this.newNickname}).then(function (data) {
-                            console.log(data);
                             if(data.code==200){
                                 if(data.list.length>0){
                                     resolve(false);
@@ -158,7 +157,6 @@
                     return promise;
                 }
             }
-
         },
         methods:{
             router:function (url) {
@@ -196,11 +194,9 @@
                             error:function () {
                                 _this.$toast('修改失败');
                             }
-
                         });
                     },
                     error:function (error,data) {
-                        console.log(data);
                         _this.$toast('密码错误');
                     }
                 });

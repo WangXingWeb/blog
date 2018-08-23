@@ -31,7 +31,6 @@
     </div>
 </body>
 <script>
-
     new Vue({
         el:"#app",
         created:function () {
@@ -42,7 +41,6 @@
             mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
                 if(data.code==200){
                     _this.collects=data.list;
-                    console.log(data.list);
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);
@@ -58,7 +56,6 @@
             router:function () {
                 history.back();
             }
-
         }
     });
 </script>
