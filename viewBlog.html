@@ -50,7 +50,7 @@
     <div id="prview" class="preview">
         <mt-header fixed  v-bind:title="blog.attributes.title" class="wx-header">
             <mt-button icon="back" @click='router' slot="left">返回</mt-button>
-            <mt-button icon="more" slot="right"></mt-button>
+            <mt-button icon="more" @click='actionShow' slot="right"></mt-button>
         </mt-header>
         <div  id="blogContainer">
             <!--标题-->
@@ -71,6 +71,7 @@
             </div>
         </div>
         <wx-toolbar :blog="blog" v-on:comment-back="commentCall"></wx-toolbar>
+        <mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
     </div>
 </body>
 <script>
@@ -122,7 +123,22 @@
             },
             comments:[],
             tempComments:[],
-            sortTempComments:[]
+            sortTempComments:[],
+            sheetVisible:false,
+            actions:[
+                {
+                    name:'删除文章',
+                    method:function () {
+                        alert(0);
+                    }
+                },
+                {
+                    name:'举报',
+                    method:function () {
+                        alert(1);
+                    }
+                }
+            ]
         },
         methods:{
             router:function () {
@@ -136,6 +152,9 @@
             },
             commentBack:function (data) {
                 this.blog.attributes.commentNum++;
+            },
+            actionShow:function () {
+                this.sheetVisible=true;
             }
         }
     });
