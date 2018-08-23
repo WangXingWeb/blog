@@ -23,28 +23,30 @@ Vue.component('wx-like-blog', {
     },
     created:function () {
         var _this=this;
-        mainBmob.getSingleData('_User',_this.dynamic.attributes.user).then(function (data) {
-            if(data.code==200){
-                _this.user=data.result;
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+        var postUser = _this.dynamic.get("user");
+        postUser.fetch({
+            success: function(data) {
+                _this.user=data;
             }
         });
-        mainBmob.getSingleData('Blog',_this.dynamic.attributes.blog).then(function (data) {
-            if(data.code==200){
-                _this.blog=data.result;
-                return mainBmob.getSingleData('_User',_this.blog.attributes.author);
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
-            }
-        }).then(function (data) {
-            if(data.code==200){
-                console.log(data.result);
-                _this.author=data.result;
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+        var postBlog = _this.dynamic.get("blog");
+        console.log(postBlog);
+        postBlog.fetch({
+            success: function(data) {
+                _this.blog=data;
+                console.log(_this.blog);
+                mainBmob.getSingleData('_User',_this.blog.attributes.author).then(function (data) {
+                    if(data.code==200){
+                        console.log(data.result);
+                        _this.author=data.result;
+                    }else{
+                        _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                    }
+                });
             }
         });
+
+
     },
     props:['dynamic'],
     template:
