@@ -25,12 +25,10 @@ Vue.component('wx-collect', {
             success: function(data) {
                 _this.blog=data;
                 console.log(_this.blog);
-                mainBmob.getSingleData('_User',_this.blog.attributes.author).then(function (data) {
-                    if(data.code==200){
-                        console.log(data.result);
-                        _this.author=data.result;
-                    }else{
-                        _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+                var postAuthor = _this.blog.get("author");
+                postAuthor.fetch({
+                    success: function(data) {
+                        _this.author=data;
                     }
                 });
             }

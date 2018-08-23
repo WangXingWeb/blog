@@ -210,7 +210,7 @@
                             contentText:_this.content,
                             content:_this.htmlContent,
                             open:_this.isSprivate,
-                            author:Bmob.User.current().id
+                            author:Bmob.User.current()
                         },"Blog",_this.blogId).then(function (data) {
                             _this.$indicator.close();
                             _this.toast('保存成功');

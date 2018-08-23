@@ -198,7 +198,7 @@
                                         contentText:_this.content,
                                         content:_this.htmlContent,
                                         open:_this.isSprivate,
-                                        author:Bmob.User.current().id,
+                                        author:Bmob.User.current(),
                                         commentNum:0,
                                         collectNum:0,
                                         applaudNum:0
@@ -228,8 +228,7 @@
                                 title:_this.title,
                                 contentText:_this.content,
                                 content:_this.htmlContent,
-                                open:_this.isSprivate,
-                                author:Bmob.User.current().id
+                                open:_this.isSprivate
                             },"Blog",_this.blogId).then(function (data) {
                                 _this.$indicator.close();
                                 _this.toast('保存成功');

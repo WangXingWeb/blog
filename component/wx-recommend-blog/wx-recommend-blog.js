@@ -2,26 +2,21 @@
 Vue.component('wx-recommend-blog', {
     data: function () {
         return {
-            blog:{
-                attributes:{
-                    title:"",
-                    content:''
-                }
-            },
             author:{
                 attributes:{
                     username:""
                 }
             }
+
         }
     },
     created:function () {
         var _this=this;
-        mainBmob.getSingleData('_User',_this.recommend.attributes.author).then(function (data) {
-            if(data.code==200){
-                _this.author=data.result;
-            }else{
-                _this.$messagebox('获取数据错误', '请确认您的网络是否通畅');
+        console.log(_this.recommend);
+        var postAuthor = _this.recommend.get("author");
+        postAuthor.fetch({
+            success: function(data) {
+                _this.author=data;
             }
         });
     },
