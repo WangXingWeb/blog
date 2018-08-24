@@ -71,6 +71,10 @@
             </div>
         </div>
         <wx-toolbar :blog="blog" v-on:comment-back="commentCall"></wx-toolbar>
+        <mt-actionsheet
+                :actions="actions"
+                v-model="sheetVisible">
+        </mt-actionsheet>
     </div>
 </body>
 <script>
@@ -136,7 +140,8 @@
             },
             commentBack:function (data) {
                 this.blog.attributes.commentNum++;
-            }
+            },
+
         }
     });
     //复制链接到剪切板

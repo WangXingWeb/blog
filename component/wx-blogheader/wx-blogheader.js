@@ -8,9 +8,7 @@ Vue.component('wx-blogheader', {
                     headImg:''
                 }
             },
-            user:{
-
-            },
+            user:{},
             isAttented:4,
             attentedId:''
         }
