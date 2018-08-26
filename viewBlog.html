@@ -97,7 +97,8 @@
             mainBmob.getSingleData('Blog',params.id).then(function (data) {
                 if(data.code==200){
                     _this.blog=data.result;
-                    var authorId=data.result.attributes.author;
+                    _this.author=data.result.attributes.author;
+                    _this.isSelf();
                     return mainBmob.equalTo('Comment',{'blog':_this.blog.id,'type':0});         //获取评论列表
                 }else{
                     _this.$toast('获取数据错误', '请确认您的网络是否通畅');
@@ -125,20 +126,8 @@
             tempComments:[],
             sortTempComments:[],
             sheetVisible:false,
-            actions:[
-                {
-                    name:'删除文章',
-                    method:function () {
-                        alert(0);
-                    }
-                },
-                {
-                    name:'举报',
-                    method:function () {
-                        alert(1);
-                    }
-                }
-            ]
+            author:{},
+            actions:[]
         },
         methods:{
             router:function () {
@@ -155,6 +144,74 @@
             },
             actionShow:function () {
                 this.sheetVisible=true;
+            },
+            isSelf:function () {
+                var _this=this;
+                if(_this.author.id==Bmob.User.current().id){
+                    _this.actions=[
+                        {
+                            name:'删除文章',
+                            method:function () {
+                                _this.$messagebox.confirm('确定删除这篇文章吗?').then(function (action) {
+                                    if(action=="confirm"){
+                                        mainBmob.delData('Blog',_this.blog.id).then(function (data) {
+                                            if(data==1){
+                                                _this.$toast('删除成功');
+                                                setTimeout(function () {
+                                                    history.back();
+                                                },2000);
+                                            }else{
+                                                _this.$toast('删除失败');
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            name:'修改文章',
+                            method:function () {
+                                window.location.href ='editBlog.html?id='+_this.blog.id;
+                            }
+                        }
+                    ];
+                }else{
+                    _this.actions=[
+                        {
+                            name:'举报',
+                            method:function () {
+                                _this.$messagebox.prompt('请输入举报原因').then(function(data){
+                                    console.log(data);
+                                    if(data.action=="confirm"){
+                                        if(data.value.length<8){
+                                            _this.$toast('举报原因太短');
+                                        }else{
+                                            var Blog = Bmob.Object.extend('Blog');
+                                            var thisBlog = new Blog();
+                                            thisBlog.id=_this.blog.id;
+
+                                            var target = new Bmob.User();
+                                            target.id=_this.author.id;
+                                            mainBmob.addData({
+                                                'user':Bmob.User.current(),
+                                                'type':0,
+                                                'blog':thisBlog,
+                                                'reason':data.value,
+                                                'target':target
+                                            },'Inform').then(function (data) {
+                                                if(data.status){
+                                                    _this.$toast('举报成功');
+                                                }else{
+                                                    _this.$toast('举报失败');
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    ];
+                }
             }
         }
     });
