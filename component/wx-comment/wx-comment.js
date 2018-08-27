@@ -15,7 +15,9 @@ Vue.component('wx-comment', {
                 id:''
             },
             popupVisible:false,
-            commentContent:''
+            commentContent:'',
+            actions:[],
+            sheetVisible:false
         }
     },
     props:['comment','blogid'],
@@ -26,6 +28,7 @@ Vue.component('wx-comment', {
         post.fetch({
             success: function(data) {
                 _this.commenter=data;
+                _this.isSelf();
             }
         });
         //user是否赞同过这条评论
@@ -55,7 +58,7 @@ Vue.component('wx-comment', {
     '<div class="comment-info">'+
     '<div class="comment-header">'+
     '<div class="commenter-name">{{ commenter.attributes.username }}</div>'+
-    '<i class="icon iconfont icon-gengduo"></i>'+
+    '<i @click="actionShow" class="icon iconfont icon-gengduo"></i>'+
     '</div>'+
     '<div class="comment-content">{{comment.attributes.content}}</div>'+
     '<div class="comment-footer">'+
@@ -72,6 +75,7 @@ Vue.component('wx-comment', {
     '</div>'+
     '<wx-reply v-for="reply in replys" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack" v-on:comment-back="commentBack"></wx-reply>'+
     '</div>'+
+    '<mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText="取消"></mt-actionsheet>'+
     '</div>',
     methods:{
         resetTime:function (time) {
@@ -85,6 +89,70 @@ Vue.component('wx-comment', {
         },
         commentBack:function (data) {
             this.$emit('comment-back', 1);
+        },
+        actionShow:function () {
+            this.sheetVisible=true;
+        },
+        isSelf:function () {
+            var _this=this;
+            if(_this.commenter.id==Bmob.User.current().id){
+                _this.actions=[
+                    {
+                        name:'删除',
+                        method:function () {
+                            _this.$messagebox.confirm('确定删除这条评论吗?').then(function (action) {
+                                if(action=="confirm"){
+                                    mainBmob.delData('Comment',_this.comment.id).then(function (data) {
+                                        if(data==1){
+                                            _this.$toast('删除成功');
+
+                                        }else{
+                                            _this.$toast('删除失败');
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                ];
+            }else{
+                _this.actions=[
+                    {
+                        name:'举报',
+                        method:function () {
+                            _this.$messagebox.prompt('请输入举报原因').then(function(data){
+                                console.log(data);
+                                if(data.action=="confirm"){
+                                    if(data.value.length<8){
+                                        _this.$toast('举报原因太短');
+                                    }else{
+                                        var Comment = Bmob.Object.extend('Comment');
+                                        var thisComment = new Comment();
+                                        console.log(_this.comment.id);
+                                        thisComment.id=_this.comment.id;
+
+                                        var target = new Bmob.User();
+                                        target.id=_this.commenter.id;
+                                        mainBmob.addData({
+                                            'user':Bmob.User.current(),
+                                            'type':0,
+                                            'comment':thisComment,
+                                            'reason':data.value,
+                                            'target':target
+                                        },'Inform').then(function (data) {
+                                            if(data.status){
+                                                _this.$toast('举报成功');
+                                            }else{
+                                                _this.$toast('举报失败');
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                ];
+            }
         },
         addComment:function () {
             var _this=this;
