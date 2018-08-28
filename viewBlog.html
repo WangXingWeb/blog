@@ -154,7 +154,7 @@
                             method:function () {
                                 _this.$messagebox.confirm('确定删除这篇文章吗?').then(function (action) {
                                     if(action=="confirm"){
-                                        mainBmob.delData('Blog',_this.blog.id).then(function (data) {
+                                        mainBmob.changeData({'isDel':true},'Blog',_this.blog.id).then(function (data) {
                                             if(data==1){
                                                 _this.$toast('删除成功');
                                                 setTimeout(function () {

@@ -40,7 +40,20 @@
             _this.$indicator.open();
             mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
                 if(data.code==200){
-                    _this.collects=data.list;
+                    console.log(data);
+                    for(var i=0;i<data.list.length;i++){
+                        var dyn=data.list[i];
+                        var postBlog = dyn.get("blog");
+                        postBlog.fetch({
+                            success: function(data) {
+                                var dynBlog=data;
+                                if(dynBlog.attributes.isDel==false){
+                                    _this.collects.push(dyn);
+                                }
+                            }
+                        });
+                    }
+                    console.log(_this.collects)
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);

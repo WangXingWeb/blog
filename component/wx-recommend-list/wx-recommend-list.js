@@ -23,7 +23,7 @@ Vue.component('wx-recommend-list', {
         getOpenList:function () {
             var _this=this;
             _this.$indicator.open();
-            mainBmob.fenye('Blog',{'open':true},_this.openBlogs.length,5,'applaudNum').then(function (data) {
+            mainBmob.fenye('Blog',{'open':true,isDel:false},_this.openBlogs.length,5,'applaudNum').then(function (data) {
                 if(data.code==200){
                     _this.openBlogs = _this.openBlogs.concat(data.list);
                     if(data.isAllLoad){

@@ -147,10 +147,9 @@
                 var _this=this;
                 if(_this.user){
                     _this.$indicator.open();
-                    mainBmob.equalTo('Blog',{author:_this.user.id}).then(function (data) {
+                    mainBmob.equalTo('Blog',{author:_this.user.id,isDel:false}).then(function (data) {
                         if(data.code==200){
                             _this.selfBlogs=data.list;
-                            console.log(data.list);
                             _this.$indicator.close();
                         }else{
                             console.log(data.error.code+data.error.message);
