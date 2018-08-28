@@ -32,6 +32,9 @@
                     <mt-header fixed  :title="selectedTitle" class="wx-header">
                         <mt-button v-on:click="router('create')" slot="right">新建笔记 +</mt-button>
                     </mt-header>
+                    <div class="nodata" v-if="selfBlogs.length==0">
+                        暂无笔记，快去创建笔记吧
+                    </div>
                     <ul class="blogList">
                         <wx-blog  v-for="blog in selfBlogs" :key="blog.id" :blogdata="blog"></wx-blog>
                     </ul>

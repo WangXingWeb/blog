@@ -27,7 +27,8 @@ Vue.component('wx-dynamic-list', {
     },
     props:[],
     template:
-    '<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">'+
+    '<div class="nodata" v-if="dynamicBlogs.length==0">暂无动态，快去关注好友吧 </div>'+
+    '<mt-loadmore v-else :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">'+
     '<ul class="blogList">'+
     '<wx-like-blog v-for="dynamic in dynamicBlogs" :dynamic="dynamic"></wx-like-blog>'+
     '</ul>'+

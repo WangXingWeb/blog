@@ -25,7 +25,7 @@ body{
 .nodata{
     line-height: 100px;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
 }
 /*重写actionsheet样式*/
