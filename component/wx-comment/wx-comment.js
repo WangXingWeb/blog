@@ -113,14 +113,17 @@ Vue.component('wx-comment', {
                                 if(action=="confirm"){
                                     mainBmob.changeData({'isDel':true},'Comment',_this.comment.id).then(function (data) {
                                         if(data==1){
-                                            return mainBmob.AddOne('Blog',_this.blogid,'commentNum',-1);
+                                            return mainBmob.AddOne('Blog',_this.blogid,'commentNum',-1*(_this.replys.length+1));
                                         }else{
                                             _this.$toast('删除失败');
                                         }
                                     }).then(function (data) {
                                         if(data==1){
                                             _this.$toast('删除成功');
-                                            _this.$emit('del-comment-back', _this.comment.id);
+                                            _this.$emit('del-comment-back',{
+                                                id:_this.comment.id,
+                                                num:_this.replys.length+1
+                                            });
                                         }else{
                                             _this.$toast('删除失败');
                                         }
@@ -136,21 +139,18 @@ Vue.component('wx-comment', {
                         name:'举报',
                         method:function () {
                             _this.$messagebox.prompt('请输入举报原因').then(function(data){
-                                console.log(data);
                                 if(data.action=="confirm"){
                                     if(data.value.length<8){
                                         _this.$toast('举报原因太短');
                                     }else{
                                         var Comment = Bmob.Object.extend('Comment');
                                         var thisComment = new Comment();
-                                        console.log(_this.comment.id);
                                         thisComment.id=_this.comment.id;
-
                                         var target = new Bmob.User();
                                         target.id=_this.commenter.id;
                                         mainBmob.addData({
                                             'user':Bmob.User.current(),
-                                            'type':0,
+                                            'type':1,
                                             'comment':thisComment,
                                             'reason':data.value,
                                             'target':target

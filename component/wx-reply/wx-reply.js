@@ -209,21 +209,19 @@ Vue.component('wx-reply', {
                         name:'举报',
                         method:function () {
                             _this.$messagebox.prompt('请输入举报原因').then(function(data){
-                                console.log(data);
                                 if(data.action=="confirm"){
                                     if(data.value.length<8){
                                         _this.$toast('举报原因太短');
                                     }else{
                                         var Comment = Bmob.Object.extend('Comment');
                                         var thisComment = new Comment();
-                                        console.log(_this.comment.id);
-                                        thisComment.id=_this.comment.id;
+                                        thisComment.id=_this.reply.id;
 
                                         var target = new Bmob.User();
                                         target.id=_this.commenter.id;
                                         mainBmob.addData({
                                             'user':Bmob.User.current(),
-                                            'type':0,
+                                            'type':1,
                                             'comment':thisComment,
                                             'reason':data.value,
                                             'target':target

@@ -149,15 +149,15 @@
             },
             delCommentCall:function (data) {
                 var _this=this;
-                this.blog.attributes.commentNum--;
+                _this.blog.attributes.commentNum=_this.blog.attributes.commentNum-data.num;
                 for(var j=0;j<_this.tempComments.length;j++){
-                    if(_this.tempComments[j].id=data){
+                    if(_this.tempComments[j].id=data.id){
                         _this.tempComments.splice(j,1);
                         return;
                     }
                 }
                 for(var i=0;i<_this.comments.length;i++){
-                    if(_this.comments[i].id=data){
+                    if(_this.comments[i].id=data.id){
                         _this.comments.splice(i,1);
                         return;
                     }
