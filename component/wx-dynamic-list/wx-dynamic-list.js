@@ -40,7 +40,6 @@ Vue.component('wx-dynamic-list', {
             var _this=this;
             mainBmob.queryMultipleData('Dynamic','user',_this.attentions,5,_this.dynamicBlogs.length).then(function (data) {
                 if(data.code==200){
-                    console.log(data);
                     for(var i=0;i<data.list.length;i++){
                         var dyn=data.list[i];
                         var postBlog = dyn.get("blog");
