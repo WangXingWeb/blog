@@ -110,16 +110,21 @@
         <div style="">
             <mt-field placeholder="请输入标题" class="title" v-model="title" @input="update"></mt-field>
         </div>
-        <div class="tool-Bar">
-            <div style="flex-grow: 1">
-                <div class="tool-Bar-loadImg" @click="loadImg">
-                    <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
-                    <i class="icon iconfont icon-image"></i>
+        <div>
+            <div class="tool-Bar">
+                <div style="flex-grow: 1;">
+                    <div class="tool-Bar-loadImg" style="width:25px;" @click="loadImg">
+                        <input type="file" id="imgUpload" style="width: 0px;height: 0px;" value="上传" id="fileContainer" @change="getFile">
+                        <i class="icon iconfont icon-image"></i>
+                    </div>
+                </div>
+                <div style="display: flex">
+                    <span class="labal-for-private">公开</span>
+                    <mt-switch v-model="isSprivate"></mt-switch>
                 </div>
             </div>
-            <span class="labal-for-private">公开</span>
-            <mt-switch v-model="isSprivate"></mt-switch>
         </div>
+
         <div class="editor-content">
             <textarea placeholder="请输入正文" v-model="content"  @input="update"></textarea>
         </div>
