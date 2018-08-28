@@ -63,10 +63,10 @@
             <div class="comment-list" v-on:commentBack="commentCall">
                 <div class="comment-title" v-if="blog.attributes.commentNum>0">评论({{blog.attributes.commentNum}})</div>
                 <div>
-                    <wx-comment v-for="comment in tempComments"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
+                    <wx-comment v-for="comment in tempComments" v-on:del-comment-back="delCommentCall"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
                 </div>
                 <div class="comment-interval" v-if="tempComments.length>0" ></div>
-                <wx-comment v-for="comment in comments"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
+                <wx-comment v-for="comment in comments" v-on:del-comment-back="delCommentCall"  :comment="comment" :blogid="blog.id" v-on:comment-back="commentBack"></wx-comment>
 
             </div>
         </div>
@@ -107,7 +107,11 @@
                 }
             }).then(function (data) {
                 if(data.code==200){
-                    _this.comments=data.list;
+                    for(var i=0;i<data.list.length;i++){
+                        if(data.list[i].attributes.isDel==false){
+                            _this.comments.push(data.list[i]);
+                        }
+                    }
                 }else{
                     _this.$toast('获取数据错误', '请确认您的网络是否通畅');
                 }
@@ -138,9 +142,27 @@
             },
             commentCall:function (data) {
                 this.tempComments.push(data);
+                console.log(this.tempComments);
             },
             commentBack:function (data) {
-                this.blog.attributes.commentNum++;
+                this.blog.attributes.commentNum=this.blog.attributes.commentNum+data;
+            },
+            delCommentCall:function (data) {
+                var _this=this;
+                this.blog.attributes.commentNum--;
+                for(var j=0;j<_this.tempComments.length;j++){
+                    if(_this.tempComments[j].id=data){
+                        _this.tempComments.splice(j,1);
+                        return;
+                    }
+                }
+                for(var i=0;i<_this.comments.length;i++){
+                    if(_this.comments[i].id=data){
+                        _this.comments.splice(i,1);
+                        return;
+                    }
+                }
+
             },
             actionShow:function () {
                 this.sheetVisible=true;

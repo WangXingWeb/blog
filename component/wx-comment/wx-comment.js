@@ -41,7 +41,7 @@ Vue.component('wx-comment', {
             }
         });
         //获取这条评论的回复
-        mainBmob.equalTo('Comment',{'parrentComment':_this.comment.id,'type':1}).then(function (data) {
+        mainBmob.equalTo('Comment',{'parrentComment':_this.comment.id,'type':1,'isDel':false}).then(function (data) {
             if(data.code==200){
                 _this.replys=data.list;
             }
@@ -73,7 +73,7 @@ Vue.component('wx-comment', {
     '<button class="comment-btn" @click="addComment">发表评论</button>'+
     '</mt-popup>'+
     '</div>'+
-    '<wx-reply v-for="reply in replys" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack" v-on:comment-back="commentBack"></wx-reply>'+
+    '<wx-reply v-for="reply in replys" v-on:del-comment-back="delCommentCall" :reply="reply" :blogid="blogid" v-on:reply-back="replyBack" v-on:comment-back="commentBack"></wx-reply>'+
     '</div>'+
     '<mt-actionsheet :actions="actions" v-model="sheetVisible" cancelText="取消"></mt-actionsheet>'+
     '</div>',
@@ -90,6 +90,15 @@ Vue.component('wx-comment', {
         commentBack:function (data) {
             this.$emit('comment-back', 1);
         },
+        delCommentCall:function (data) {
+            var _this=this;
+            this.$emit('comment-back', -1);
+            for(var i=0;i<_this.replys.length;i++){
+                if(_this.replys[i].id=data){
+                    _this.replys.splice(i,1);
+                }
+            }
+        },
         actionShow:function () {
             this.sheetVisible=true;
         },
@@ -102,10 +111,16 @@ Vue.component('wx-comment', {
                         method:function () {
                             _this.$messagebox.confirm('确定删除这条评论吗?').then(function (action) {
                                 if(action=="confirm"){
-                                    mainBmob.delData('Comment',_this.comment.id).then(function (data) {
+                                    mainBmob.changeData({'isDel':true},'Comment',_this.comment.id).then(function (data) {
+                                        if(data==1){
+                                            return mainBmob.AddOne('Blog',_this.blogid,'commentNum',-1);
+                                        }else{
+                                            _this.$toast('删除失败');
+                                        }
+                                    }).then(function (data) {
                                         if(data==1){
                                             _this.$toast('删除成功');
-
+                                            _this.$emit('del-comment-back', _this.comment.id);
                                         }else{
                                             _this.$toast('删除失败');
                                         }
@@ -173,7 +188,8 @@ Vue.component('wx-comment', {
                     'content':_this.commentContent,
                     'commenter':myuser,
                     'applaudNum':0,
-                    'toUser':toUser
+                    'toUser':toUser,
+                    'isDel':false
                 }
                 mainBmob.addData(newComment,'Comment').then(function (data) {
                     if(data.status){

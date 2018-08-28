@@ -20,6 +20,7 @@ Vue.component('wx-toolbar', {
             var _this=this;
             _this.shareUrl='www.iwangxing.cn/blog/viewBlog.html?id='+_this.blog.id;  //分享路径
             var user=Bmob.User.current();
+            //是否已收藏和点赞
             mainBmob.equalTo('Dynamic',{'user':user.id,'blog':_this.blog.id}).then(function (data) {
                 if(data.code==200){
                     for(var i=0;i<data.list.length;i++){
@@ -152,12 +153,16 @@ Vue.component('wx-toolbar', {
                 _this.$indicator.open();
                 var commenter = new Bmob.User();
                 commenter.id=Bmob.User.current().id;
+                var toUser = new Bmob.User();
+                toUser.id=_this.blog.attributes.author.id;
                 var newCommemt={
                     'type':0,
                     'content':_this.commentContent,
                     'commenter':commenter,
                     'blog':_this.blog.id,
-                    'applaudNum':0
+                    'applaudNum':0,
+                    'toUser':toUser,
+                    'isDel':false
                 };
                 var newCommemtId='';
                 mainBmob.addData(newCommemt,'Comment').then(function (data) {
