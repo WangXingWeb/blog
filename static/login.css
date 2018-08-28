@@ -1,6 +1,6 @@
 .logo{
     margin: 0 auto;
-    width:120px;
+    width:140px;
     height: 80px;
     display: block;
 }
@@ -9,7 +9,7 @@
     color: #dc4036;
     font-weight: bold;
     font-family: 华文新魏;
-    font-size: 16px;
+    font-size: 18px;
 }
 .wx-form{
     width: 80%;
