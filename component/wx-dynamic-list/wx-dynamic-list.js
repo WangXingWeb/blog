@@ -47,16 +47,12 @@ Vue.component('wx-dynamic-list', {
                             postBlog.fetch({
                                 success: function(data) {
                                     var dynBlog=data;
-                                    console.log(data);
-                                    console.log(data.attributes.isDel);
                                     if(!dynBlog.attributes.isDel){
-                                        console.log(i);
                                         _this.dynamicBlogs.push(dyn);
                                     }
                                 }
                             });
                         })(i);
-
                     }
                     if(data.isAllLoad){
                         _this.allLoaded = true;// 若数据已全部获取完毕

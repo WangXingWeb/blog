@@ -30,7 +30,6 @@ Vue.component('wx-collect', {
                 });
             }
         });
-
     },
     props:['collect'],
     template:

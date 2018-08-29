@@ -20,7 +20,7 @@
     <div id="app">
         <mt-header fixed  title="收藏" class="wx-header">
             <mt-button icon="back" @click='router' slot="left">返回</mt-button>
-            <mt-button icon="more" slot="right"></mt-button>
+            <!--<mt-button icon="more" slot="right"></mt-button>-->
         </mt-header>
         <div class="wx-content">
             <div class="nodata" v-if="collects.length==0">
@@ -40,7 +40,6 @@
             _this.$indicator.open();
             mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
                 if(data.code==200){
-                    console.log(data);
                     for(var i=0;i<data.list.length;i++){
                         (function () {
                             var dyn=data.list[i];
@@ -48,7 +47,6 @@
                             postBlog.fetch({
                                 success: function(data) {
                                     var dynBlog=data;
-                                    console.log(dynBlog)
                                     if(dynBlog.attributes.isDel==false){
                                         _this.collects.push(dyn);
                                     }
@@ -62,7 +60,6 @@
                     _this.$indicator.close();
                 }
             });
-
             _this.$indicator.close();
         },
         data: {
