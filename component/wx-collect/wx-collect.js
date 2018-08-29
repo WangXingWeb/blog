@@ -18,13 +18,10 @@ Vue.component('wx-collect', {
     },
     created:function () {
         var _this=this;
-        console.log(_this.collect);
         var postBlog = _this.collect.get("blog");
-        console.log(postBlog);
         postBlog.fetch({
             success: function(data) {
                 _this.blog=data;
-                console.log(_this.blog);
                 var postAuthor = _this.blog.get("author");
                 postAuthor.fetch({
                     success: function(data) {

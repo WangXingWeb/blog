@@ -38,6 +38,7 @@
             mainBmob.init();
             var user=Bmob.User.current();
             _this.$indicator.open();
+            var arrList=[];
             mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
                 if(data.code==200){
                     console.log(data);
@@ -46,20 +47,23 @@
                         var postBlog = dyn.get("blog");
                         postBlog.fetch({
                             success: function(data) {
+                                console.log(data);
                                 var dynBlog=data;
                                 if(dynBlog.attributes.isDel==false){
-                                    _this.collects.push(dyn);
+                                    arrList.push(dyn);
                                 }
                             }
                         });
                     }
-                    console.log(_this.collects)
+                    console.log(arrList);
+                    _this.collects=arrList;
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);
                     _this.$indicator.close();
                 }
             });
+
             _this.$indicator.close();
         },
         data: {
