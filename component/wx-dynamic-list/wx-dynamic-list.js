@@ -41,16 +41,22 @@ Vue.component('wx-dynamic-list', {
             mainBmob.queryMultipleData('Dynamic','user',_this.attentions,5,_this.dynamicBlogs.length).then(function (data) {
                 if(data.code==200){
                     for(var i=0;i<data.list.length;i++){
-                        var dyn=data.list[i];
-                        var postBlog = dyn.get("blog");
-                        postBlog.fetch({
-                            success: function(data) {
-                                var dynBlog=data;
-                                if(dynBlog.attributes.idDel==false){
-                                    _this.dynamicBlogs.push(data.list[i]);
+                        (function (i) {
+                            var dyn=data.list[i];
+                            var postBlog = dyn.get("blog");
+                            postBlog.fetch({
+                                success: function(data) {
+                                    var dynBlog=data;
+                                    console.log(data);
+                                    console.log(data.attributes.isDel);
+                                    if(!dynBlog.attributes.isDel){
+                                        console.log(i);
+                                        _this.dynamicBlogs.push(dyn);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        })(i);
+
                     }
                     if(data.isAllLoad){
                         _this.allLoaded = true;// 若数据已全部获取完毕

@@ -38,25 +38,24 @@
             mainBmob.init();
             var user=Bmob.User.current();
             _this.$indicator.open();
-            var arrList=[];
             mainBmob.equalTo('Dynamic',{user:user.id,type:2}).then(function (data) {
                 if(data.code==200){
                     console.log(data);
                     for(var i=0;i<data.list.length;i++){
-                        var dyn=data.list[i];
-                        var postBlog = dyn.get("blog");
-                        postBlog.fetch({
-                            success: function(data) {
-                                console.log(data);
-                                var dynBlog=data;
-                                if(dynBlog.attributes.isDel==false){
-                                    arrList.push(dyn);
+                        (function () {
+                            var dyn=data.list[i];
+                            var postBlog = dyn.get("blog");
+                            postBlog.fetch({
+                                success: function(data) {
+                                    var dynBlog=data;
+                                    console.log(dynBlog)
+                                    if(dynBlog.attributes.isDel==false){
+                                        _this.collects.push(dyn);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        })(i);
                     }
-                    console.log(arrList);
-                    _this.collects=arrList;
                     _this.$indicator.close();
                 }else{
                     console.log(data.error.code+data.error.message);
