@@ -116,7 +116,8 @@
                     <i class="icon iconfont icon-image"></i>
                 </div>
             </div>
-            <span class="labal-for-private">公开</span>
+            <span v-if="isSprivate" class="labal-for-private">公开</span>
+            <span v-else class="labal-for-private">私密</span>
             <mt-switch v-model="isSprivate"></mt-switch>
         </div>
         <div class="editor-content">

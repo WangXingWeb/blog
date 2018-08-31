@@ -119,7 +119,8 @@
                     </div>
                 </div>
                 <div style="display: flex">
-                    <span class="labal-for-private">公开</span>
+                    <span v-if="isSprivate" class="labal-for-private">公开</span>
+                    <span v-else class="labal-for-private">私密</span>
                     <mt-switch v-model="isSprivate"></mt-switch>
                 </div>
             </div>
