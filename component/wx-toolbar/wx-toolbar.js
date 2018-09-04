@@ -9,31 +9,34 @@ Vue.component('wx-toolbar', {
             collect:{},
             applaud:{},
             popupVisible:false,
-            commentContent:''
+            commentContent:'',
+            user:{}
         }
     },
     created:function () {
+        this.user=Bmob.User.current();
     },
     props:['blog'],
     watch:{
         blog:function (newVal) {
             var _this=this;
             _this.shareUrl='www.iwangxing.cn/blog/viewBlog.html?id='+_this.blog.id;  //分享路径
-            var user=Bmob.User.current();
-            //是否已收藏和点赞
-            mainBmob.equalTo('Dynamic',{'user':user.id,'blog':_this.blog.id}).then(function (data) {
-                if(data.code==200){
-                    for(var i=0;i<data.list.length;i++){
-                        if(data.list[i].attributes.type==0){
-                            _this.isApplaud=true;
-                            _this.applaud=data.list[i];
-                        }else if(data.list[i].attributes.type==2){
-                            _this.isCollected=true;
-                            _this.collect=data.list[i];
+            if(_this.user){
+                //是否已收藏和点赞
+                mainBmob.equalTo('Dynamic',{'user':_this.user.id,'blog':_this.blog.id}).then(function (data) {
+                    if(data.code==200){
+                        for(var i=0;i<data.list.length;i++){
+                            if(data.list[i].attributes.type==0){
+                                _this.isApplaud=true;
+                                _this.applaud=data.list[i];
+                            }else if(data.list[i].attributes.type==2){
+                                _this.isCollected=true;
+                                _this.collect=data.list[i];
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     },
     template:
@@ -91,27 +94,36 @@ Vue.component('wx-toolbar', {
         },
         addApplaud:function () {
             var _this=this;
-            var Blog = Bmob.Object.extend('Blog');
-            var thisBlog = new Blog();
-            thisBlog.id=_this.blog.id;
-            mainBmob.addData({user:Bmob.User.current(),'type':0,'blog':thisBlog},'Dynamic').then(function (data) {
-                if(data.status){
-                    _this.isApplaud=true;
-                    _this.$toast('已赞同');
-                    _this.applaud.id=data.objectId;
-                    _this.blog.attributes.applaudNum++;
-                    return mainBmob.AddOne('Blog',_this.blog.id,'applaudNum',1);
-                }else{
-                    _this.$toast('赞同失败');
-                }
-            }).then(function (data) {
-                if(data==1){
+            if(_this.user){
+                var Blog = Bmob.Object.extend('Blog');
+                var thisBlog = new Blog();
+                thisBlog.id=_this.blog.id;
+                mainBmob.addData({user:Bmob.User.current(),'type':0,'blog':thisBlog},'Dynamic').then(function (data) {
+                    if(data.status){
+                        _this.isApplaud=true;
+                        _this.$toast('已赞同');
+                        _this.applaud.id=data.objectId;
+                        _this.blog.attributes.applaudNum++;
+                        return mainBmob.AddOne('Blog',_this.blog.id,'applaudNum',1);
+                    }else{
+                        _this.$toast('赞同失败');
+                    }
+                }).then(function (data) {
+                    if(data==1){
 
-                }
-            });
+                    }
+                });
+            }else{
+                this.needLogin();
+            }
         },
         addComment:function () {
-            this.popupVisible=true;
+            var _this=this;
+            if(_this.user){
+                _this.popupVisible=true;
+            }else{
+                this.needLogin();
+            }
         },
         delCollected:function () {
             var _this=this;
@@ -130,22 +142,26 @@ Vue.component('wx-toolbar', {
         },
         addCollected:function () {
             var _this=this;
-            var Blog = Bmob.Object.extend('Blog');
-            var thisBlog = new Blog();
-            thisBlog.id=_this.blog.id;
-            mainBmob.addData({user:Bmob.User.current(),'type':2,'blog':thisBlog},'Dynamic').then(function (data) {
-                if(data.status){
-                    _this.isCollected=true;
-                    _this.$toast('已收藏');
-                    _this.collect.id=data.objectId;
-                    _this.blog.attributes.collectNum++;
-                    return mainBmob.AddOne('Blog',_this.blog.id,'collectNum',1);
-                }else{
-                    _this.$toast('收藏失败');
-                }
-            }).then(function (data) {
-                
-            });
+            if(_this.user){
+                var Blog = Bmob.Object.extend('Blog');
+                var thisBlog = new Blog();
+                thisBlog.id=_this.blog.id;
+                mainBmob.addData({user:Bmob.User.current(),'type':2,'blog':thisBlog},'Dynamic').then(function (data) {
+                    if(data.status){
+                        _this.isCollected=true;
+                        _this.$toast('已收藏');
+                        _this.collect.id=data.objectId;
+                        _this.blog.attributes.collectNum++;
+                        return mainBmob.AddOne('Blog',_this.blog.id,'collectNum',1);
+                    }else{
+                        _this.$toast('收藏失败');
+                    }
+                }).then(function (data) {
+
+                });
+            }else{
+                this.needLogin();
+            }
         },
         comment:function () {
             var _this=this;
@@ -185,7 +201,15 @@ Vue.component('wx-toolbar', {
             }else {
                 _this.$toast('请输入评论内容');
             }
-
+        },
+        needLogin:function () {
+            var _this=this;
+            _this.$messagebox.confirm('你还没有登录，请去登录','提示').then(function(data){
+                if(data=='confirm'){
+                    localStorage.setItem("loginBackURL",'viewBlog.html?id='+_this.blog.id);
+                    window.location.href = 'login.html';
+                }
+            });
         }
     }
 });

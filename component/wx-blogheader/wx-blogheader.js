@@ -22,22 +22,26 @@ Vue.component('wx-blogheader', {
             postAuthor.fetch({
                 success: function(data) {
                     _this.author=data;
-                    if(_this.author.id==Bmob.User.current().id){
-                        _this.isAttented=2;
-                    }else{
-                        mainBmob.equalTo('Attention',{'user':_this.user.id,'attented':_this.author.id}).then(function (data) {
-                            if(data.code==200){
-                                if(data.list.length>0){
-                                    _this.isAttented=0;
-                                    _this.attentedId=data.list[0].id;
+                    if(Bmob.User.current()){
+                        if(_this.author.id==Bmob.User.current().id){
+                            _this.isAttented=2;
+                        }else{
+                            mainBmob.equalTo('Attention',{'user':_this.user.id,'attented':_this.author.id}).then(function (data) {
+                                if(data.code==200){
+                                    if(data.list.length>0){
+                                        _this.isAttented=0;
+                                        _this.attentedId=data.list[0].id;
+                                    }else{
+                                        _this.isAttented=1;
+                                    }
+                                    _this.$indicator.close();
                                 }else{
-                                    _this.isAttented=1;
+                                    console.log(data.error.code+data.error.message);
                                 }
-                                _this.$indicator.close();
-                            }else{
-                                console.log(data.error.code+data.error.message);
-                            }
-                        });
+                            });
+                        }
+                    }else{
+                        _this.isAttented=1;
                     }
                 }
             });
