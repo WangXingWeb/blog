@@ -68,6 +68,7 @@ Vue.component('wx-collect', {
             return dateFormat(time,'yyyy.MM.dd hh:mm');
         },
         readBlog:function (id) {
+            localStorage.setItem("backURL",'collect.html');
             window.location.href = 'viewBlog.html?id='+id;
         }
     }

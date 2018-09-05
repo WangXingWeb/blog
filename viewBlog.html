@@ -135,7 +135,8 @@
         },
         methods:{
             router:function () {
-                history.back();
+                var backURL=localStorage.getItem("backURL");
+                window.location.href = backURL;
             },
             restime:function (time) {
                 return dateFormat(time,'yyyy.MM.dd hh:mm');

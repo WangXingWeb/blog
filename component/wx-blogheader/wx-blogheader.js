@@ -68,31 +68,45 @@ Vue.component('wx-blogheader', {
     methods:{
         Attent:function (id) {
             var _this=this;
-            if(this.isAttented==0){
-                /*取消关注*/
-                mainBmob.delData('Attention',_this.attentedId).then(function (data) {
-                    console.log(data);
-                    if(data==1){
-                        _this.isAttented=1;
-                    }
-                });
+            if(Bmob.User.current()){
+                if(this.isAttented==0){
+                    /*取消关注*/
+                    mainBmob.delData('Attention',_this.attentedId).then(function (data) {
+                        console.log(data);
+                        if(data==1){
+                            _this.isAttented=1;
+                        }
+                    });
+                }else{
+                    /*关注*/
+                    var myattented = new Bmob.User();
+                    myattented.id=id;
+                    mainBmob.addData({'user':Bmob.User.current(),'attented':myattented},'Attention').then(function (data) {
+                        if(data.status){
+                            _this.isAttented=0;
+                            _this.attentedId=data.objectId;
+                        }
+                    });
+                }
             }else{
-                /*关注*/
-                var myattented = new Bmob.User();
-                myattented.id=id;
-                mainBmob.addData({'user':Bmob.User.current(),'attented':myattented},'Attention').then(function (data) {
-                    if(data.status){
-                        _this.isAttented=0;
-                        _this.attentedId=data.objectId;
-                    }
-                });
+                _this.needLogin();
             }
+
         },
         router:function (url) {
             window.location.href ='editBlog.html?id='+this.blog.id;
         },
         resetTime:function (time) {
             return dateFormat(time,'yyyy.MM.dd hh:mm');
+        },
+        needLogin:function () {
+            var _this=this;
+            _this.$messagebox.confirm('你还没有登录，请去登录','提示').then(function(data){
+                if(data=='confirm'){
+                    localStorage.setItem("loginBackURL",'viewBlog.html?id='+_this.blog.id);
+                    window.location.href = 'login.html';
+                }
+            });
         }
     }
 });
