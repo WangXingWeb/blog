@@ -44,6 +44,7 @@ Vue.component('wx-comment', {
         mainBmob.equalTo('Comment',{'parrentComment':_this.comment.id,'type':1,'isDel':false}).then(function (data) {
             if(data.code==200){
                 _this.replys=data.list;
+                _this.replys.reverse();
             }
         });
 
@@ -85,7 +86,7 @@ Vue.component('wx-comment', {
             this.popupVisible=true;
         },
         replyBack:function (data) {
-            this.replys.unshift(data);
+            this.replys.push(data);
         },
         commentBack:function (data) {
             this.$emit('comment-back', 1);
@@ -96,6 +97,7 @@ Vue.component('wx-comment', {
             for(var i=0;i<_this.replys.length;i++){
                 if(_this.replys[i].id=data){
                     _this.replys.splice(i,1);
+                    break;
                 }
             }
         },
@@ -193,7 +195,7 @@ Vue.component('wx-comment', {
                 }
                 mainBmob.addData(newComment,'Comment').then(function (data) {
                     if(data.status){
-                        _this.replys.unshift(data.object);
+                        _this.replys.push(data.object);
                         _this.$toast('回复成功');
                         _this.comment.attributes.commentNum++;
                         _this.popupVisible=false;

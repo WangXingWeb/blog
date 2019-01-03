@@ -184,6 +184,7 @@ Vue.component('wx-reply', {
                         method:function () {
                             _this.$messagebox.confirm('确定删除这条评论吗?').then(function (action) {
                                 if(action=="confirm"){
+                                    console.log("$$$$$$$$$$$$$$$$$");
                                     mainBmob.changeData({'isDel':true},'Comment',_this.reply.id).then(function (data) {
                                         if(data==1){
                                             return mainBmob.AddOne('Blog',_this.blogid,'commentNum',-1);
