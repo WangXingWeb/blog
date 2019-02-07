@@ -41,17 +41,13 @@
     </mt-header>
     <div class="content">
         <div class="item interval"  @click='router("changeHeadImg")'>
-            <div class="item-name username">
-                头像
-            </div>
+            <div class="item-name username">头像</div>
             <div class="item-content">
                 <img class="mine-info-headImg" :src="user.attributes.headImg" alt="">
             </div>
         </div>
         <div class="item interval" @click='router("changeName")'>
-            <div class="item-name">
-                昵称
-            </div>
+            <div class="item-name">昵称</div>
             <div class="item-content">
                {{user.attributes.username}}
             </div>
